@@ -15,7 +15,7 @@ Notebook Viewer Static Page Views
 - [Windowing Part1](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Windowing_Part1.ipynb)
 - [Windowing Part2](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Windowing_Part2.ipynb)
 - [Windowing Part3](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Windowing_Part3.ipynb)
-- [Filtering_Part1](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Filtering_Part1.ipynb)
+- [Filtering Part1](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Filtering_Part1.ipynb)
 - [Filtering Part2](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Filtering_Part2.ipynb)
 - [Filtering Part3](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Filtering_Part3.ipynb)
 - [Compressive Sampling](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Compressive_Sampling.ipynb)
