@@ -7,18 +7,18 @@ Notebook Viewer Static Page Views
 
 **Signal Processing Reading List**
 
-- [Sampling Theorem Part1](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Sampling_Theorem.ipynb)
-- [Sampling Theorem Part2 v2](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Sampling_Theorem_Part_2_v2.ipynb)
-- [Fourier Transform](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Fourier_Transform.ipynb)
-- [Frequency Resolution](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Frequency_Resolution.ipynb)
-- [More Fourier Transform](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/More_Fourier_Transform.ipynb)
-- [Windowing Part1](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Windowing_Part1.ipynb)
-- [Windowing Part2](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Windowing_Part2.ipynb)
-- [Windowing Part3](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Windowing_Part3.ipynb)
-- [Filtering Part1](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Filtering_Part1.ipynb)
-- [Filtering Part2](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Filtering_Part2.ipynb)
+- [Sampling Theorem Part1](https://nbviewer.jupyter.org/github/bagustris/python-for-signal-processing/blob/master/notebook/Sampling_Theorem.ipynb)
+- [Sampling Theorem Part2 v2](https://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Sampling_Theorem_Part_2_v2.ipynb)
+- [Fourier Transform](https://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Fourier_Transform.ipynb)
+- [Frequency Resolution](https://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Frequency_Resolution.ipynb)
+- [More Fourier Transform](https://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/More_Fourier_Transform.ipynb)
+- [Windowing Part1](https://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Windowing_Part1.ipynb)
+- [Windowing Part2](https://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Windowing_Part2.ipynb)
+- [Windowing Part3](https://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Windowing_Part3.ipynb)
+- [Filtering Part1](https://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Filtering_Part1.ipynb)
+- [Filtering Part2](https://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Filtering_Part2.ipynb)
 - [Filtering Part3](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Filtering_Part3.ipynb)
-- [Compressive Sampling](http://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Compressive_Sampling.ipynb)
+- [Compressive Sampling](https://nbviewer.ipython.org/github/bagustris/Python-for-Signal-Processing/blob/master/notebook/Compressive_Sampling.ipynb)
 
 **Stochastic Processes Reading List**
 
