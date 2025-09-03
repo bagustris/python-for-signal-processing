@@ -1,0 +1,35 @@
+name: Simple Notebook Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test-simple:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install jupyter nbconvert numpy scipy matplotlib pandas seaborn
+        # Try to install cvxopt, but don't fail if it doesn't work
+        pip install cvxopt || echo "cvxopt installation failed, continuing..."
+        
+    - name: Test notebooks in notebook/ directory
+      run: |
+        python simple_test.py notebook
+        
+    - name: Test notebooks in book-version/ directory
+      run: |
+        python simple_test.py book-version
