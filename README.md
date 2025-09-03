@@ -7,8 +7,8 @@ Notebook Viewer Static Page Views
 
 **Signal Processing Reading List**
 
-- [Sampling Theorem Part1](https://nbviewer.jupyter.org/github/bagustris/python-for-signal-processing/blob/master/notebook/Sampling_Theorem_Part_1.ipynb)
-- [Sampling Theorem Part2 v2](https://nbviewer.ipython.org/github/bagustris/python-for-signal-processing/blob/master/notebook/Sampling_Theorem_Part_2.ipynb)
+- [Sampling Theorem Part_1](https://nbviewer.jupyter.org/github/bagustris/python-for-signal-processing/blob/master/notebook/Sampling_Theorem_Part_1.ipynb)
+- [Sampling Theorem Part_2](https://nbviewer.ipython.org/github/bagustris/python-for-signal-processing/blob/master/notebook/Sampling_Theorem_Part_2.ipynb)
 - [Fourier Transform](https://nbviewer.ipython.org/github/bagustris/python-for-signal-processing/blob/master/notebook/Fourier_Transform.ipynb)
 - [Frequency Resolution](https://nbviewer.ipython.org/github/bagustris/python-for-signal-processing/blob/master/notebook/Frequency_Resolution.ipynb)
 - [More Fourier Transform](https://nbviewer.ipython.org/github/bagustris/python-for-signal-processing/blob/master/notebook/More_Fourier_Transform.ipynb)
