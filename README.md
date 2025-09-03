@@ -1,6 +1,6 @@
-Jupyter notebooks for Python 3 (tested on 3.6 and 3.8) for Signnotebook/al
+Jupyter notebooks for Python 3 (tested on 3.6 and 3.8) for Signal
 Processing. This forked repository is a teaching material for 
-signal processing master course at Engineering Physics [ITS](https://www.its.ac.id).
+the signal processing master course at Engineering Physics [ITS](https://www.its.ac.id).
 
 Notebook Viewer Static Page Views
 -----------------------------------
