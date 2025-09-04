@@ -61,7 +61,7 @@ jobs:
         python test_notebooks.py --directory book-version
         
     - name: Upload test artifacts on failure
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: failure()
       with:
         name: notebook-test-failures-py${{ matrix.python-version }}
