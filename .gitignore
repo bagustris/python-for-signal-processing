@@ -1,0 +1,4 @@
+*.pdf
+bak/
+.ipynb_checkpoints/
+*test_results.json
