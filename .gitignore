@@ -2,3 +2,9 @@
 bak/
 .ipynb_checkpoints/
 *test_results.json
+
+# Jupyter Book / Sphinx build output
+_build/
+book-version/_build/
+notebook/_build/
+_build-jupyterbook/

@@ -41,3 +41,14 @@ Notebook Viewer Static Page Views
 **Misc.**
 
 - [Example CSVs](http://github.com/bagustris/python-for-signal-processing/blob/master/notebook/Example_CSVs.ipynb)
+
+## How to build jupyter books 
+
+```bash
+uv venv .venv --python 3.12
+uv pip install -r requirements.txt --python .venv/bin/python
+.venv/bin/jupyter-book build . --path-output _build-jupyterbook
+
+# (Optional) copy generated HTML into docs/ for local preview
+rm -rf docs && mkdir -p docs && cp -a _build-jupyterbook/_build/html/. docs/
+```

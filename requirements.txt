@@ -17,5 +17,10 @@ jupyter>=1.0.0
 ipython>=7.0.0
 ipywidgets>=7.6.0
 
+# Jupyter Book / notebook format tools (for GitHub Pages)
+nbformat>=5.7.0
+# Jupyter Book v2 has a different CLI and build workflow; pin to v1 for `jupyter-book build`.
+jupyter-book>=1.0.0,<2
+
 # Additional scientific libraries that might be used
 sympy>=1.9.0
