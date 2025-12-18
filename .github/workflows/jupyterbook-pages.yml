@@ -1,0 +1,70 @@
+name: Build & Deploy Jupyter Book (Pages)
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - "_config.yml"
+      - "_toc.yml"
+      - "index.md"
+      - "notebook/**"
+      - "book-version/**"
+      - "requirements.txt"
+      - ".github/workflows/jupyterbook-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build book from repo root
+        run: |
+          jupyter-book build . --path-output _build-jupyterbook
+
+      - name: Stage HTML into docs/
+        run: |
+          rm -rf docs
+          mkdir -p docs
+          cp -a _build-jupyterbook/_build/html/. docs/
+          # Ensure Pages serves files starting with underscores if present
+          touch docs/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact (docs/)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
