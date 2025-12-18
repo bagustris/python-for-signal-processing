@@ -1,0 +1,18 @@
+# Table of contents for the Jupyter Book
+# https://jupyterbook.org/en/stable/structure/toc.html
+
+format: jb-book
+root: Sampling_Theorem_Part_1
+chapters:
+  - file: Sampling_Theorem_Part_2
+  - file: Fourier_Transform
+  - file: Frequency_Resolution
+  - file: More_Fourier_Transform
+  - file: Windowing_Part1
+  - file: Windowing_Part2
+  - file: Windowing_Part3
+  - file: Filtering_Part1
+  - file: Filtering_Part2
+  - file: Filtering_Part3
+  - file: Compressive_Sampling
+  - file: Example_CSVs

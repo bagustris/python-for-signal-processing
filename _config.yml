@@ -1,0 +1,35 @@
+# Root Jupyter Book configuration
+# Source folder: repository root
+# https://jupyterbook.org/en/stable/customize/config.html
+
+title: Python for Signal Processing
+author: Contributors
+
+# Best practice for CI: do not execute notebooks unless explicitly needed.
+execute:
+  execute_notebooks: "off"
+
+# Only build files listed in the TOC
+only_build_toc_files: true
+
+repository:
+  url: https://github.com/unpingco/Python-for-Signal-Processing
+  branch: master
+
+html:
+  use_repository_button: true
+  use_issues_button: true
+
+# Keep the root build focused on the book sources.
+sphinx:
+  config:
+    exclude_patterns:
+      - '.venv/**'
+      - 'docs/**'
+      - '_build/**'
+      - '_build-jupyterbook/**'
+      - '**/.ipynb_checkpoints/**'
+      - 'book-version/_build/**'
+      - 'code/**'
+      - 'pict/**'
+      - 'bak/**'

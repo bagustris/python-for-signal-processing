@@ -1,0 +1,57 @@
+# Root Table of Contents
+# Ordered to match README.md, plus book-version chapters.
+# https://jupyterbook.org/en/stable/structure/toc.html
+
+format: jb-book
+root: index
+
+parts:
+  - caption: Signal Processing
+    chapters:
+      - file: notebook/Sampling_Theorem_Part_1
+      - file: notebook/Sampling_Theorem_Part_2
+      - file: notebook/Fourier_Transform
+      - file: notebook/Frequency_Resolution
+      - file: notebook/More_Fourier_Transform
+      - file: notebook/Windowing_Part1
+      - file: notebook/Windowing_Part2
+      - file: notebook/Windowing_Part3
+      - file: notebook/Filtering_Part1
+      - file: notebook/Filtering_Part2
+      - file: notebook/Filtering_Part3
+      - file: notebook/Compressive_Sampling
+
+  - caption: Stochastic Processes
+    chapters:
+      - file: notebook/Conditional_Expectation_Gaussian
+      - file: notebook/Conditional_expectation_MSE
+      - file: notebook/Conditional_expectation_MSE_Ex
+      - file: notebook/Conditional_Expectation_Projection
+      - file: notebook/Projection
+      - file: notebook/Projection_Ex
+      - file: notebook/Projection_mdim
+      - file: notebook/Inverse_Projection_Constrained_Optimization
+      - file: notebook/Gauss_Markov
+      - file: notebook/Maximum_likelihood
+      - file: notebook/Expectation_Maximization
+      - file: notebook/Markov_chains
+      - file: notebook/Buffons_Needle_Sim
+      - file: notebook/Sampling_Monte_Carlo
+      - file: notebook/Rectangle_Wedge_Tail_Decomposition
+
+  - caption: Misc
+    chapters:
+      - file: notebook/Example_CSVs
+
+  - caption: Book Version
+    chapters:
+      - file: book-version/Chapter_1_Intro
+        title: "Chapter 1: Intro"
+      - file: book-version/Chapter_2_Sampling_Theorem
+        title: "Chapter 2: Sampling Theorem"
+      - file: book-version/Chapter_3_Discrete_Fourier_transform
+        title: "Chapter 3: Discrete Fourier Transform"
+      - file: book-version/Chapter_4_Spectral_analysis
+        title: "Chapter 4: Spectral Analysis"
+      - file: book-version/Chapter_5_Finite_impulse_response_filters
+        title: "Chapter 5: Finite Impulse Response Filters"
