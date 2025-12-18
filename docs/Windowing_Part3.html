@@ -1,0 +1,868 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Windowing_Part3';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="Filtering_Part1.html" />
+    <link rel="prev" title="Introduction" href="Windowing_Part2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="Sampling_Theorem_Part_1.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="Sampling_Theorem_Part_1.html">
+                    Sampling Theorem - Part 1:
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2FWindowing_Part3.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Windowing_Part3.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#peak-sidelobe-level">Peak Sidelobe Level</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#db-bandwidth">3-dB Bandwidth</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scalloping-loss">Scalloping Loss</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<p>In this section, we cover three additional metrics used in practice for evaluating and choosing between different window functions.</p>
+<section id="peak-sidelobe-level">
+<h2>Peak Sidelobe Level<a class="headerlink" href="#peak-sidelobe-level" title="Link to this heading">#</a></h2>
+<p>As the name suggests, <em>peak sidelobe level</em> measures how far down the nearest peak is from the mainlobe’s maximum. This captures the worst-case scenario where a nearby signal sits exactly on the highest sidelobe. This idea is illustrated in the next figure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span> 
+
+<span class="k">def</span><span class="w"> </span><span class="nf">db20</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">Nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s1">&#39;Given DFT, return power level in dB or take DFT if need be&#39;</span>
+    <span class="k">assert</span>  <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">W</span><span class="p">)</span> <span class="ow">or</span> <span class="n">W</span><span class="o">.</span><span class="n">ndim</span><span class="o">==</span><span class="mi">1</span> 
+    <span class="k">if</span> <span class="n">Nfft</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># assume W is DFT </span>
+        <span class="k">return</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">W</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># assume time-domain passed, so need DFT</span>
+        <span class="n">DFT</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">W</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span><span class="n">Nfft</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nfft</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">DFT</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">undb20</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="s1">&#39;Invert the db20. Recover amplitude&#39;</span>
+    <span class="k">return</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="mf">20.</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">Ns</span><span class="o">=</span> <span class="mi">16</span>
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">256</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">freqs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">Nf</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">hanning</span><span class="p">(</span><span class="n">Ns</span><span class="p">,</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">db20</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span> 
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freqs</span><span class="p">,</span><span class="n">W</span><span class="p">,</span><span class="s1">&#39;-b&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">4.</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">1.01</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Discrete Frequency&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$20\log_</span><span class="si">{10}</span><span class="s1">|W|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Hanning Window&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span>
+            <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">76</span><span class="o">/</span><span class="n">Nf</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">76</span><span class="o">/</span><span class="n">Nf</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">32</span><span class="p">),</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;arrowstyle&#39;</span><span class="p">:</span><span class="s1">&#39;&lt;-&gt;&#39;</span><span class="p">},</span>
+            <span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span> <span class="mf">0.4</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="s1">&#39;Peak sidelobe level&#39;</span><span class="p">,</span>
+        <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+        <span class="n">bbox</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;fc&#39;</span><span class="p">:</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">.3</span><span class="p">})</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/bagustris/.local/lib/python3.6/site-packages/ipykernel_launcher.py:7: DeprecationWarning: `hanning` is deprecated, use `scipy.signal.windows.hann` instead!
+  import sys
+/home/bagustris/.local/lib/python3.6/site-packages/ipykernel_launcher.py:12: RuntimeWarning: divide by zero encountered in log10
+  if sys.path[0] == &#39;&#39;:
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.4, 0.5, &#39;Peak sidelobe level&#39;)
+</pre></div>
+</div>
+<img alt="_images/3c843445bf86cddc190661314c8a5eb6c63e29bac2b2d7f1806eb6e7f531cbc5.png" src="_images/3c843445bf86cddc190661314c8a5eb6c63e29bac2b2d7f1806eb6e7f531cbc5.png" />
+</div>
+</div>
+<p>The figure above shows the DFT of the Hanning window and how far down the next sidelobe is from the peak (~31 dB). The figure of merit considers the worst-case where an interfering single frequency sits exactly on the peak of this sidelobe. The next bit of code uses complex roots to find the peaks of the sidelobes for window functions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">peak_sidelobe</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span><span class="n">return_index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;Given window function, return peak sidelobe level and bin index of </span>
+<span class="sd">       all (return_all=True) or some sidelobe peaks if desired (return_index=True). </span>
+<span class="sd">       Note that this method fails when the window function</span>
+<span class="sd">       has no roots on the unit circle (e.g. exponential window). The return index</span>
+<span class="sd">       is in units of DFT-bin (k/N). </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">&lt;=</span><span class="n">N</span><span class="p">)</span> <span class="c1"># need longer DFT otherwise</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roots</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>     <span class="c1"># find complex roots of window function</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">r</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span><span class="p">)]</span> <span class="c1"># keep only those on unit circle (approx)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">imag</span><span class="o">/</span><span class="mf">2.</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">N</span>     <span class="c1"># get k^th bin index</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">y</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="c1"># keep positive half only as integer roundoff</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>            <span class="c1"># dump repeated</span>
+    <span class="n">y</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>                  <span class="c1"># sort in-place </span>
+    <span class="n">W</span> <span class="o">=</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">N</span><span class="p">)))</span> <span class="c1">#compute DFT</span>
+    <span class="c1"># loop through slices and pick out max() as peak for that slice&#39;s sidelobe</span>
+    <span class="n">sidelobe_levels</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sidelobe_idx</span> <span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:])]:</span>
+        <span class="n">imx</span><span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span><span class="o">+</span><span class="n">W</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span> <span class="c1"># bin index of max</span>
+        <span class="n">peak</span><span class="o">=</span> <span class="n">W</span><span class="p">[</span><span class="n">imx</span><span class="p">]</span><span class="o">-</span><span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>          <span class="c1"># relative to global peak</span>
+        <span class="n">sidelobe_levels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">peak</span> <span class="p">)</span> <span class="c1"># store sidelobe level for later</span>
+        <span class="n">sidelobe_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">imx</span><span class="o">/</span><span class="n">N</span><span class="p">)</span>       <span class="c1"># ... with corresponding bin</span>
+    <span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sidelobe_levels</span><span class="p">,</span> <span class="n">sidelobe_idx</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">return_index</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">sidelobe_levels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sidelobe_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">sidelobe_levels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dftmatrix</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">Ns</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s1">&#39;construct DFT matrix of size N give Ns time-samples&#39;</span>
+    <span class="n">k</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Ns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">Ns</span> <span class="o">=</span> <span class="n">N</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">N</span> <span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]))</span> <span class="c1"># use numpy broadcasting to create matrix</span>
+    <span class="k">return</span> <span class="n">U</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s consider the scenario with a signal on the highest sidelobe of the window function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Ns</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">512</span>
+
+<span class="n">U</span><span class="o">=</span><span class="n">dftmatrix</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="n">N</span><span class="p">,</span> <span class="n">Ns</span><span class="o">=</span><span class="n">Ns</span><span class="p">)</span>
+<span class="n">offset</span><span class="o">=</span><span class="mi">8</span> <span class="c1"># place DFT near middle of plot for readability</span>
+<span class="n">u</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">U</span><span class="p">[:,</span><span class="n">offset</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="c1"># phase shifts</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">hanning</span><span class="p">(</span><span class="n">Ns</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">level</span><span class="p">,</span><span class="n">idx</span> <span class="o">=</span> <span class="n">peak_sidelobe</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">u</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">u</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">idx</span><span class="p">))</span>         <span class="c1"># signal on peak of sidelobe</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1">#ax.plot(abs(np.fft.fft(w*(x0),N)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">db20</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x0</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="n">offset</span><span class="o">+</span><span class="n">idx</span><span class="o">*</span><span class="n">N</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span>
+         <span class="n">length_includes_head</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+         <span class="n">head_length</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span><span class="n">head_width</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">fc</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="c1">#ax.arrow( idx*N,0,0,3,length_includes_head=True,lw=1.5,head_width=2,fc=&#39;g&#39;)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span>
+         <span class="n">length_includes_head</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+         <span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span><span class="n">head_length</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span><span class="n">head_width</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">fc</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="c1">#ax.legend(loc=0)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span><span class="o">=</span><span class="n">N</span><span class="o">/</span><span class="mf">4.</span><span class="p">,</span><span class="n">xmin</span><span class="o">=-</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymax</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$20\log_</span><span class="si">{10}</span><span class="s1">|W_k|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">.5</span><span class="p">,</span><span class="s1">&#39;&#39;&#39;The signal (green) on the first sidelobe is reduced </span>
+<span class="s1">by 31 dB during the convolution but still </span>
+<span class="s1">contaminates the other signal (blue) by </span>
+<span class="s1">the residual amount&#39;&#39;&#39;</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">);</span>
+
+<span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">db20</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">x1</span><span class="p">,</span><span class="n">N</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span> <span class="n">offset</span><span class="o">+</span><span class="n">idx</span><span class="o">*</span><span class="n">N</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="n">length_includes_head</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span><span class="n">head_length</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span><span class="n">head_width</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">fc</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span> <span class="n">offset</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="n">length_includes_head</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span><span class="n">head_length</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span><span class="n">head_width</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">fc</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="c1">#ax.legend(loc=0)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span><span class="o">=</span><span class="n">N</span><span class="o">/</span><span class="mf">4.</span><span class="p">,</span><span class="n">xmin</span><span class="o">=-</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymax</span> <span class="o">=</span> <span class="mi">17</span><span class="p">,</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$20\log_</span><span class="si">{10}</span><span class="s1">|W_k|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">.6</span><span class="p">,</span><span class="s1">&#39;&#39;&#39;In this case, the window&#39;s mainlobe peak reaches </span>
+<span class="s1">the green signal and it&#39;s the blue signal&#39;s turn to </span>
+<span class="s1">sit on the sidelobe and contaminate the green </span>
+<span class="s1">signal.&#39;&#39;&#39;</span><span class="p">,</span><span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">);</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/bagustris/.local/lib/python3.6/site-packages/ipykernel_launcher.py:8: DeprecationWarning: `hanning` is deprecated, use `scipy.signal.windows.hann` instead!
+  
+/home/bagustris/.local/lib/python3.6/site-packages/ipykernel_launcher.py:15: RuntimeWarning: divide by zero encountered in log10
+  from ipykernel import kernelapp as app
+</pre></div>
+</div>
+<img alt="_images/58dcd7f357771ae340c4f1171578a729a308b82a3bf507924fc6fd976c107adb.png" src="_images/58dcd7f357771ae340c4f1171578a729a308b82a3bf507924fc6fd976c107adb.png" />
+</div>
+</div>
+<p>The cartoon above shows the DFT of the window function as it slides across the two signals for the circular convolution. In the top plot, the green signal sits on the peak of the first sidelobe of the window. Because the peak sidelobe level is 31 dB down, its contribution to the overall DFT at that discrete frequency is reduced by 31 dB. Note that at this stage, the signal on the left offers its maximum contribution because it is squarely on the peak of the window’s mainlobe. As shown in the bottom plot, the same situation   happens again  in the convolution as the sliding window reaches the green signal on the right; it will be contaminated by  signal on the left as that signal climbs onto the peak of the sidelobe.</p>
+</section>
+<section id="db-bandwidth">
+<h2>3-dB Bandwidth<a class="headerlink" href="#db-bandwidth" title="Link to this heading">#</a></h2>
+<p>At the 3-dB bandwidth point, the mainlobe has lost half of its peak power. This is because <span class="math notranslate nohighlight">\(10 \log_{10}(1/2) \approx -3 \)</span>. The following figure shows the DFT for the  hamming  window and its corresponding half-power point down the mainlobe. In general,  there is no closed form solution to the half-power level so we  must compute it numerically.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">N</span><span class="o">=</span><span class="mi">512</span>
+<span class="n">w</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span>
+<span class="n">W</span><span class="o">=</span><span class="n">db20</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+
+<span class="n">m</span> <span class="o">=</span><span class="mi">10</span>
+<span class="n">p</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">m</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="n">Ns</span><span class="p">,</span><span class="n">W</span><span class="p">[:</span><span class="n">m</span><span class="p">]</span><span class="o">-</span><span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="mf">3.01</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># fit quadratic polynomial</span>
+<span class="n">width</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roots</span><span class="p">(</span><span class="n">p</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">2</span> <span class="c1"># 3-dB beamwidth</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="n">Ns</span><span class="p">,</span><span class="n">W</span><span class="o">-</span><span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># normalize to peak</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">60</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$20\log_</span><span class="si">{10}</span><span class="s1">|X|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$ BW_</span><span class="si">{3dB}</span><span class="s1">$=</span><span class="si">%3.2f</span><span class="s1"> bins&#39;</span><span class="o">%</span><span class="k">width</span>)
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\frac</span><span class="si">{N_s}{N}</span><span class="s1"> k$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span> 
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;&lt;-&gt;&quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">28</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> 
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mf">1.2</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;&lt;-&gt;&quot;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span> <span class="n">width</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="sa">r</span><span class="s1">&#39;$\frac{BW_</span><span class="si">{3dB}</span><span class="s1">}</span><span class="si">{2}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span> <span class="mf">1.3</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="s1">&#39;-3 dB&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(1.3, -2, &#39;-3 dB&#39;)
+</pre></div>
+</div>
+<img alt="_images/265658e5573bb325678647b760038367a90268c9872d0ffa8870bacd749ad4d9.png" src="_images/265658e5573bb325678647b760038367a90268c9872d0ffa8870bacd749ad4d9.png" />
+</div>
+</div>
+<p>The figure above is the schematic for the mainlobe of the window. This figure of merit provides a sense of how far off a signal can be from the mainlobe before losing half its power.</p>
+</section>
+<section id="scalloping-loss">
+<h2>Scalloping Loss<a class="headerlink" href="#scalloping-loss" title="Link to this heading">#</a></h2>
+<p>The DFT divides the sampling frequency <span class="math notranslate nohighlight">\( f_s \)</span> into <span class="math notranslate nohighlight">\(N\)</span> discrete frequencies, but the signal of interest may no conveniently lie on one of these sampled frequencies. The <em>scalloping loss</em> accounts for the reduction in signal energy due to this common, unfortunate situation.</p>
+<p>One common way to define  the scalloping loss is as the ratio of coherent gain for a tone located half a bin from a DFT sample point to the coherent gain,</p>
+<div class="math notranslate nohighlight">
+\[
+Scalloping \hspace{0.1em} Loss = \frac{\left|\sum\limits_{n=0}^{N_s-1} w_n \exp \left( -j\pi n/N_s  \right)\right|}{\sum\limits_{n=0}^{N_s-1} w_n} 
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">N</span><span class="o">=</span><span class="mi">256</span>
+<span class="n">Ns</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">w</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">triang</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span>
+<span class="n">W</span><span class="o">=</span><span class="n">db20</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+
+<span class="n">W0</span> <span class="o">=</span> <span class="n">db20</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">Ns</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">*</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">*</span><span class="n">w</span><span class="p">,</span><span class="n">N</span><span class="p">)</span><span class="o">-</span><span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">W</span> <span class="o">=</span> <span class="n">W</span><span class="o">-</span><span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># rescale for plot</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;window&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">W0</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;half-bin shifted&#39;</span><span class="p">)</span>
+<span class="n">scalloping_loss</span> <span class="o">=</span> <span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">W0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">30</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Triangular window scalloping Loss=</span><span class="si">%3.2f</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">scalloping_loss</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$20\log_</span><span class="si">{10}</span><span class="s1">|W|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="o">-</span><span class="n">scalloping_loss</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">24</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/bagustris/.local/lib/python3.6/site-packages/ipykernel_launcher.py:12: RuntimeWarning: divide by zero encountered in log10
+  if sys.path[0] == &#39;&#39;:
+</pre></div>
+</div>
+<img alt="_images/440e43227522f220dc28ace52969ad5976c033e20ec06726b0854a8f0cae7060.png" src="_images/440e43227522f220dc28ace52969ad5976c033e20ec06726b0854a8f0cae7060.png" />
+</div>
+</div>
+<p>The horizontal line in the figure above shows the level of the scalloping loss for the triangular window.</p>
+</section>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>In this section, we illustrated the major issues involved in using window functions for spectral analysis and derived the most common figures of merit for some popular windows. There are many more windows available and Harris (1978) provides an exhaustive list and many more detailed figures of merit. In fact, I have seen rumpled versions of this 1978 paper in just about every engineering lab I have worked in. In practice, some window functions are preferred because they have coefficients that are easy to implement on fixed point arithmetic hardware without excessive sensitivity to quantization errors. The main idea is that windows with favorable  sidelobe levels are always wider (larger equivalent noise bandwidth and 3-dB bandwidth) so these pull in more signal noise into their wider mainlobes and make it harder to distinguish nearby signals which may fit into the same mainlobe. Thus, there is a trade-off between signal-to-noise (more noise in mainlobe reduces signal-to-noise) and resolution (nearby indistinguishable signals). Unfortunately, it is not possible to simultaneously have very low sidelobes and a very narrow mainlobe. This is due to the <em>stuffed mattress effect</em> where “pushing” down the DFT at any one place causes it to sprout up somewhere else.</p>
+<p>Outside of two-tone seperability, there is the issue of wideband signals. In that case, you may prefer a wide mainlobe that encompasses the signal bandwidth with very low sidelobes that reduce extraneous signals. The bottom line is that there are many engineering trade-offs involved in choosing window functions for particular application. Understanding how window functions are used in spectral analysis is fundamental to the entire field of signal processing because it touches all of the key engineering problems encountered in practice.</p>
+<p>As usual, the original corresponding IPython notebook for this post  is available for download <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Windowing_Part3.ipynb">here</a>.</p>
+<p>Comments and corrections welcome!</p>
+</section>
+<section id="references">
+<h1>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Harris, Fredric J. “On the use of windows for harmonic analysis with the discrete Fourier transform.” Proceedings of the IEEE 66.1 (1978): 51-83.</p></li>
+</ul>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python361064bit3b840f9918f246278fc4b65bf6247be2",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python361064bit3b840f9918f246278fc4b65bf6247be2'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Windowing_Part2.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Filtering_Part1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#peak-sidelobe-level">Peak Sidelobe Level</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#db-bandwidth">3-dB Bandwidth</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scalloping-loss">Scalloping Loss</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

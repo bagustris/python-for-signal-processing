@@ -1,0 +1,1035 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Projection in Multiple Dimensions &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Projection_mdim';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Inverse Projection" href="Inverse_Projection_Constrained_Optimization.html" />
+    <link rel="prev" title="References" href="Projection_Ex.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Projection_mdim.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Projection_mdim.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Projection in Multiple Dimensions</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Projection in Multiple Dimensions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weighted-distances">Weighted Distances</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix">Appendix</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="projection-in-multiple-dimensions">
+<h1>Projection in Multiple Dimensions<a class="headerlink" href="#projection-in-multiple-dimensions" title="Link to this heading">#</a></h1>
+<p>In this section, we extend from the <a class="reference external" href="http://python-for-signal-processing.blogspot.com/2012/11/the-projection-concept.html">one-dimensional subspace</a> to the more general two-dimensional subspace. This means that there are two vectors,  <span class="math notranslate nohighlight">\(\mathbf{v}_1\)</span> and  <span class="math notranslate nohighlight">\(\mathbf{v}_2\)</span> that are not colinear and that span the subspace. In the previous case, we had only one vector ( <span class="math notranslate nohighlight">\(\mathbf{v}\)</span>), so we had a one-dimensional subspace, but now that we have two vectors, we have a two-dimensional subspace (i.e. a plane). The extension from the two-dimensional subspace to the <em>n</em>-dimensional subspace follows the same argument but introduces more notation than we need so we’ll stick with the two-dimensional case for awhile. For the two-dimensional case, the optimal MMSE solution has the form</p>
+<div class="math notranslate nohighlight">
+\[ \hat{\mathbf{y}} = \alpha_1 \mathbf{v}_1 + \alpha_2 \mathbf{v}_2 \in \mathbb{R}^m \]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> exists in the m-dimensional space of real numbers. We want to project this vector onto the two m-dimensional  <span class="math notranslate nohighlight">\(\mathbf{v}_i\)</span> vectors.  Here, the orthogonality requirement extends as</p>
+<div class="math notranslate nohighlight">
+\[ \langle \mathbf{y} - \alpha_1 \mathbf{v}_1 -\alpha_2 \mathbf{v}_2 , \mathbf{v}_1\rangle= 0 \]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[ \langle \mathbf{y} - \alpha_1 \mathbf{v}_1 -\alpha_2 \mathbf{v}_2 , \mathbf{v}_2\rangle= 0 \]</div>
+<p>Recall that for vectors, we have</p>
+<div class="math notranslate nohighlight">
+\[ \langle \mathbf{x} , \mathbf{y}\rangle  = \mathbf{x}^T \mathbf{y} \in \mathbb{R}\]</div>
+<p>This leads to the linear system of equations:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} \begin{eqnarray}
+\langle \mathbf{y}, \mathbf{v}_1\rangle = &amp; \alpha_1 \langle \mathbf{v}_1, \mathbf{v}_1\rangle  &amp;  +\alpha_2 \langle \mathbf{v}_1, \mathbf{v}_2\rangle   \\\\
+\langle \mathbf{y}, \mathbf{v}_2\rangle = &amp; \alpha_1 \langle \mathbf{v}_1, \mathbf{v}_2\rangle  &amp;  +\alpha_2 \langle \mathbf{v}_2, \mathbf{v}_2\rangle 
+\end{eqnarray}
+\end{split}\]</div>
+<p>which can be written in matrix form as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} \left[ \begin{array}{c}
+\langle \mathbf{y}, \mathbf{v}_1\rangle  \\\\
+\langle \mathbf{y}, \mathbf{v}_2\rangle  \\\\
+\end{array} \right] = 
+\left[ \begin{array}{cc}
+\langle \mathbf{v}_1, \mathbf{v}_1\rangle &amp; \langle \mathbf{v}_1, \mathbf{v}_2\rangle \\\\
+\langle \mathbf{v}_1, \mathbf{v}_2\rangle  &amp; \langle \mathbf{v}_2, \mathbf{v}_2\rangle \\\\
+\end{array} \right] \left[
+\begin{array}{c}
+\alpha_1  \\\\
+\alpha_2  \\\\
+\end{array} \right]\end{split}\]</div>
+<p>which can be further reduced by stacking the columns into</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{V} = \left[ \mathbf{v}_1, \mathbf{v}_2 \right] \in \mathbb{R}^{m \times 2} \]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[ \boldsymbol{\alpha}= \left[ \alpha_1, \alpha_2\right]^T \in \mathbb{R}^{2}\]</div>
+<p>which gives</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{V}^T \mathbf{y} = (\mathbf{V}^T \mathbf{V}) \boldsymbol{\alpha} \]</div>
+<p>Note that by writing this using vector notation, we have implicitly generalized beyond two dimensions since there is nothing to stop from stacking <span class="math notranslate nohighlight">\(\mathbf{V}\)</span> with more column vectors to create a larger subspace. By solving we obtain,</p>
+<div class="math notranslate nohighlight">
+\[ \boldsymbol{\alpha} = (\mathbf{V}^T \mathbf{V})^{-1} \mathbf{V}^T \mathbf{y} \]</div>
+<p>and so the optimal solution is then,</p>
+<div class="math notranslate nohighlight">
+\[ \hat{\mathbf{y}} = \mathbf{V} \boldsymbol{\alpha} \in \mathbb{R}^m \]</div>
+<p>Note that the existence of the inverse is guaranteed by the non-co-linearity of the <span class="math notranslate nohighlight">\(\mathbf{v}_i\)</span> vectors. Whether or not that inverse is numerically stable is another issue.</p>
+<p>Then, we can combine these to obtain</p>
+<div class="math notranslate nohighlight">
+\[ \hat{\mathbf{y}} = \mathbf{V} (\mathbf{V}^T \mathbf{V})^{-1} \mathbf{V}^T \mathbf{y} \]</div>
+<p>when then makes the projection operator for this case:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{P}_{V}= \mathbf{V} (\mathbf{V}^T \mathbf{V})^{-1} \mathbf{V}^T \in \mathbb{R}^{m \times m} \]</div>
+<p>As a quick check, we can see this reduce to the 1-dimensional case by setting</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{V}= \mathbf{v} \in \mathbb{R}^m\]</div>
+<p>so then,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{P}_{v}= \mathbf{v} \frac{1}{\mathbf{v}^T \mathbf{v}} \mathbf{v}^T \]</div>
+<p>which matches our <a class="reference external" href="http://python-for-signal-processing.blogspot.com/2012/11/the-projection-concept.html">previous result</a>. The point of all these manipulations is that we can construct another projection operator with all the MMSE properties we had before, but now in a bigger subspace.  We can further verify the idempotent property of projection matrices by checking that</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{P}_V \mathbf{P}_V = \mathbf{P}_V\]</div>
+<p>The following graphic shows that when we project the three dimensional <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> vector onto the plane, which is spanned by the two <span class="math notranslate nohighlight">\(\mathbf{v}_i\)</span> vectors, we obtain the MMSE solution where the sphere is tangent to the plane. The point of tangency is the  point <span class="math notranslate nohighlight">\(\hat{\mathbf{y}} \)</span> which is the MMSE solution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#http://stackoverflow.com/questions/10374930/matplotlib-annotating-a-3d-scatter-plot
+
+from mpl_toolkits.mplot3d import proj3d
+import matplotlib.pyplot as plt
+import numpy as np
+
+fig = plt.figure()
+fig.set_size_inches([8,8])
+
+ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+
+ax.set_aspect(1)
+ax.set_xlim([0,2])
+ax.set_ylim([0,2])
+ax.set_zlim([0,2])
+ax.set_aspect(1)
+ax.set_xlabel(&#39;x-axis&#39;,fontsize=16)
+ax.set_ylabel(&#39;y-axis&#39;,fontsize=16)
+ax.set_zlabel(&#39;z-axis&#39;,fontsize=16)
+
+y = matrix([1,1,1]).T 
+V = matrix([[1,0.25], # columns are v_1, v_2
+            [0,0.50],
+            [0,0.00]])
+
+alpha=inv(V.T*V)*V.T*y # optimal coefficients
+P = V*inv(V.T*V)*V.T
+yhat = P*y         # approximant
+
+
+u = np.linspace(0, 2*np.pi, 100)
+v = np.linspace(0, np.pi, 100)
+
+xx = np.outer(np.cos(u), np.sin(v))
+yy = np.outer(np.sin(u), np.sin(v))
+zz = np.outer(np.ones(np.size(u)), np.cos(v))
+
+sphere=ax.plot_surface(xx+y[0,0], yy+y[1,0], zz+y[2,0],  
+                       rstride=4, cstride=4, color=&#39;gray&#39;,alpha=0.3,lw=0.25)
+
+ax.plot3D([y[0,0],0],[y[1,0],0],[y[2,0],0],&#39;r-&#39;,lw=3)
+ax.plot3D([y[0,0]],[y[1,0]],[y[2,0]],&#39;ro&#39;)
+
+ax.plot3D([V[0,0],0],[V[1,0],0],[V[2,0],0],&#39;b-&#39;,lw=3)
+ax.plot3D([V[0,0]],[V[1,0]],[V[2,0]],&#39;bo&#39;)
+ax.plot3D([V[0,1],0],[V[1,1],0],[V[2,1],0],&#39;b-&#39;,lw=3)
+ax.plot3D([V[0,1]],[V[1,1]],[V[2,1]],&#39;bo&#39;)
+
+ax.plot3D([yhat[0,0],0],[yhat[1,0],0],[yhat[2,0],0],&#39;g--&#39;,lw=3)
+ax.plot3D([yhat[0,0]],[yhat[1,0]],[yhat[2,0]],&#39;go&#39;)
+
+
+x2, y2, _ = proj3d.proj_transform(y[0,0],y[1,0],y[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{y}$&quot;, 
+    xy = (x2, y2), xytext = (-20, 20), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(yhat[0,0],yhat[1,0],yhat[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\hat{\mathbf{y}}$&quot;, 
+    xy = (x2, y2), xytext = (-40, 10), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(V[0,0],V[1,0],V[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{v}_1$&quot;, 
+    xy = (x2, y2), xytext = (120, 10), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(V[0,1],V[1,1],V[2,1], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{v}_2$&quot;, 
+    xy = (x2, y2), xytext = (-30, 30), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a7d3ae353aa0fbe1758d3d7d541aa51025843a63e2446af72b2b5d2fb4ebf516.png" src="../_images/a7d3ae353aa0fbe1758d3d7d541aa51025843a63e2446af72b2b5d2fb4ebf516.png" />
+</div>
+</div>
+<section id="weighted-distances">
+<h2>Weighted Distances<a class="headerlink" href="#weighted-distances" title="Link to this heading">#</a></h2>
+<p>As before, we can easily extend this projection operator to cases where the measure of distance between <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> and the subspace <span class="math notranslate nohighlight">\(\mathbf{v}\)</span> is weighted (i.e. non-uniform). We can accomodate these weighted distances by re-writing the projection operator as</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{P}_{V} = \mathbf{V} ( \mathbf{V}^T \mathbf{Q V})^{-1} \mathbf{V}^T \mathbf{Q} \]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{Q}\)</span> is positive definite matrix.  Earlier, we started with a point <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> and inflated a sphere  centered at <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> until it just touched the plane defined by <span class="math notranslate nohighlight">\(\mathbf{v}_i\)</span> and this point was closest point on the subspace to <span class="math notranslate nohighlight">\(\mathbf{y}\)</span>. In the general case with a weighted distance except now we inflate an ellipsoid, not a sphere, until the ellipsoid touches the line.</p>
+<p>The code and figure below illustrate what happens using the weighted <span class="math notranslate nohighlight">\( \mathbf{P}_v \)</span>. It is basically the same code we used above. You can download the IPython notebook corresponding to this post and try different values on the diagonal of <span class="math notranslate nohighlight">\(\mathbf{Q}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from mpl_toolkits.mplot3d import proj3d
+import matplotlib.pyplot as plt
+import numpy as np
+
+fig = plt.figure()
+fig.set_size_inches([8,8])
+
+ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+ax.set_xlim([0,2])
+ax.set_ylim([0,2])
+ax.set_zlim([0,2])
+ax.set_aspect(1)
+ax.set_xlabel(&#39;x-axis&#39;,fontsize=16)
+ax.set_ylabel(&#39;y-axis&#39;,fontsize=16)
+ax.set_zlabel(&#39;z-axis&#39;,fontsize=16)
+
+y = matrix([1,1,1]).T 
+V = matrix([[1,0.25], # columns are v_1, v_2
+            [0,0.50],
+            [0,0.00]])
+
+Q = matrix([[1,0,0],
+            [0,2,0],
+            [0,0,3]])
+
+P = V*inv(V.T*Q*V)*V.T*Q
+yhat = P*y         # approximant
+
+
+u = np.linspace(0, 2*np.pi, 100)
+v = np.linspace(0, np.pi, 100)
+
+xx = np.outer(np.cos(u), np.sin(v))
+yy = np.outer(np.sin(u), np.sin(v))
+zz = np.outer(np.ones(np.size(u)), np.cos(v))
+
+xx,yy,yz=map(squeeze,split(tensordot(dstack([xx,yy,zz]),Q,axes=1),3,axis=2))
+
+ellipsoid=ax.plot_surface(xx+y[0,0], yy+y[1,0], zz+y[2,0],  
+                           rstride=4, cstride=4, color=&#39;gray&#39;,alpha=0.3,lw=0.25)
+
+ax.plot3D([y[0,0],0],[y[1,0],0],[y[2,0],0],&#39;r-&#39;,lw=3)
+ax.plot3D([y[0,0]],[y[1,0]],[y[2,0]],&#39;ro&#39;)
+
+ax.plot3D([V[0,0],0],[V[1,0],0],[V[2,0],0],&#39;b-&#39;,lw=3)
+ax.plot3D([V[0,0]],[V[1,0]],[V[2,0]],&#39;bo&#39;)
+ax.plot3D([V[0,1],0],[V[1,1],0],[V[2,1],0],&#39;b-&#39;,lw=3)
+ax.plot3D([V[0,1]],[V[1,1]],[V[2,1]],&#39;bo&#39;)
+
+ax.plot3D([yhat[0,0],0],[yhat[1,0],0],[yhat[2,0],0],&#39;g--&#39;,lw=3)
+ax.plot3D([yhat[0,0]],[yhat[1,0]],[yhat[2,0]],&#39;go&#39;)
+
+x2, y2, _ = proj3d.proj_transform(y[0,0],y[1,0],y[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{y}$&quot;, 
+    xy = (x2, y2), xytext = (-20, 20), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(yhat[0,0],yhat[1,0],yhat[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\hat{\mathbf{y}}$&quot;, 
+    xy = (x2, y2), xytext = (40, 30), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(V[0,0],V[1,0],V[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{v}_1$&quot;, 
+    xy = (x2, y2), xytext = (120, 10), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(V[0,1],V[1,1],V[2,1], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{v}_2$&quot;, 
+    xy = (x2, y2), xytext = (-30, 30), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cc4fe7c9114b42b5098abb864300a46666bbf99150b58b751f652b1a485e3a75.png" src="../_images/cc4fe7c9114b42b5098abb864300a46666bbf99150b58b751f652b1a485e3a75.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>In this section, we extended the concept of a projection operator beyond one dimension and showed the corresponding geometric concepts that tie the projection operator to MMSE problems in more than one dimension.</p>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>This post was created using the <a class="reference external" href="https://github.com/ipython/nbconvert">nbconvert</a> utility from the source <a class="reference internal" href="#www.ipython.org"><span class="xref myst">IPython Notebook</span></a> which is available for <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Projection_mdim.ipynb">download</a> from the main github <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing">site</a> for this blog. The projection concept is masterfully discussed in the classic Strang, G. (2003). <em>Introduction to linear algebra</em>. Wellesley Cambridge Pr. Also, some of Dr. Strang’s excellent lectures are available on <a class="reference external" href="http://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/">MIT Courseware</a>. I highly recommend these as well as the book.</p>
+</section>
+<section id="appendix">
+<h2>Appendix<a class="headerlink" href="#appendix" title="Link to this heading">#</a></h2>
+<p>Below is some extra code to handle the more general case where there is a rotation as well as a weighting of the axes. Note the projection operator is constructed exactly the same way.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from mpl_toolkits.mplot3d import proj3d
+import matplotlib.pyplot as plt
+import numpy as np
+
+fig = plt.figure()
+fig.set_size_inches([8,8])
+
+ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+ax.set_xlim([0,2])
+ax.set_ylim([0,2])
+ax.set_zlim([0,2])
+ax.set_aspect(1)
+ax.set_xlabel(&#39;x-axis&#39;,fontsize=16)
+ax.set_ylabel(&#39;y-axis&#39;,fontsize=16)
+ax.set_zlabel(&#39;z-axis&#39;,fontsize=16)
+
+y = matrix([1,1,1]).T 
+V = matrix([[1,0.25], # columns are v_1, v_2
+            [0,0.50],
+            [0,0.00]])
+
+def rotation_matrix(angle,axis=&#39;z&#39;):                  
+    angle = angle/180.*pi
+    if axis==&#39;z&#39;:
+        return matrix([[cos(angle),sin(angle),0],
+                  [sin(-angle),cos(angle),0],
+                  [0,0,1]])
+    elif axis==&#39;y&#39;:
+        return matrix([[cos(angle),sin(angle),0],
+                       [0,1,0],
+                       [sin(-angle),cos(angle),0]])
+    elif axis==&#39;x&#39;:
+        return matrix([[1,0,0],
+                       [cos(angle),sin(angle),0],
+                       [sin(-angle),cos(angle),0]])
+          
+S = matrix([[3,0,0],
+            [0,2,0],
+            [0,0,1]])
+
+R = rotation_matrix(30)*rotation_matrix(30,&#39;x&#39;)*rotation_matrix(40,&#39;y&#39;)
+
+Q = R.T*S*R # apply 3-D rotations
+
+P = V*inv(V.T*Q*V)*V.T*Q # build projection matrix
+yhat = P*y         # approximant
+
+
+u = np.linspace(0, 2*np.pi, 100)
+v = np.linspace(0, np.pi, 100)
+
+xx = np.outer(np.cos(u), np.sin(v))
+yy = np.outer(np.sin(u), np.sin(v))
+zz = np.outer(np.ones(np.size(u)), np.cos(v))
+
+xx,yy,yz=map(squeeze,split(tensordot(dstack([xx,yy,zz]),Q,axes=1),3,axis=2))
+
+ellipsoid=ax.plot_surface(xx+y[0,0], yy+y[1,0], zz+y[2,0],  
+                           rstride=4, cstride=4, color=&#39;gray&#39;,alpha=0.3,lw=0.25)
+
+ax.plot3D([y[0,0],0],[y[1,0],0],[y[2,0],0],&#39;r-&#39;,lw=3)
+ax.plot3D([y[0,0]],[y[1,0]],[y[2,0]],&#39;ro&#39;)
+
+ax.plot3D([V[0,0],0],[V[1,0],0],[V[2,0],0],&#39;b-&#39;,lw=3)
+ax.plot3D([V[0,0]],[V[1,0]],[V[2,0]],&#39;bo&#39;)
+ax.plot3D([V[0,1],0],[V[1,1],0],[V[2,1],0],&#39;b-&#39;,lw=3)
+ax.plot3D([V[0,1]],[V[1,1]],[V[2,1]],&#39;bo&#39;)
+
+ax.plot3D([yhat[0,0],0],[yhat[1,0],0],[yhat[2,0],0],&#39;g--&#39;,lw=3)
+ax.plot3D([yhat[0,0]],[yhat[1,0]],[yhat[2,0]],&#39;go&#39;)
+
+x2, y2, _ = proj3d.proj_transform(y[0,0],y[1,0],y[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{y}$&quot;, 
+    xy = (x2, y2), xytext = (-20, 20), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(yhat[0,0],yhat[1,0],yhat[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\hat{\mathbf{y}}$&quot;, 
+    xy = (x2, y2), xytext = (40, 30), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(V[0,0],V[1,0],V[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{v}_1$&quot;, 
+    xy = (x2, y2), xytext = (120, 10), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(V[0,1],V[1,1],V[2,1], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{v}_2$&quot;, 
+    xy = (x2, y2), xytext = (-30, 30), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a5dc642c2f381c250d853ea63510ab57f6662154947cb6afd9179c2de1c52afa.png" src="../_images/a5dc642c2f381c250d853ea63510ab57f6662154947cb6afd9179c2de1c52afa.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Projection_Ex.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">References</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Inverse_Projection_Constrained_Optimization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Inverse Projection</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Projection in Multiple Dimensions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#weighted-distances">Weighted Distances</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix">Appendix</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

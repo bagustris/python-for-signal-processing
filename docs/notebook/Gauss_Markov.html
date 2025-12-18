@@ -1,0 +1,779 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Gauss_Markov';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Maximum Likelihood Estimation" href="Maximum_likelihood.html" />
+    <link rel="prev" title="Inverse Projection" href="Inverse_Projection_Constrained_Optimization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Gauss_Markov.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Gauss_Markov.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<p>In this section, we  consider the famous Gauss-Markov problem which will give us an opportunity to use all the material we have so far developed. The Gauss-Markov is the fundamental model for noisy parameter estimation because it estimates unobservable parameters given a noisy indirect measurement.  Incarnations of the same model appear in all studies of Gaussian models. This case is an excellent opportunity to use everything we have so far learned about projection and conditional expectation.</p>
+<p>Following Luenberger (1997), let’s  consider the following problem:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{y} = \mathbf{W} \boldsymbol{\beta} + \boldsymbol{\epsilon} \]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{W}\)</span> is a <span class="math notranslate nohighlight">\( n \times m \)</span> matrix, and <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> is a <span class="math notranslate nohighlight">\(n \times 1\)</span> vector. Also, <span class="math notranslate nohighlight">\(\boldsymbol{\epsilon}\)</span> is a <span class="math notranslate nohighlight">\(n\)</span>-dimensional random vector with zero-mean and covariance</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}( \boldsymbol{\epsilon} \boldsymbol{\epsilon}^T) = \mathbf{Q}\]</div>
+<p>Note that real systems usually provide a <em>calibration mode</em> where you can estimate <span class="math notranslate nohighlight">\(\mathbf{Q}\)</span> so it’s not fantastical to assume you have some knowledge of the noise statistics. The problem is to find a matrix <span class="math notranslate nohighlight">\(\mathbf{K}\)</span> so that <span class="math notranslate nohighlight">\( \boldsymbol{\hat{\beta}} = \mathbf{K} \mathbf{y}\)</span>  approximates <span class="math notranslate nohighlight">\( \boldsymbol{\beta}\)</span>.  Note that we only have knowledge of <span class="math notranslate nohighlight">\(\boldsymbol{\beta}\)</span> via <span class="math notranslate nohighlight">\( \mathbf{y}\)</span> so we can’t measure it directly. Further, note that <span class="math notranslate nohighlight">\(\mathbf{K} \)</span> is a matrix, not a vector, so there are <span class="math notranslate nohighlight">\(m \times n\)</span> entries to compute.</p>
+<p>We can approach this problem the usual way by trying to solve the MMSE problem:</p>
+<div class="math notranslate nohighlight">
+\[ \min_K \mathbb{E}(|| \boldsymbol{\hat{\beta}}- \boldsymbol{\beta} ||^2)\]</div>
+<p>which we can write out as</p>
+<div class="math notranslate nohighlight">
+\[ \min_K \mathbb{E}(|| \boldsymbol{\hat{\beta}}- \boldsymbol{\beta} ||^2)
+=  \min_K\mathbb{E}(|| \mathbf{K}\mathbf{y}- \boldsymbol{\beta} ||^2)
+=  \min_K\mathbb{E}(|| \mathbf{K}\mathbf{W}\mathbf{\boldsymbol{\beta}}+\mathbf{K}\boldsymbol{\epsilon}- \boldsymbol{\beta} ||^2)\]</div>
+<p>and since <span class="math notranslate nohighlight">\(\boldsymbol{\epsilon}\)</span> is the only random variable here, this simplifies to</p>
+<div class="math notranslate nohighlight">
+\[\min_K || \mathbf{K}\mathbf{W}\mathbf{\boldsymbol{\beta}}- \boldsymbol{\beta} ||^2 + \mathbb{E}(||\mathbf{K}\boldsymbol{\epsilon} ||^2)
+\]</div>
+<p>The next step is to compute</p>
+<p><span class="math notranslate nohighlight">\(\DeclareMathOperator{\Tr}{Trace}\)</span>
+$<span class="math notranslate nohighlight">\( \mathbb{E}(||\mathbf{K}\boldsymbol{\epsilon} ||^2) = \mathbb{E}(\boldsymbol{\epsilon}^T \mathbf{K}^T \mathbf{K}^T \boldsymbol{\epsilon})=\Tr(\mathbf{K \mathbb{E}(\boldsymbol{\epsilon}\boldsymbol{\epsilon}^T) K}^T)=\Tr(\mathbf{K Q K}^T)\)</span>$</p>
+<p>using the properties of the trace of  a matrix. We can assemble everything as</p>
+<div class="math notranslate nohighlight">
+\[  \min_K || \mathbf{K W} \boldsymbol{\beta} -  \boldsymbol{\beta}||^2 + \Tr(\mathbf{K Q K}^T) \]</div>
+<p>Now, if we were to solve this for <span class="math notranslate nohighlight">\(\mathbf{K}\)</span>, it would be a function of <span class="math notranslate nohighlight">\( \boldsymbol{\beta}\)</span>, which is the same thing as saying that the estimator, <span class="math notranslate nohighlight">\( \boldsymbol{\hat{\beta}}\)</span>, is a function of what we are trying to estimate, <span class="math notranslate nohighlight">\( \boldsymbol{\beta}\)</span>, which makes no sense. However, writing this out tells us that if we had <span class="math notranslate nohighlight">\(\mathbf{K W}= \mathbf{I}\)</span>, then the first term  vanishes and the problem simplifies to</p>
+<div class="math notranslate nohighlight">
+\[ \min_K \Tr(\mathbf{K Q K}^T) \]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{KW} = \mathbf{I}\]</div>
+<p>This requirement is the same as asserting that the estimator is unbiased,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}( \boldsymbol{\hat{\beta}}) = \mathbf{KW}  \boldsymbol{\beta} =  \boldsymbol{\beta}  \]</div>
+<p>To line this problem up with our earlier work, let’s consider  the <span class="math notranslate nohighlight">\(i^{th}\)</span> column of <span class="math notranslate nohighlight">\(\mathbf{K}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{k}_i\)</span>. Now, we can re-write the problem as</p>
+<div class="math notranslate nohighlight">
+\[ \min_k (\mathbf{k}_i^T \mathbf{Q} \mathbf{k}_i) \]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{k}_i^T \mathbf{W} = \mathbf{e}_i\]</div>
+<p>and from our previous work on contrained optimization, we know the solution to this:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{k}_i  = \mathbf{Q}^{-1} \mathbf{W}(\mathbf{W}^T \mathbf{Q^{-1} W})^{-1}\mathbf{e}_i\]</div>
+<p>Now all we have to do is stack these together for the general solution:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{K}  = (\mathbf{W}^T \mathbf{Q^{-1} W})^{-1} \mathbf{W}^T\mathbf{Q}^{-1} \]</div>
+<p>It’s easy when you have all of the concepts lined up! For completeness, the covariance of the error is</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\hat{\boldsymbol{\beta}}-\boldsymbol{\beta}) (\hat{\boldsymbol{\beta}}-\boldsymbol{\beta})^T
+= \mathbb{E}(\mathbf{K} \boldsymbol{\epsilon} \boldsymbol{\epsilon}^T \mathbf{K}^T)=\mathbf{K}\mathbf{Q}\mathbf{K}^T =(\mathbf{W}^T \mathbf{Q}^{-1} \mathbf{W})^{-1}\]</div>
+<p>The following  simulation  illustrates these results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from mpl_toolkits.mplot3d import proj3d
+from numpy.linalg import inv
+import matplotlib.pyplot as plt
+import numpy as np
+from numpy import matrix, linalg, ones, array
+
+Q = np.eye(3)*.1 # error covariance matrix
+#Q[0,0]=1
+
+beta = matrix(ones((2,1))) # this is what we are trying estimate
+W = matrix([[1,2],
+            [2,3],
+            [1,1]])
+
+ntrials = 50 
+epsilon = np.random.multivariate_normal((0,0,0),Q,ntrials).T 
+y=W*beta+epsilon
+
+K=inv(W.T*inv(Q)*W)*matrix(W.T)*inv(Q) 
+b=K*y #estimated beta from data
+
+fig = plt.figure()
+fig.set_size_inches([6,6])
+
+# some convenience definitions for plotting
+bb = array(b)
+bm = bb.mean(1)
+yy = array(y)
+ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+
+ax.plot3D(yy[0,:],yy[1,:],yy[2,:],&#39;mo&#39;,label=&#39;y&#39;,alpha=0.3)
+ax.plot3D([beta[0,0],0],[beta[1,0],0],[0,0],&#39;r-&#39;,label=r&#39;$\beta$&#39;)
+ax.plot3D([bm[0],0],[bm[1],0],[0,0],&#39;g-&#39;,lw=1,label=r&#39;$\hat{\beta}_m$&#39;)
+ax.plot3D(bb[0,:],bb[1,:],0*bb[1,:],&#39;.g&#39;,alpha=0.5,lw=3,label=r&#39;$\hat{\beta}$&#39;)
+ax.legend(loc=0,fontsize=18)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ba576bea868c84a65c20ed296b2d434061a4b7fd2e538f30d626be9925213b7a.png" src="../_images/ba576bea868c84a65c20ed296b2d434061a4b7fd2e538f30d626be9925213b7a.png" />
+</div>
+</div>
+<p>The figure above show the simulated <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> data as magenta circles. The green dots show the corresponding estimates, <span class="math notranslate nohighlight">\(\boldsymbol{\hat{\beta}}\)</span> for each sample. The red and green lines show the true value of <span class="math notranslate nohighlight">\(\boldsymbol{\beta}\)</span> versus the average of the estimated <span class="math notranslate nohighlight">\(\boldsymbol{\beta}\)</span>-values, <span class="math notranslate nohighlight">\(\boldsymbol{\hat{\beta_m}}\)</span>. The matrix <span class="math notranslate nohighlight">\(\mathbf{K}\)</span> maps the magenta circles in the corresponding green dots. Note there are many possible ways to map the magenta circles to the plane, but the <span class="math notranslate nohighlight">\(\mathbf{K}\)</span> is the ones that minimizes the MSE for <span class="math notranslate nohighlight">\(\boldsymbol{\beta}\)</span>.</p>
+<p>The figure below shows more detail in the horizontal <em>xy</em>-plane above.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from  matplotlib.patches import Ellipse
+
+fig, ax = plt.subplots()
+fig.set_size_inches((6,6))
+ax.set_aspect(1)
+ax.plot(bb[0,:],bb[1,:],&#39;g.&#39;)
+ax.plot([beta[0,0],0],[beta[1,0],0],&#39;r--&#39;,label=r&#39;$\beta$&#39;,lw=4.)
+ax.plot([bm[0],0],[bm[1],0],&#39;g-&#39;,lw=1,label=r&#39;$\hat{\beta}_m$&#39;)
+ax.legend(loc=0,fontsize=18)
+ax.grid()
+
+bm_cov = inv(W.T*Q*W)
+U,S,V = linalg.svd(bm_cov) 
+
+err = np.sqrt((matrix(bm))*(bm_cov)*(matrix(bm).T))
+theta = np.arccos(U[0,1])/np.pi*180
+
+ax.add_patch(Ellipse(bm,err*2/np.sqrt(S[0]),err*2/np.sqrt(S[1])
+                       ,angle=theta,color=&#39;pink&#39;,alpha=0.5))
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6d6576de4faaf1db07cd04c7a6dea721091873aa6a1163579c7706064a4444cc.png" src="../_images/6d6576de4faaf1db07cd04c7a6dea721091873aa6a1163579c7706064a4444cc.png" />
+</div>
+</div>
+<p>The figure above shows the green dots, which are individual estimates of <span class="math notranslate nohighlight">\(\boldsymbol{\hat{\beta}}\)</span> from the corresponding simulated <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> data. The red dashed line is the true value for <span class="math notranslate nohighlight">\(\boldsymbol{\beta}\)</span> and the green line (<span class="math notranslate nohighlight">\(\boldsymbol{\hat{\beta_m}}\)</span> ) is the average of all the green dots. Note there is hardly a visual difference between them. The pink ellipse provides some scale as to the covariance of the estimated <span class="math notranslate nohighlight">\(\boldsymbol{\beta}\)</span>  values. I invite you to download this <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Gauss_Markov.ipynb">IPython notebook</a>  and tweak the values for the error covariance or any other parameter. All of the plots should update and scale correctly.</p>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>The Gauss-Markov problem is the cornerstone of all Gaussian modeling and is thus one of the most powerful models used in signal processing. We showed how to estimate the unobservable parameters given noisy measurements using our previous work on projection. We also coded up a short example to illustrate how this works in a simulation. For a much more detailed approach, see Luenberger (1997).</p>
+<p>As usual, the corresponding IPython notebook for this post  is available for download <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Gauss_Markov.ipynb">here</a>.</p>
+<p>Comments and corrections welcome!</p>
+</section>
+<section id="references">
+<h1>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Luenberger, David G. <em>Optimization by vector space methods</em>. Wiley-Interscience, 1997.</p></li>
+</ul>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Inverse_Projection_Constrained_Optimization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Inverse Projection</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Maximum_likelihood.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Maximum Likelihood Estimation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

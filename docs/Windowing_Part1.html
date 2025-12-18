@@ -1,0 +1,772 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Windowing_Part1';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction" href="Windowing_Part2.html" />
+    <link rel="prev" title="Introduction" href="More_Fourier_Transform.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="Sampling_Theorem_Part_1.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="Sampling_Theorem_Part_1.html">
+                    Sampling Theorem - Part 1:
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2FWindowing_Part1.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Windowing_Part1.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-a-window">What is a window?</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<p>In the <a class="reference external" href="http://python-for-signal-processing.blogspot.com/2013/03/spectral-estimation-using-discrete.html">prior section</a>, we discovered that resolving two nearby frequencies depends crucially on the rectangular window and its corresponding <code class="docutils literal notranslate"><span class="pre">sinc</span></code> Discrete Fourier Transform (DFT). However, our two nearby signals had <em>equal</em> amplitudes. What happens when  this is no longer the case? The figure below shows the DFT of two nearby signals where one has ten times the amplitude.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span>
+
+<span class="c1"># some useful functions </span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dftmatrix</span><span class="p">(</span><span class="n">Nfft</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s1">&#39;construct DFT matrix&#39;</span>
+    <span class="n">k</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nfft</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">N</span> <span class="o">=</span> <span class="n">Nfft</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">Nfft</span> <span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]))</span> <span class="c1"># use numpy broadcasting to create matrix</span>
+    <span class="k">return</span> <span class="n">U</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nfft</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">db20</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">Nfft</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s1">&#39;Given DFT, return power level in dB&#39;</span>
+    <span class="k">if</span> <span class="n">Nfft</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># assume W is DFT </span>
+        <span class="k">return</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">W</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># assume time-domain passed, so need DFT</span>
+        <span class="k">return</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">W</span><span class="p">,</span><span class="n">Nfft</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nfft</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span>
+
+<span class="n">fs</span> <span class="o">=</span> <span class="mi">64</span> <span class="c1"># sampling frequency</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># one signal</span>
+<span class="n">deltaf</span> <span class="o">=</span> <span class="mf">2.3</span> <span class="c1"># second nearby frequency</span>
+
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">512</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="n">deltaf</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="c1"># equal amplitudes</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="s1">&#39;Same amplitudes&#39;</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+            <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;Lightyellow&#39;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="n">deltaf</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="c1"># one has 10x the amplitude</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="s1">&#39;Different amplitudes&#39;</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+                <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;lightyellow&#39;</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Smaller signal&#39;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)[</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="n">Nf</span><span class="p">)]),</span>
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">15</span><span class="p">),</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;alpha&#39;</span><span class="p">:</span><span class="mf">.3</span><span class="p">});</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/6449c8dedbf0275d0d25b673d21fe1ced2a2b7a1e336c00a3a822d211250d9e7.png" src="_images/6449c8dedbf0275d0d25b673d21fe1ced2a2b7a1e336c00a3a822d211250d9e7.png" />
+</div>
+</div>
+<p>In the figure above, the top plot shows the  two peaks of  nearby signals when they both have the same amplitude. The bottom plot shows the case where the higher frequency signal has ten times the amplitude. Note that the two frequencies are no longer resolvable because the weaker signal (smaller amplitude) has descended into the sidelobes of the  stronger one. Thus, we need more than just longer sampling durations and denser DFTs to resolve these signals. This is where <em>windows</em> (sometimes called <em>tapers</em>) come in.</p>
+<section id="what-is-a-window">
+<h2>What is a window?<a class="headerlink" href="#what-is-a-window" title="Link to this heading">#</a></h2>
+<p>A window is a function that is multiplied sample-by-sample against the input signal (i.e. element-wise).  For example, given an input signal, <span class="math notranslate nohighlight">\(s_n\)</span>, and a window, <span class="math notranslate nohighlight">\(w_n\)</span>, the new windowed signal is,</p>
+<div class="math notranslate nohighlight">
+\[ y_n = s_n w_n \]</div>
+<p>known in vector notation as the <em>Hadamard</em> product,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{y} = \mathbf{w} \odot \mathbf{s}  \]</div>
+<p>The following figure compares the the rectangular and triangular windows applied to an input sinusoid.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">nsamp</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">window</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">triang</span><span class="p">(</span><span class="n">nsamp</span><span class="p">)</span>
+<span class="n">rectwin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nsamp</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsamp</span><span class="p">),</span><span class="n">window</span><span class="p">,</span><span class="s1">&#39;m-o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;triangular&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsamp</span><span class="p">),</span><span class="n">rectwin</span><span class="p">,</span><span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;rectangular&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymax</span> <span class="o">=</span> <span class="mf">1.1</span><span class="p">,</span><span class="n">ymin</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dftmatrix</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="mi">64</span><span class="p">)[:,</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="c1"># convert to numpy array</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">window</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">triang</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;signal&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">window</span><span class="o">*</span><span class="n">x</span><span class="p">,</span><span class="s1">&#39;-or&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;windowed</span><span class="se">\n</span><span class="s1">signal&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">5.</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Amplitude&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;sample index&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">window</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Window function&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">);</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/bagustris/.local/lib/python3.6/site-packages/ipykernel_launcher.py:11: UserWarning: In Matplotlib 3.3 individual lines on a stem plot will be added as a LineCollection instead of individual lines. This significantly improves the performance of a stem plot. To remove this warning and switch to the new behaviour, set the &quot;use_line_collection&quot; keyword argument to True.
+  # This is added back by InteractiveShellApp.init_path()
+</pre></div>
+</div>
+<img alt="_images/ab1b4786860f40de3b94ddcc05041ffba12bb7e789acda5028ba44ee916cf9c3.png" src="_images/ab1b4786860f40de3b94ddcc05041ffba12bb7e789acda5028ba44ee916cf9c3.png" />
+</div>
+</div>
+<p>In the figure above, the top plot shows the <span class="math notranslate nohighlight">\(w_n\)</span> sequences for the <font color="blue"> rectangular</font> and <font color="magenta"> triangular</font> windows. The bottom plot shows the input <font color="blue">signal before (light blue line) </font> and <font color="red"> after (red line)</font> applying the <font color="magenta">triangular window</font>. The amplitudes are noted on the vertical scale on the left. The triangular window is drawn in the background with scale noted on the right side. Basicially, the red line is the product of the blue line and the pink background window function. As shown, because the triangular window slopes to zero at  the beginning and at the end, the amplitude of the input signal drops away from the middle. This means that we lose precious signal energy at the start and end of the signal. We certainly want something in exchange for this!</p>
+<p>The following figure shows the two input signals with rectangular, triangular, and Hamming windows applied.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Nf</span> <span class="o">=</span> <span class="mi">512</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="n">deltaf</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="n">db20</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="s1">&#39;rectangular window&#39;</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+                <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;lightyellow&#39;</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Smaller signal&#39;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">db20</span><span class="p">(</span><span class="n">X</span><span class="p">)[</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="n">Nf</span><span class="p">)]),</span>
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">30</span><span class="p">),</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;m&#39;</span><span class="p">})</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">triang</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">w</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="n">db20</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="s1">&#39;triangular window&#39;</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+                <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;lightyellow&#39;</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Smaller signal&#39;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">db20</span><span class="p">(</span><span class="n">X</span><span class="p">)[</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="n">Nf</span><span class="p">)]),</span>
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">30</span><span class="p">),</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;m&#39;</span><span class="p">})</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">w</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="n">db20</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="s1">&#39;Hamming window&#39;</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+                <span class="n">backgroundcolor</span><span class="o">=</span><span class="s1">&#39;lightyellow&#39;</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;Smaller signal&#39;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">db20</span><span class="p">(</span><span class="n">X</span><span class="p">)[</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="n">Nf</span><span class="p">)]),</span>
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">30</span><span class="p">),</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;m&#39;</span><span class="p">});</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/8dd18413431595e82b06599bef956fd260bb5801883f975f90ed5c816de81e5e.png" src="_images/8dd18413431595e82b06599bef956fd260bb5801883f975f90ed5c816de81e5e.png" />
+</div>
+</div>
+<p>To enhance detail, the figure above shows the the <span class="math notranslate nohighlight">\(20\log_{10} | X_k |\)</span> of the DFT of the input signal with noted  windows applied on the same scale. The top plot shows the rectangular window and we can barely make out the smaller signal in the sidelobes of the dominant larger signal. The middle plot shows the triangular window and we can see that there is definitely something peeking out from the sidelobes, but we can see this most clearly using the Hamming window (bottom plot), which shows a peak at the nearby frequency. Note that the width of the mainlobe widened as the second weaker signal emerged from the sidelobes of the  stronger  signal. This is one of the trade-offs involved when using windows for spectral analysis.</p>
+</section>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>In this section, we demonstrated that window functions can help resolve nearby frequencies that have different amplitudes. As the plots showed, we traded precious signal energy for resolution, but we need a systematic framework for evaluating different window functions. This framework will be the topic of our next section.</p>
+<p>As usual, the original corresponding IPython notebook for this post  is available for download <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Windowing.ipynb">here</a>.</p>
+<p>Comments and corrections welcome!</p>
+</section>
+<section id="references">
+<h1>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Oppenheim, A. V., and A. S. Willsky. <em>Signals and Systems</em> Prentice-Hall, (1997).</p></li>
+<li><p>Proakis, John G. <em>Digital signal processing: principles algorithms and applications</em> Pearson Education India, 2001.</p></li>
+</ul>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="More_Fourier_Transform.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Windowing_Part2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-a-window">What is a window?</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

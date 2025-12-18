@@ -1,0 +1,749 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Conditional_Expectation_Gaussian';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Summary" href="Conditional_expectation_MSE.html" />
+    <link rel="prev" title="Compressive sampling Overview" href="Compressive_Sampling.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Conditional_Expectation_Gaussian.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Conditional_Expectation_Gaussian.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-expectation-by-optimization">Conditional Expectation by Optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-expectation-using-direct-integration">Conditional Expectation Using Direct Integration</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<p>By this point, we have developed many tools to deal with computing the conditional expectation. In this section, we discuss a bizarre and amazing coincidence regarding Gaussian random variables and linear projection, a coincidence that is the basis for most of statistical signal processing.</p>
+<section id="conditional-expectation-by-optimization">
+<h2>Conditional Expectation by Optimization<a class="headerlink" href="#conditional-expectation-by-optimization" title="Link to this heading">#</a></h2>
+<p>Now, let’s consider the important case of the zero-mean bivariate Gaussian and try to find a  function <span class="math notranslate nohighlight">\(h\)</span> that minimizes the mean squared error (MSE). Again,  trying to solve for the conditional expectation by minimizing the error over all possible functions <span class="math notranslate nohighlight">\(h\)</span> is generally very, very hard. One alternative is to use parameters for the <span class="math notranslate nohighlight">\(h\)</span> function and then just optimize over those. For example, we could assume that <span class="math notranslate nohighlight">\(h(Y)= \alpha Y\)</span> and then use calculus to find the <span class="math notranslate nohighlight">\(\alpha\)</span> parameter.</p>
+<p>Let’s try this with the zero-mean bivariate Gaussian density,</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}((X-\alpha Y )^2) = \mathbb{E}(\alpha^2 Y^2 - 2 \alpha X Y + X^2 )\]</div>
+<p>and then differentiate this with respect to <span class="math notranslate nohighlight">\(\alpha\)</span> to obtain</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(2 \alpha Y^2 - 2 X Y  ) = 2 \alpha \sigma_y^2 - 2 \mathbb{E}(XY) = 0\]</div>
+<p>Then, solving for <span class="math notranslate nohighlight">\(\alpha\)</span> gives</p>
+<div class="math notranslate nohighlight">
+\[ \alpha = \frac{ \mathbb{E}(X Y)}{ \sigma_y^2 } \]</div>
+<p>which means we that</p>
+<p>\begin{equation}
+\mathbb{ E}(X|Y) \approx \alpha Y =   \frac{ \mathbb{E}(X Y )}{ \sigma_Y^2 } Y =\frac{\sigma_{X Y}}{ \sigma_Y^2 } Y
+\end{equation}</p>
+<p>where that last equality is just notation. Remember here we assumed a special linear form for <span class="math notranslate nohighlight">\(h=\alpha Y\)</span>, but we did that for convenience. We still don’t know whether or not this is the one true <span class="math notranslate nohighlight">\(h_{opt}\)</span> that minimizes the MSE for all such functions.</p>
+</section>
+<section id="conditional-expectation-using-direct-integration">
+<h2>Conditional Expectation Using Direct Integration<a class="headerlink" href="#conditional-expectation-using-direct-integration" title="Link to this heading">#</a></h2>
+<p>Now, let’s try this again by computing  <span class="math notranslate nohighlight">\( \mathbb{E}(X|Y)\)</span> in the case of the bivariate Gaussian distribution straight from the definition.</p>
+<p>\begin{equation}
+\mathbb{E}(X|Y)  = \int_{\mathbb{ R}} x \frac{f_{X,Y}(x,y)}{f_Y(y)} dx
+\end{equation}</p>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[ f_{X,Y}(x,y) = \frac{1}{2\pi |\mathbf{R}|^{\frac{1}{2}}} e^{-\frac{1}{2} \mathbf{v}^T \mathbf{R}^{-1} \mathbf{v} } \]</div>
+<p>and where</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{v}= \left[ x,y \right]^T\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} \mathbf{R} = \left[ \begin{array}{cc}
+\sigma_{x}^2 &amp; \sigma_{xy}  \\\\
+\sigma_{xy}  &amp; \sigma_{y}^2 \\\\
+\end{array} \right] \end{split}\]</div>
+<p>and with</p>
+<p>\begin{eqnarray}
+\sigma_{xy} &amp;=&amp; \mathbb{E}(xy)   \nonumber    \
+\sigma_{x}^2 &amp;=&amp; \mathbb{E}(x^2) \nonumber    \
+\sigma_{y}^2 &amp;=&amp; \mathbb{E}(y^2) \nonumber<br />
+\end{eqnarray}</p>
+<p>This conditional expectation (Eq. 4 above) is a tough integral to evaluate, so we’ll do it with <code class="docutils literal notranslate"><span class="pre">sympy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from sympy import Matrix, Symbol, exp, pi, simplify, integrate 
+from sympy import stats, sqrt, oo, use
+from sympy.abc import y,x
+
+sigma_x = Symbol(&#39;sigma_x&#39;,positive=True)
+sigma_y = Symbol(&#39;sigma_y&#39;,positive=True)
+sigma_xy = Symbol(&#39;sigma_xy&#39;,real=True)
+fyy = stats.density(stats.Normal(&#39;y&#39;,0,sigma_y))(y)
+ 
+R = Matrix([[sigma_x**2, sigma_xy],
+            [sigma_xy,sigma_y**2]])
+fxy = 1/(2*pi)/sqrt(R.det()) * exp((-Matrix([[x,y]])*R.inv()* Matrix([[x],[y]]))[0,0]/2 )
+
+fcond = simplify(fxy/fyy)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Unfortunately, <code class="docutils literal notranslate"><span class="pre">sympy</span></code> cannot immediately integrate this without some hints. So, we need to define a positive variable (<span class="math notranslate nohighlight">\(u\)</span>) and substitute it into the integration</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>u=Symbol(&#39;u&#39;,positive=True) # define positive variable
+
+fcond2=fcond.subs(sigma_x**2*sigma_y**2-sigma_xy**2,u) # substitute as hint to integrate
+g=simplify(integrate(fcond2*x,(x,-oo,oo))) # evaluate integral
+gg=g.subs( u,sigma_x**2 *sigma_y**2 - sigma_xy**2 ) # substitute back in
+use( gg, simplify,level=2) # simplify exponent term
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>sigma_xy*y/sigma_y**2
+</pre></div>
+</div>
+</div>
+</div>
+<p>Thus, by direct integration using <code class="docutils literal notranslate"><span class="pre">sympy</span></code>, we found</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{ E}(X|Y) = Y \frac{\sigma_{xy}}{\sigma_{y}^{2}} \]</div>
+<p>and this matches the prior result we obtained by direct minimization by assuming that <span class="math notranslate nohighlight">\(\mathbb{E}(X|Y) = \alpha Y\)</span> and then solving for the optimal <span class="math notranslate nohighlight">\(\alpha\)</span>!</p>
+<p>The importance of this result cannot be understated: the one true and optimal <span class="math notranslate nohighlight">\(h_{opt}\)</span> <em>is a linear function</em> of <span class="math notranslate nohighlight">\(Y\)</span>.</p>
+<p>In other words, assuming a linear function, which made the direct search for an optimal <span class="math notranslate nohighlight">\(h(Y)\)</span> merely convenient yields the optimal result! This is  a general result that extends for <em>all</em> Gaussian problems. The link between linear functions and optimal estimation of Gaussian random variables is the most fundamental result in statistical signal processing! This fact is exploited in everything from optimal filter design  to adaptive signal processing.</p>
+<p>We can easily extend this result to non-zero mean problems by inserting the means in the right places as follows:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{ E}(X|Y) = \bar{X} + (Y-\bar{Y}) \frac{\sigma_{xy}}{\sigma_{y}^{2}}  \]</div>
+<p>where <span class="math notranslate nohighlight">\(\bar{X}\)</span> is the mean of <span class="math notranslate nohighlight">\(X\)</span> (same for <span class="math notranslate nohighlight">\(Y\)</span>).</p>
+</section>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>In this section, we showed that the conditional expectation for Gaussian random variables is a linear function, which, by a bizarre coincidence, is also the easiest one to work with. This result is fundamental to all optimal linear filtering problems (e.g. Kalman filter) and is the basis of most of the theory of stochastic processes used in signal processing. Up to this point, we have worked hard to illustrate all of the concepts we will need to unify our understanding of this entire field and figured out multiple approaches to these kinds of problems, most of which are far more difficult to compute. Thus, it is indeed just plain lucky that the most powerful distribution is the easiest to compute as a conditional expectation because it is a linear function. We will come back to this same result again and again as we work our way through these greater concepts.</p>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>This post was created using the <a class="reference external" href="https://github.com/ipython/nbconvert">nbconvert</a> utility from the source <a class="reference internal" href="#www.ipython.org"><span class="xref myst">IPython Notebook</span></a> which is available for <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Conditional_Expectation_Gaussian.ipynb">download</a> from the main github <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing">site</a> for this blog.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Compressive_Sampling.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Compressive sampling Overview</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Conditional_expectation_MSE.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Summary</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-expectation-by-optimization">Conditional Expectation by Optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-expectation-using-direct-integration">Conditional Expectation Using Direct Integration</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

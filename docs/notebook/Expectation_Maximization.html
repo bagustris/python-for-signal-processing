@@ -1,0 +1,842 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Expectation Maximization &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Expectation_Maximization';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Basic Definitions" href="Markov_chains.html" />
+    <link rel="prev" title="Maximum Likelihood Estimation" href="Maximum_likelihood.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Expectation_Maximization.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Expectation_Maximization.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Expectation Maximization</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Expectation Maximization</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experiment-measuring-from-unseen-groups">Experiment: Measuring from Unseen Groups</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-the-experiment">Simulating the Experiment</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Expectation maximization</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="expectation-maximization">
+<h1>Expectation Maximization<a class="headerlink" href="#expectation-maximization" title="Link to this heading">#</a></h1>
+<p>Expectation Maximization (EM) is a powerful technique for creating maximum likelihood estimators when the variables are difficult to separate. Here, we set up a Gaussian mixture experiment with two Gaussians and derive the corresponding estimators of their means using EM.</p>
+<section id="experiment-measuring-from-unseen-groups">
+<h2>Experiment: Measuring from Unseen Groups<a class="headerlink" href="#experiment-measuring-from-unseen-groups" title="Link to this heading">#</a></h2>
+<p>Let’s investigate the following experiment:</p>
+<p>Suppose we have a population with two distinct groups of individuals with different heights. If we randomly pick an individual from the population, assume we don’t know which group the individual is from. So, we measure that individual’s height and choose another individual. The goal is to estimate the mean heights of the two distinct groups when we have an unlabeled distribution of heights sampled from both groups.</p>
+<p>Group <strong>a</strong> is normally distributed as</p>
+<div class="math notranslate nohighlight">
+\[ \mathcal{N}_a(x) =\mathcal{N}(x; \mu_a,\sigma) \]</div>
+<p>and likewise for group <strong>b</strong></p>
+<div class="math notranslate nohighlight">
+\[ \mathcal{N}_b(x) =\mathcal{N}(x; \mu_b,\sigma) \]</div>
+<p>Note that we fix the standard deviation <span class="math notranslate nohighlight">\(\sigma\)</span> to be the same for both groups, but the means (<span class="math notranslate nohighlight">\(\mu_a,\mu_b\)</span>) are different. The problem is to estimate the means given that you can’t directly know which group you are picking from.</p>
+<p>Then we can write the joint density for this experiment as the following:</p>
+<div class="math notranslate nohighlight">
+\[ f_{\mu_a,\mu_b}(x,z)=  \frac{1}{2} \mathcal{N}_a(x) ^z \mathcal{N}_b(x) ^{1-z} \]</div>
+<p>where <span class="math notranslate nohighlight">\(z=1\)</span> if we pick from group <strong>a</strong> and <span class="math notranslate nohighlight">\(z=0\)</span> for group <strong>b</strong>. Note that the <span class="math notranslate nohighlight">\(1/2\)</span> comes from the 50/50 chance of picking either group.  Unfortunately, since we do not measure the <span class="math notranslate nohighlight">\(z\)</span> variable, we have to integrate it out of our density function to account for this handicap. Thus,</p>
+<div class="math notranslate nohighlight">
+\[ f_{\mu_a,\mu_b}(x)=  \frac{1}{2}  \mathcal{N}_a(x)+\frac{1}{2}  \mathcal{N}_b(x)\]</div>
+<p>Now, since <span class="math notranslate nohighlight">\(n\)</span> trials are independent, we can write out the likelihood:</p>
+<div class="math notranslate nohighlight">
+\[ \mathcal{L}(\mu_a,\mu_b|\mathbf{x})= \prod_{i=1}^n f_{\mu_a,\mu_b}(x_i)\]</div>
+<p>This is basically notation. We have just substituted everything into <span class="math notranslate nohighlight">\( f_{\mu_a,\mu_b}(x)\)</span> under the independent-trials assumption. Recal that the independent trials assumptions means that the joint probability is just the product of the individual probabilities. The idea of <em>maximum likelihood</em> is to maximize this as the function of <span class="math notranslate nohighlight">\(\mu_a\)</span> and <span class="math notranslate nohighlight">\(\mu_b\)</span> after plugging in all of the <span class="math notranslate nohighlight">\(x_i\)</span> data.  The problem is we don’t know which group we are measuring at each trial so this is trickier than just estimating the parameters for each group separately.</p>
+</section>
+<section id="simulating-the-experiment">
+<h2>Simulating the Experiment<a class="headerlink" href="#simulating-the-experiment" title="Link to this heading">#</a></h2>
+<p>We need the following code to setup the experiment of randomly a group and then picking an individual from that group.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from __future__ import division
+from numpy import array, linspace, random
+from scipy.stats import bernoulli, norm
+from matplotlib import cm
+from matplotlib.pylab import figure, subplots
+#random.seed(101) # set random seed for reproducibility
+mua_true=4 # we are trying to estimate this from the data
+mub_true=7 # we are trying to estimate this from the data
+fa=norm(mua_true,1) # distribution for group A
+fb=norm(mub_true,1) # distribution for group B
+fz=bernoulli(0.25) # each group equally likely 
+
+def sample(n=10):
+    &#39;simulate picking from each group n times&#39;
+    tmp=fz.rvs(n) # choose n of the coins, A or B
+    return tmp*(fb.rvs(n))+(1-tmp)*fa.rvs(n) # flip it n times
+
+xs = sample(1000) # generate some samples
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here’s a quick look at the density functions of each group and a histogram of the samples</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f,ax = subplots()
+x = linspace(mua_true-2,mub_true+2,100)
+ax.plot(x,fa.pdf(x),label=&#39;group A&#39;)
+ax.plot(x,fb.pdf(x),label=&#39;group B&#39;)
+ax.hist(xs,bins=50,normed=1,label=&#39;Samples&#39;);
+ax.legend(loc=0);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/da6896d3463731c0189887fd2a7a0ab72eb2a26f283d753b87ec350ce3b236bb.png" src="../_images/da6896d3463731c0189887fd2a7a0ab72eb2a26f283d753b87ec350ce3b236bb.png" />
+</div>
+</div>
+<p>Just from looking at this plot, we suspect that we will have to reconcile the samples in the overlap region since these could have come from either group. This is where the <em>Expectation Maximization</em> algorithm enters.</p>
+</section>
+</section>
+<section id="id1">
+<h1>Expectation maximization<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>The key idea of expectation maximization is that we can somehow pretend we know the unobservable <span class="math notranslate nohighlight">\(z\)</span> value and the proceed with the usual maximum likelihood estimation process.</p>
+<p>The idea behind expectation-maximization is that we want to use a maximum likelihood estimate (this is the <em>maximization</em> part of the algorithm) after computing the expectation over the missing variable (in this case, <span class="math notranslate nohighlight">\(z\)</span>).</p>
+<p>The following code uses <code class="docutils literal notranslate"><span class="pre">sympy</span></code> to setup the functions symbolically and convert them to <code class="docutils literal notranslate"><span class="pre">numpy</span></code> functions that we can quickly evaluate. Because it’s easier and more stable to evaluate, we will work with the <code class="docutils literal notranslate"><span class="pre">log</span></code> of the likelihood function. It is useful to keep track of the <em>incomplete log-likelihood</em> (<span class="math notranslate nohighlight">\(\log\mathcal{L}\)</span>) since it can be proved that it is monotone increasing and good way to identify coding errors. Recall that this was the likelihood in the case where we integrated out the <span class="math notranslate nohighlight">\(z\)</span> variable to reconcile as its absence.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import sympy
+from sympy.abc import x, z
+from sympy import stats
+
+mu_a,mu_b = sympy.symbols(&#39;mu_a,mu_b&#39;)
+na=stats.Normal( &#39;x&#39;, mu_a,1)
+nb=stats.Normal( &#39;x&#39;, mu_b,1)
+
+L=(stats.density(na)(x)+stats.density(nb)(x))/2 # incomplete likelihood function 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we need to compute the expectation step. To avoid notational overload, we will just use <span class="math notranslate nohighlight">\(\Theta\)</span> to denote the <span class="math notranslate nohighlight">\(\mu_b\)</span> and <span class="math notranslate nohighlight">\(\mu_a\)</span> parameters and the data <span class="math notranslate nohighlight">\(x_i\)</span>. This means that the density function of <span class="math notranslate nohighlight">\(z\)</span> and <span class="math notranslate nohighlight">\(\Theta\)</span> can be written as the following:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}(z,\Theta) = \frac{1}{2} \mathcal{N}_a(\Theta) ^ z \mathcal{N}_b(\Theta) ^ {(1-z)} \]</div>
+<p>For the expectation part we have to compute <span class="math notranslate nohighlight">\(\mathbb{E}(z|\Theta)\)</span> but since <span class="math notranslate nohighlight">\(z\in \lbrace 0,1 \rbrace\)</span>, this simplifies easily</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(z|\Theta) = 1 \cdot \mathbb{P}(z=1|\Theta) + 0 \cdot \mathbb{P}(z=0|\Theta) =  \mathbb{P}(z=1|\Theta)  \]</div>
+<p>Now, the only thing left is to find <span class="math notranslate nohighlight">\(  \mathbb{P}(z=1|\Theta) \)</span> which we can do using Bayes rule:</p>
+<div class="math notranslate nohighlight">
+\[  \mathbb{P}(z=1|\Theta)  = \frac{ \mathbb{P}(\Theta|z=1)\mathbb{P}(z=1)}{\mathbb{P}(\Theta)} \]</div>
+<p>The term in the denominator comes from summing (integrating) out the <span class="math notranslate nohighlight">\(z\)</span> items in the full joint density <span class="math notranslate nohighlight">\( \mathbb{P}(z,\Theta) \)</span></p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}(\Theta) = (\mathcal{N}_a(\Theta) + \mathcal{N}_b(\Theta))\frac{1}{2} \]</div>
+<p>and since <span class="math notranslate nohighlight">\(\mathbb{P}(z=1)=1/2\)</span>, we finally obtain</p>
+<div class="math notranslate nohighlight">
+\[  \mathbb{E}(z|\Theta) =\mathbb{P}(z=1|\Theta)  = \frac{\mathcal{N}_a(\Theta)}{\mathcal{N}_a(\Theta) + \mathcal{N}_b(\Theta)} \]</div>
+<p>and which is coded below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def ez(x,mu_a,mu_b): # expected value of hidden variable
+  return norm(mu_a).pdf(x) / ( norm(mu_a).pdf(x) + norm(mu_b).pdf(x) )
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, given we we have this estimate for <span class="math notranslate nohighlight">\(z_i\)</span>,  <span class="math notranslate nohighlight">\(\hat{z}_i=\mathbb{E(z|\Theta_i)}\)</span>, we can go back and compute the log likelihood estimate of</p>
+<div class="math notranslate nohighlight">
+\[ J= \log\prod_{i=1}^n \mathbb{P}(\hat{z}_i,\Theta_i) = \sum_{i=1}^n \hat{z}_i\log \mathcal{N}_a(\Theta_i) +(1-\hat{z}_i)\log \mathcal{N}_b(\Theta_i) +\log(1/2)  \]</div>
+<p>by maximizing it using basic calculus. The trick is to remember that <span class="math notranslate nohighlight">\(\hat{z}_i\)</span> is <em>fixed</em>, so we only have to maximize the <span class="math notranslate nohighlight">\(\log\)</span> parts. This leads to</p>
+<div class="math notranslate nohighlight">
+\[ \hat{\mu_a} = \frac{\sum_{i=1}^n \hat{z}_i x_i}{\sum_{i=1}^n  \hat{z}_i } \]</div>
+<p>and for <span class="math notranslate nohighlight">\(\mu_b\)</span></p>
+<div class="math notranslate nohighlight">
+\[ \hat{\mu_b} = \frac{\sum_{i=1}^n (1-\hat{z}_i) x_i}{\sum_{i=1}^n  1-\hat{z}_i } \]</div>
+<p>Now, we finally have the <em>maximization</em> step ( above ) and the <em>expectation</em> step (<span class="math notranslate nohighlight">\(\hat{z}_i\)</span>) from earlier. We’re ready to simulate the algorithm and plot its performance!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Lf=sympy.lambdify((x,mu_a,mu_b), sympy.log(abs(L)),&#39;numpy&#39;) # convert to numpy function from sympy
+
+def run():
+    out, lout = [], []
+    mu_a_n=random.random() * 10 # initial guess
+    mu_b_n=random.random() * 10 # initial guess
+    for i in range(20): # iterations of expectation and maximization
+        tau=ez(xs,mu_a_n,mu_b_n)                 # expected value of z-variable
+        lout.append( sum(Lf(xs,mu_a_n,mu_b_n)) ) # save incomplete likelihood value (should be monotone)
+        out.append((mu_a_n, mu_b_n))             # save of (pa,pb) steps
+        mu_a_n=( sum(tau*xs) / sum(tau) )        # new maximum likelihood estimate of pa
+        mu_b_n=( sum((1-tau) * xs) / sum(1-tau) )
+    return out, lout
+
+out, lout = run()
+
+fig=figure()
+fig.set_figwidth(12)
+ax=fig.add_subplot(121)
+ax.plot(array(out),&#39;o-&#39;)
+ax.legend((&#39;mu_a&#39;,&#39;mu_b&#39;),loc=0)
+ax.hlines([mua_true,mub_true],0,len(out),[&#39;r&#39;,&#39;g&#39;])
+ax.set_xlabel(&#39;iteration&#39;,fontsize=18)
+ax.set_ylabel(&#39;$\mu_a,\mu_b$ values&#39;,fontsize=24)
+ax=fig.add_subplot(122)
+ax.plot(array(lout),&#39;o-&#39;)
+ax.set_xlabel(&#39;iteration&#39;,fontsize=18)
+ax.set_title(&#39;Incomplete likelihood&#39;,fontsize=16)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0xf16bab0&gt;
+</pre></div>
+</div>
+<img alt="../_images/9a2fb8b3804342082d6f3c0ab7ab0065862687934b3737de1f96c5a635a63763.png" src="../_images/9a2fb8b3804342082d6f3c0ab7ab0065862687934b3737de1f96c5a635a63763.png" />
+</div>
+</div>
+<p>The figure on the left shows the estimates for both <span class="math notranslate nohighlight">\(\mu_a\)</span> and <span class="math notranslate nohighlight">\(\mu_b\)</span> for each iteration and the figure on the right shows the corresponding incomplete likelihood function. The horizontal lines on the left-figure show the true values we are trying to estimate. Notice the EM algorithm converges very quickly, but because each group is equally likely to be chosen, the algorithm cannot distinguish one from the other. The code below constructs a error surface to see this effect. The incomplete likelihood function is monotone which tells us that we have not made a coding error. We’re omitting the proof of this monotonicity.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>out, lout = run()
+mua_step=linspace(0,10,30)
+mub_step=linspace(0,10,20)
+z=Lf(xs,mua_step[:,None],mub_step[:,None,None]).sum(axis=2) # numpy broadcasting
+fig=figure(figsize=(8,5))
+ax=fig.add_subplot(111)
+p=ax.contourf(mua_step,mub_step,z,30,cmap=cm.gray)
+xa,xb=zip(*out) # unpack the container from the previous block
+ax.plot(xa,xb,&#39;ro&#39;)                                    # points per iteration in red
+ax.plot(mua_true,mub_true,&#39;bs&#39;)                        # true values in blue
+ax.plot(xa[0],xb[0],&#39;gx&#39;,ms=15.,mew=2.)                # starting point in green
+ax.text(xa[0],xb[0],&#39;   start&#39;,color=&#39;g&#39;,fontsize=11.)
+ax.set_xlabel(&#39;$\mu_a$&#39;,fontsize=24)
+ax.set_ylabel(&#39;$\mu_b$&#39;,fontsize=24)
+ax.set_title(&#39;Incomplete Likelihood&#39;,fontsize=18)
+fig.colorbar(p);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/34e0b5b96a0233823f760a9d025350fbfcc17b8d589743866dcd56c5b44fa9da.png" src="../_images/34e0b5b96a0233823f760a9d025350fbfcc17b8d589743866dcd56c5b44fa9da.png" />
+</div>
+</div>
+<p>The figure shows the incomplete likelihood function that the algorithm is exploring. Note that the algorithm can get to the maximizer but since the surface has symmetric maxima, it has no way to pick between them and ultimately just picks the one that is closest to the starting point. This is because each group is equally likely to be chosen. I urge you to download this notebook and try different initial points and see where the maximizer winds up.</p>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>Expectation maximization is a powerful algorithm that is especially useful when it is difficult to de-couple the variables involved in a standard maximum likelihood estimation. Note that convergence to the “correct” maxima is not guaranteed, as we observed here. This is even more pronounced when there are more parameters to estimate. There is a nice <a class="reference external" href="http://www.cs.cmu.edu/~alad/em/">applet</a> you can use to investigate this effect and a much more detailed mathematical derivation <a class="reference external" href="http://crow.ee.washington.edu/people/bulyko/papers/em.pdf">here</a>.</p>
+<p>As usual, the IPython notebook corresponding to this post can be found <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Expectation_Maximization.ipynb">here</a>. I urge you to try these calculations on your own. Try changing the sample size and making the choice between the two groups no longer equal to 1/2 (equally likely).</p>
+<p>Note you will need at least <code class="docutils literal notranslate"><span class="pre">sympy</span></code> version 0.7.2 to run this notebook.</p>
+<p>Comments appreciated!</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Maximum_likelihood.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Maximum Likelihood Estimation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Markov_chains.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Basic Definitions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Expectation Maximization</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experiment-measuring-from-unseen-groups">Experiment: Measuring from Unseen Groups</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-the-experiment">Simulating the Experiment</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Expectation maximization</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

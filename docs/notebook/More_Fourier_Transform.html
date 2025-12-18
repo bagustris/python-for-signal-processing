@@ -1,0 +1,866 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>More Fourier Transform &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/More_Fourier_Transform';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Windowing: Part 1" href="Windowing_Part1.html" />
+    <link rel="prev" title="Frequency Resolution" href="Frequency_Resolution.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Sampling Theorem: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Frequency Resolution</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">More Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Windowing: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Windowing: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Windowing: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Filtering: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Filtering: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Filtering: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Sampling Monte Carlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_2_Sampling_Theorem.html">Chapter 2: Sampling Theorem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_3_Discrete_Fourier_transform.html">Chapter 3: Discrete Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_4_Spectral_analysis.html">Chapter 4: Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_5_Finite_impulse_response_filters.html">Chapter 5: Finite Impulse Response Filters</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/More_Fourier_Transform.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/More_Fourier_Transform.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>More Fourier Transform</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="more-fourier-transform">
+<h1>More Fourier Transform<a class="headerlink" href="#more-fourier-transform" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Aliasing</p></li>
+<li><p>Decimation</p></li>
+<li><p>Interpolation</p></li>
+</ul>
+<p>The following plot shows that two different signal frequencies (i.e.,
+<span class="math notranslate nohighlight">\(f=0\)</span>, <span class="math notranslate nohighlight">\(f=f_s\)</span>) can generate the <em>exact</em> same samples.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">n</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">/</span><span class="n">fs</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">n</span><span class="o">/</span><span class="n">fs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">n</span><span class="p">),</span> <span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;samples&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fs</span><span class="o">*</span><span class="n">t</span><span class="p">),</span><span class="s1">&#39;--g&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=fs&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">t</span><span class="o">*</span><span class="mi">0</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;r--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;f=0&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=-</span><span class="mf">2.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">left</span><span class="o">=-</span><span class="mf">.5</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">t</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">*</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Amplitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Two signals have identical samples&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f21dd8f0978&gt;
+</pre></div>
+</div>
+<img alt="../_images/f01e32514b9b0ab8b28dc0e06ce7dcb2d2623f1610625ae5284342527b3015f4.png" src="../_images/f01e32514b9b0ab8b28dc0e06ce7dcb2d2623f1610625ae5284342527b3015f4.png" />
+</div>
+</div>
+<p>This is the <em>aliasing</em> problem and it is a fact of  sampling. In fact, its implications are even more problematic.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span>  <span class="n">division</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">FancyArrow</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d.art3d</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">art3d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d.art3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Poly3DCollection</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.gridspec</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gridspec</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dftmatrix</span><span class="p">(</span><span class="n">Nfft</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s1">&#39;construct DFT matrix&#39;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nfft</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">N</span> <span class="o">=</span> <span class="n">Nfft</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">/</span><span class="n">Nfft</span> <span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]))</span> <span class="c1"># use numpy broadcasting to create matrix</span>
+    <span class="k">return</span> <span class="n">U</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nfft</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">facet_filled</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">):</span>
+    <span class="s1">&#39;construct 3D facet from adjacent points filled to zero&#39;</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="n">a0</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">b0</span> <span class="o">=</span> <span class="n">b</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">ve</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">a0</span><span class="p">,</span><span class="n">b0</span><span class="p">,</span><span class="n">b</span><span class="p">])</span>      <span class="c1"># create closed polygon facet</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">Poly3DCollection</span><span class="p">([</span><span class="n">ve</span><span class="p">])</span> <span class="c1"># create facet</span>
+    <span class="n">poly</span><span class="o">.</span><span class="n">set_alpha</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">poly</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">poly</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">drawDFTView</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s1">&#39;above code as a function. Draws 3D diagram given DFT matrix&#39;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()])</span><span class="o">.</span><span class="n">T</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># add ax to existing figure</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+        
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="n">d</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;auto&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">azim</span><span class="o">=-</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">a</span><span class="o">=</span><span class="n">FancyArrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">length_includes_head</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">b</span><span class="o">=</span><span class="n">FancyArrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">length_includes_head</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">art3d</span><span class="o">.</span><span class="n">patch_2d_to_3d</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="n">art3d</span><span class="o">.</span><span class="n">patch_2d_to_3d</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+    <span class="n">sl</span><span class="o">=</span><span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">2</span><span class="p">)]</span> <span class="c1"># collect neighboring points</span>
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">sl</span><span class="p">:</span>
+      <span class="n">poly</span><span class="o">=</span><span class="n">facet_filled</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">s</span><span class="p">,:])</span>
+      <span class="n">ax</span><span class="o">.</span><span class="n">add_collection3d</span><span class="p">(</span><span class="n">poly</span><span class="p">)</span>
+     
+    <span class="c1"># edge polygons    </span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_collection3d</span><span class="p">(</span><span class="n">facet_filled</span><span class="p">(</span><span class="n">d</span><span class="p">[[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],:]))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_collection3d</span><span class="p">(</span><span class="n">facet_filled</span><span class="p">(</span><span class="n">d</span><span class="p">[[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],:]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">chirp</span>
+
+<span class="n">f0</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># start frequency</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># end-time</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># frequency at end-time</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="mi">40</span> <span class="c1"># sample rate</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">t1</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">chirp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">f0</span><span class="p">,</span><span class="n">t1</span><span class="p">,</span><span class="n">f1</span><span class="p">)</span>
+
+<span class="c1">#drawDFTView(fft.fft(x,512),ax=None,fig=None)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">dftmatrix</span><span class="p">(</span><span class="n">Nfft</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s1">&#39;construct DFT matrix&#39;</span>
+    <span class="n">k</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nfft</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">N</span> <span class="o">=</span> <span class="n">Nfft</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">Nfft</span> <span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]))</span> <span class="c1"># use numpy broadcasting to create matrix</span>
+    <span class="k">return</span> <span class="n">U</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nfft</span><span class="p">)</span>
+
+<span class="n">U</span> <span class="o">=</span> <span class="n">dftmatrix</span><span class="p">(</span><span class="mi">128</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span><span class="mi">32</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">U</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+
+<span class="n">drawDFTView</span><span class="p">(</span><span class="n">U</span><span class="o">.</span><span class="n">H</span><span class="o">*</span><span class="p">(</span><span class="n">U</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">U</span><span class="p">[:,</span><span class="mi">100</span><span class="p">])</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/db3dc1faedf6e5b496243c68d4611874fd64c343c3070cb95bd96806163ece34.png" src="../_images/db3dc1faedf6e5b496243c68d4611874fd64c343c3070cb95bd96806163ece34.png" />
+<img alt="../_images/0bb11b8442f12cb5917ce3c0fa3cb322dccffa61cee3a7749798ab16480c28cf.png" src="../_images/0bb11b8442f12cb5917ce3c0fa3cb322dccffa61cee3a7749798ab16480c28cf.png" />
+</div>
+</div>
+<div class="math notranslate nohighlight">
+\[ \Omega_k = \frac{2\pi}{N} k \]</div>
+<p>and for sampled frequency,</p>
+<div class="math notranslate nohighlight">
+\[ f_k = \frac{f_s}{N} k \]</div>
+<div class="math notranslate nohighlight">
+\[ \delta f = f_s/N\]</div>
+<div class="math notranslate nohighlight">
+\[ \Omega_{k+N} = \Omega_k\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Nf</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="mi">64</span> <span class="c1"># delta_f = 1 Hz</span>
+<span class="n">f</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span>
+<span class="n">deltaf</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\delta f = 2$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="n">deltaf</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="s1">&#39;-o&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\delta f = 1/2$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/fe19c43a00a776f9e8b85f0f1ff57616a064ec24d30c1398b57b59a45f803e95.png" src="../_images/fe19c43a00a776f9e8b85f0f1ff57616a064ec24d30c1398b57b59a45f803e95.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Nf</span> <span class="o">=</span> <span class="mi">64</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$N=</span><span class="si">%d</span><span class="s1">$&#39;</span><span class="o">%</span><span class="k">Nf</span>, fontsize=18)
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">64</span><span class="o">*</span><span class="mi">4</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$N=</span><span class="si">%d</span><span class="s1">$&#39;</span><span class="o">%</span><span class="k">Nf</span>, fontsize=18)
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f117f5920a22aea8cf5733ff882266fdacd1086bbc439b4be0c2aec25309ee64.png" src="../_images/f117f5920a22aea8cf5733ff882266fdacd1086bbc439b4be0c2aec25309ee64.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="n">deltaf</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">64</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$N=</span><span class="si">%d</span><span class="s1">$&#39;</span><span class="o">%</span><span class="k">Nf</span>, fontsize=18)
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">64</span><span class="o">*</span><span class="mi">8</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$N=</span><span class="si">%d</span><span class="s1">$&#39;</span><span class="o">%</span><span class="k">Nf</span>, fontsize=18)
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/2d4824097d6188d148887bcd033c92224f4d7407888f882101d9137071cb7a37.png" src="../_images/2d4824097d6188d148887bcd033c92224f4d7407888f882101d9137071cb7a37.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#t = arange(0,10,1/fs).reshape(10,-1)</span>
+<span class="c1">#x=cos(2*pi*f*t) + cos(2*pi*(f+deltaf)*t)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="math notranslate nohighlight">
+\[ \frac{\sin \left( N_s  \frac{2\pi}{N} k\right)}{\sin \left( \frac{2\pi}{N} k \right)}\]</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>In this section, we considered the Discrete Fourier Transform (DFT) using a matrix/vector approach. We used this approach to  develop an intuitive visual vocabulary for the DFT with respect to high/low frequency  and real-valued signals. We recognized that zero-padding an input signal is the same as analyzing more discrete frequencies in the transform domain.</p>
+<p>As usual, the corresponding IPython notebook for this post  is available for download <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Fourier_Transform.ipynb">here</a>.</p>
+<p>Comments and corrections welcome!</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Oppenheim, A. V., and A. S. Willsky. “Signals and Systems.” Prentice-Hall, (1997).</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python361064bit3b840f9918f246278fc4b65bf6247be2",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python361064bit3b840f9918f246278fc4b65bf6247be2'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Frequency_Resolution.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Frequency Resolution</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Windowing_Part1.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Windowing: Part 1</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

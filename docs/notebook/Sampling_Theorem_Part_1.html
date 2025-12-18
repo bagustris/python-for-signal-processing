@@ -1,0 +1,936 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Sampling Theorem - Part 1: &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Sampling_Theorem_Part_1';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Approximately Time-Limited Functions" href="Sampling_Theorem_Part_2.html" />
+    <link rel="prev" title="Python for Signal Processing" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Sampling_Theorem_Part_1.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Sampling_Theorem_Part_1.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Sampling Theorem - Part 1:</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Sampling Theorem - Part 1:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#investigating-the-sampling-theorem">Investigating The Sampling Theorem</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-example-sampling-a-sinusoid">Basic Example: Sampling a Sinusoid</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reconstruction">Reconstruction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-observations">Key Observations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="sampling-theorem-part-1">
+<h1>Sampling Theorem - Part 1:<a class="headerlink" href="#sampling-theorem-part-1" title="Link to this heading">#</a></h1>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="investigating-the-sampling-theorem">
+<h1>Investigating The Sampling Theorem<a class="headerlink" href="#investigating-the-sampling-theorem" title="Link to this heading">#</a></h1>
+<p>This notebook introduces the fundamental concepts of the Sampling Theorem, also known as the Nyquist-Shannon sampling theorem.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>The sampling theorem is one of the most important results in signal processing. It establishes the conditions under which a continuous-time signal can be perfectly reconstructed from its samples.</p>
+<p><strong>Theorem Statement</strong>: If a signal <span class="math notranslate nohighlight">\(x(t)\)</span> is band-limited to frequencies below <span class="math notranslate nohighlight">\(f_c\)</span> Hz, then it can be perfectly reconstructed from samples taken at a rate of at least <span class="math notranslate nohighlight">\(2f_c\)</span> samples per second.</p>
+<p>The minimum sampling rate <span class="math notranslate nohighlight">\(f_s = 2f_c\)</span> is called the <strong>Nyquist rate</strong>.
+In this section, we investigate the implications of the sampling theorem. Here is the usual statement of the theorem from wikipedia:</p>
+<p><em>“If a function <span class="math notranslate nohighlight">\(x(t)\)</span> contains no frequencies higher than B hertz, it is completely determined by giving its ordinates at a series of points spaced 1/(2B) seconds apart.”</em></p>
+<p>Since a function <span class="math notranslate nohighlight">\(x(t)\)</span> is a function from the real line to the real line, there are uncountably many points between any two ordinates, so sampling is a massive reduction of data since it only takes a tiny number of points to completely characterize the function. This is a powerful idea worth exploring. In fact, we have seen this idea of reducing a function to a discrete set of numbers before in Fourier series expansions where (for periodic <span class="math notranslate nohighlight">\(x(t)\)</span>)</p>
+<div class="math notranslate nohighlight">
+\[ a_n = \frac{1}{T} \int^{T}_0 x(t) \exp (-j \omega_n t )dt \]</div>
+<p>with corresponding reconstruction as:</p>
+<div class="math notranslate nohighlight">
+\[ x(t) = \sum_k a_n \exp( j \omega_n t) \]</div>
+<p>But here we are generating discrete points <span class="math notranslate nohighlight">\(a_n\)</span> by integrating over the <strong>entire</strong> function <span class="math notranslate nohighlight">\(x(t)\)</span>, not just evaluating it at a single point. This means we are collecting information about the entire function to compute a single discrete point <span class="math notranslate nohighlight">\(a_n\)</span>, whereas with sampling we are just taking individual points in isolation.</p>
+<p>Let’s come at this the other way: suppose we are given a set of samples <span class="math notranslate nohighlight">\([x_1,x_2,..,x_N]\)</span> and we are then told to reconstruct the function. What would we do? This is the kind of question seldom asked because we typically sample, filter, and then do something else without trying to reconstruct the function from the samples directly.</p>
+<p>Returning to our reconstruction challenge, perhaps the most natural thing to do is draw a straight line between each of the points as in linear interpolation. The next block of code takes samples of the <span class="math notranslate nohighlight">\(sin\)</span> over a single period and draws a line between sampled ordinates.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># Hz, signal frequency</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="mf">20.0</span> <span class="c1"># Hz, sampling rate (ie. &gt;= 2*f), default = 20</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span> <span class="c1"># sample interval, symmetric for convenience later</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;amplitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;amplitude&#39;)
+</pre></div>
+</div>
+<img alt="../_images/9b51dc4515876d6e65f85cb3adf4969dc1b0df5df5e61861d8a218029595c4d6.png" src="../_images/9b51dc4515876d6e65f85cb3adf4969dc1b0df5df5e61861d8a218029595c4d6.png" />
+</div>
+</div>
+</section>
+<section id="basic-example-sampling-a-sinusoid">
+<h2>Basic Example: Sampling a Sinusoid<a class="headerlink" href="#basic-example-sampling-a-sinusoid" title="Link to this heading">#</a></h2>
+<p>Let’s start with a simple example of sampling a sinusoidal signal and observe the effects of different sampling rates.
+In this plot, notice how near the extremes of the <span class="math notranslate nohighlight">\(sin\)</span> at <span class="math notranslate nohighlight">\(t=1/(4f)\)</span> and <span class="math notranslate nohighlight">\(t=3/(4 f)\)</span>, we are taking the same density of points since the sampling theorem makes no requirement on <em>where</em> we should sample as long as we sample at a regular intervals. This means that on the up and down slopes of the <span class="math notranslate nohighlight">\(sin\)</span>, which are obviously linear-looking and where a linear approximation is a good one, we are taking the same density of samples as near the curvy peaks. Here’s a bit of code that zooms in to the first peak to illustrate this.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">xmin</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">f</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">f</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="o">*</span><span class="mi">3</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mf">1.1</span> <span class="p">)</span>
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(np.float64(0.09999999999999998),
+ np.float64(0.4),
+ np.float64(0.0),
+ np.float64(1.1))
+</pre></div>
+</div>
+<img alt="../_images/f483a9c5d25439833047b89e0bb7e0f1acaada59a0acafb442e8ea06c1e30c3d.png" src="../_images/f483a9c5d25439833047b89e0bb7e0f1acaada59a0acafb442e8ea06c1e30c3d.png" />
+</div>
+</div>
+<p>To drive this point home (and create some cool matplotlib plots), we can construct the piecewise linear interpolant and compare the quality of the approximation using <code class="docutils literal notranslate"><span class="pre">numpy.piecewise</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">interval</span> <span class="o">=</span> <span class="p">[]</span>     <span class="c1"># piecewise domains</span>
+<span class="n">apprx</span> <span class="o">=</span> <span class="p">[]</span>        <span class="c1"># line on domains</span>
+
+<span class="c1"># build up points *evenly* inside of intervals</span>
+<span class="n">tp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="mi">20</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">])</span>
+
+<span class="c1"># construct arguments for piecewise</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+   <span class="n">interval</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">tp</span><span class="p">,</span><span class="n">tp</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
+   <span class="n">apprx</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">tp</span><span class="p">[</span><span class="n">interval</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">-</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="n">x_hat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">piecewise</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">apprx</span><span class="p">)</span>     <span class="c1"># piecewise linear approximation</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can examine the squared errors in the interpolant. The following snippet plots the <span class="math notranslate nohighlight">\(sin\)</span> and with the filled-in error of the linear interpolant.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">x_hat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">tp</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Amplitude&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Errors with Piecewise Linear Interpolant&#39;</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+<span class="n">sqe</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_hat</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">tp</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">sqe</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">xmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">sqe</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;squared error&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="c1"># ax1.figure.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;squared error&#39;)
+</pre></div>
+</div>
+<img alt="../_images/439aad56cb6403564be154a985608d0be7aff8d084655de3e43c8aa7829f1498.png" src="../_images/439aad56cb6403564be154a985608d0be7aff8d084655de3e43c8aa7829f1498.png" />
+</div>
+</div>
+<p>Note: I urge you to change the <span class="math notranslate nohighlight">\(fs\)</span> sampling rate in the code above then rerun this notebook to see how these errors change with more/less sampling points.</p>
+<p>Now, we could pursue this line of reasoning with higher-order polynomials instead of just straight lines, but this would all eventually take us to the same conclusion; namely, that all of these approximations improve as the density of sample points increases, which is the <em>exact</em> opposite of what the sampling theorem says — there is <em>sparse</em> set of samples points that will retrieve the original function. Furthermore, we observed that the quality of the piecewise linear interpolation is sensitive to <em>where</em> the sample points are taken and the sampling theorem is so powerful that it <em>has no such requirement</em>.</p>
+</section>
+<section id="reconstruction">
+<h2>Reconstruction<a class="headerlink" href="#reconstruction" title="Link to this heading">#</a></h2>
+<p>Let’s look at this another way by examing the Fourier Transform of a signal that is bandlimited and thus certainly satisfies the hypothesis of the sampling theorem:</p>
+<div class="math notranslate nohighlight">
+\[ X(f) = 0, \text{where  } |f|&gt; W \]</div>
+<p>Now, the inverse Fourier transform of this is the following:</p>
+<div class="math notranslate nohighlight">
+\[ x(t) = \int_{-W}^W X(f) e^{j 2 \pi f t} df \]</div>
+<p>We can take the <span class="math notranslate nohighlight">\(X(f)\)</span> and expand it into a Fourier series by pretending that it is periodic with period <span class="math notranslate nohighlight">\(2 W\)</span>. Thus, we can formally write the following:</p>
+<div class="math notranslate nohighlight">
+\[ X(f) = \sum_k a_k e^{ - j 2 \pi k f/(2 W) }  \]</div>
+<p>we can compute the coefficients <span class="math notranslate nohighlight">\(a_k\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[ a_k = \frac{1}{2 W} \int_{-W}^W X(f) e^{ j 2 \pi k f/(2 W) } df   \]</div>
+<p>These coefficients bear a striking similarity to the <span class="math notranslate nohighlight">\(x(t)\)</span> integral we just computed above. In fact, by lining up terms, we can write:</p>
+<div class="math notranslate nohighlight">
+\[ a_k = \frac{1}{2 W} x \left(   t = \frac{k}{2 W} \right)  \]</div>
+<p>Now, we can write out <span class="math notranslate nohighlight">\(X(f)\)</span> in terms of this series and these <span class="math notranslate nohighlight">\(a_k\)</span> and then invert the Fourier transform to obtain the following:</p>
+<div class="math notranslate nohighlight">
+\[ x(t) = \int_{-W}^W \sum_k a_k e^{ - j 2 \pi k f/(2 W) }  e^{j 2 \pi f t} df \]</div>
+<p>substitute for <span class="math notranslate nohighlight">\(a_k\)</span></p>
+<div class="math notranslate nohighlight">
+\[ x(t) = \int_{-W}^W \sum_k ( \frac{1}{2 W} x( t = \frac{k}{2 W} ) ) e^{ - j 2 \pi k f/(2 W) }  e^{j 2 \pi f t} df \]</div>
+<p>switch summation and integration (usually dangerous, but OK here)</p>
+<div class="math notranslate nohighlight">
+\[ x(t) = \sum_k x(t = \frac{k}{2 W}) \frac{1}{2 W}  \int_{-W}^W e^{ - j 2 \pi k f/(2 W) +j 2 \pi f t} df  \]</div>
+<p>which gives finally:</p>
+<div class="math notranslate nohighlight">
+\[ x(t) = \sum_k x(t = \frac{k}{2 W})  \frac{sin(\pi (k-2 t W))} {\pi (k- 2 t W)} \]</div>
+<p>And this what we have been seeking! A formula that reconstructs the function from its samples. Let’s try it!</p>
+</section>
+<section id="key-observations">
+<h2>Key Observations<a class="headerlink" href="#key-observations" title="Link to this heading">#</a></h2>
+<p>From the plots above, we can observe:</p>
+<ol class="arabic simple">
+<li><p><strong>Below Nyquist Rate</strong>: When sampling below the Nyquist rate, we lose information about the original signal</p></li>
+<li><p><strong>At Nyquist Rate</strong>: Sampling exactly at the Nyquist rate provides just enough information to reconstruct the signal</p></li>
+<li><p><strong>Above Nyquist Rate</strong>: Oversampling provides more than enough information for perfect reconstruction</p></li>
+</ol>
+</section>
+<section id="next-steps">
+<h2>Next Steps<a class="headerlink" href="#next-steps" title="Link to this heading">#</a></h2>
+<p>In the next parts of this series, we will explore:</p>
+<ul class="simple">
+<li><p>Aliasing effects when sampling below the Nyquist rate</p></li>
+<li><p>Reconstruction techniques using sinc interpolation</p></li>
+<li><p>Practical considerations in real-world sampling systems
+Note that since our samples are spaced at <span class="math notranslate nohighlight">\(t= k/f_s \)</span>, we’ll use <span class="math notranslate nohighlight">\(  W= f_s /2 \)</span> to line things up.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># redefine this here for convenience</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span> <span class="c1"># sample points</span>
+<span class="n">num_coeffs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span> 
+<span class="n">sm</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">num_coeffs</span><span class="p">,</span> <span class="n">num_coeffs</span><span class="p">):</span> <span class="c1"># since function is real, need both sides</span>
+   <span class="n">sm</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="o">/</span><span class="n">fs</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">t</span><span class="p">),</span> <span class="n">ts</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">ts</span><span class="p">),</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;sampling rate=</span><span class="si">%3.2f</span><span class="s1"> Hz&#39;</span> <span class="o">%</span> <span class="n">fs</span><span class="p">)</span>
+
+<span class="c1"># ax.figure.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;sampling rate=20.00 Hz&#39;)
+</pre></div>
+</div>
+<img alt="../_images/ffc0c22af8ec7f6edf8ba153cebaf7f1e52c5c424fe356c91b748974600633eb.png" src="../_images/ffc0c22af8ec7f6edf8ba153cebaf7f1e52c5c424fe356c91b748974600633eb.png" />
+</div>
+</div>
+<p>We can do the same check as we did for the linear interpolant above as</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">sm</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Amplitude&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+<span class="n">sqe</span> <span class="o">=</span> <span class="p">(</span><span class="n">sm</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">sqe</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">xmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">sqe</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;squared error&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Errors with sinc Interpolant&#39;</span><span class="p">)</span>
+
+<span class="c1"># ax1.figure.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Errors with sinc Interpolant&#39;)
+</pre></div>
+</div>
+<img alt="../_images/06e6e24bd5bdc015d0ed38e1b3509b8ba65f977602ec6cf52926de9e2b6c12fc.png" src="../_images/06e6e24bd5bdc015d0ed38e1b3509b8ba65f977602ec6cf52926de9e2b6c12fc.png" />
+</div>
+</div>
+<p>These interpolating functions are called the “Whittaker” interpolating functions. Let’s examine these functions more closely with the following code</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span> <span class="c1"># create axis handle</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1"># makes this plot easier to read</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">k</span> <span class="o">-</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">t</span><span class="p">),</span> 
+         <span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span> <span class="o">-</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">t</span><span class="p">),</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">/</span><span class="n">fs</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">/</span><span class="n">fs</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="s1">&#39;o&#39;</span><span class="p">,</span>
+         <span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span> <span class="o">-</span> <span class="n">fs</span> <span class="o">*</span> <span class="n">t</span><span class="p">),</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">k</span><span class="o">/</span><span class="n">fs</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="n">k</span><span class="p">)</span><span class="o">/</span><span class="n">fs</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="s1">&#39;o&#39;</span>
+<span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">.2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;sample value goes here&#39;</span><span class="p">,</span>
+            <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="mf">.1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">),</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="s1">&#39;shrink&#39;</span><span class="p">:</span><span class="mf">0.05</span><span class="p">},</span>
+            <span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;no interference here&#39;</span><span class="p">,</span>
+            <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="mf">.1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;green&#39;</span><span class="p">,</span><span class="s1">&#39;shrink&#39;</span><span class="p">:</span><span class="mf">0.05</span><span class="p">},</span>
+            <span class="p">)</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(-0.9, 0.5, &#39;no interference here&#39;)
+</pre></div>
+</div>
+<img alt="../_images/5cbb453aad2683cda639af157a72b9ec1bce5273fcc895d4265eb831b02dbca0.png" src="../_images/5cbb453aad2683cda639af157a72b9ec1bce5273fcc895d4265eb831b02dbca0.png" />
+</div>
+</div>
+<p>The vertical line in the previous plot shows that where one function has a peak, the other function has a zero. This is why when you put samples at each of the peaks, they match the sampled function exactly at those points. In between those points, the crown shape of the functions fills in the missing values. Furthermore, as the figure above shows, there is no interference between the functions sitting on each of the interpolating functions because the peak of one is perfectly aligned with the zero of the others (dotted lines). Thus, the sampling theorem says that the filled-in values are drawn from the curvature of the sinc functions, not straight lines as we investigated earlier.</p>
+<p>As an illustration, the following code shows how the individual Whittaker functions (dashed lines) are assembled into the final approximation  (black-line) using the given samples (blue-dots). I urge you to play with the sampling rate to see what happens. Note the heavy use of <code class="docutils literal notranslate"><span class="pre">numpy</span></code> broadcasting in this code instead of the multiple loops we used earlier.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="mf">20.0</span> <span class="c1"># sampling rate</span>
+<span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">((</span><span class="n">t</span><span class="o">*</span><span class="n">fs</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))))</span> <span class="c1"># sorted coefficient list</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">/</span><span class="n">fs</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">k</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">fs</span><span class="o">*</span><span class="n">t</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="c1"># individual whittaker functions</span>
+        <span class="n">t</span><span class="p">,(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">k</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">/</span><span class="n">fs</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">k</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">fs</span><span class="o">*</span><span class="n">t</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="c1"># whittaker interpolant</span>
+     <span class="n">k</span><span class="o">/</span><span class="n">fs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">k</span><span class="o">/</span><span class="n">fs</span><span class="p">),</span><span class="s1">&#39;ob&#39;</span><span class="p">)</span><span class="c1"># samples</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">((</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">,</span><span class="o">-</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">1.1</span><span class="p">));</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/303b4f1ee28fd5c64af24b6250b36a4a2e1216e691c373462bcc1f084f2aeea8.png" src="../_images/303b4f1ee28fd5c64af24b6250b36a4a2e1216e691c373462bcc1f084f2aeea8.png" />
+</div>
+</div>
+<p>However, if you’ve been following carefully, you should be somewhat uncomfortable with the second to the last plot that shows the errors in the Whittaker interpolation. Namely, <em>why are there any errors</em>? Does not the sampling theorem guarantee exact-ness which should mean no error at all? It turns out that answering this question takes us further into the implications of the sampling theorem, but that is the topic of our next post.</p>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>In this section, we started our investigation of the famous sampling theorem that is the bedrock of the entire field of signal processing and we asked if we could reverse-engineer the consquences of the sampling theorem by reconstructing a sampled function from its discrete samples. This led us to consider the famous <em>Whittaker interpolator</em>, whose proof we sketched here. However, after all this work, we came to a disturbing conclusion regarding the exact-ness of the sampling theorem that we will investigate in a subsequent posting.  In the meantime, I urge you to start at the top of notebook and play with the sampling frequency, and maybe even the sampled function and see what else you can discover about the sampling theorem.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>This is in the <a class="reference external" href="http://ipython.org/">IPython Notebook format</a> and was converted to HTML using <a class="reference external" href="https://github.com/ipython/nbconvert">nbconvert</a>.</p></li>
+<li><p>See <a class="reference external" href="http://books.google.com/books?id=Re5SAAAAMAAJ">Signal analysis</a> for more detailed mathematical development.</p></li>
+<li><p>The IPython Notebook corresponding to this post can be found <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Sampling_Theorem.ipynb">here</a>.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Python for Signal Processing</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Sampling_Theorem_Part_2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Approximately Time-Limited Functions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Sampling Theorem - Part 1:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#investigating-the-sampling-theorem">Investigating The Sampling Theorem</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-example-sampling-a-sinusoid">Basic Example: Sampling a Sinusoid</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reconstruction">Reconstruction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-observations">Key Observations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

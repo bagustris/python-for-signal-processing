@@ -1,0 +1,911 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Inverse Projection &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Inverse_Projection_Constrained_Optimization';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction" href="Gauss_Markov.html" />
+    <link rel="prev" title="Projection in Multiple Dimensions" href="Projection_mdim.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Inverse_Projection_Constrained_Optimization.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Inverse_Projection_Constrained_Optimization.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Inverse Projection</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Inverse Projection</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#weighted-constrained-minimization">Weighted Constrained Minimization</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="inverse-projection">
+<h1>Inverse Projection<a class="headerlink" href="#inverse-projection" title="Link to this heading">#</a></h1>
+<p>In our <a class="reference external" href="http://python-for-signal-processing.blogspot.com/2012/11/projection-in-multiple-dimensions-in.html">previous discussion</a>, we developed a powerful intuitive sense for projections and their relationships to minimum mean squared error problems. Here, we continue to extract yet another powerful result from the same concept. Recall that we learned to minimize</p>
+<div class="math notranslate nohighlight">
+\[ J = || \mathbf{y} - \mathbf{V}\boldsymbol{\alpha} ||^2  \]</div>
+<p>by projecting <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> onto the space characterized by <span class="math notranslate nohighlight">\(\mathbf{V}\)</span> as follows:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{\hat{y}} = \mathbf{P}_V \mathbf{y}\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{P}_V  = \mathbf{V} (\mathbf{V}^T \mathbf{V})^{-1} \mathbf{V}^T\]</div>
+<p>where the corresponding error (<span class="math notranslate nohighlight">\(\boldsymbol{\epsilon}\)</span>) comes directly from the Pythagorean theorem:</p>
+<div class="math notranslate nohighlight">
+\[ ||\mathbf{y}||^2  = ||\mathbf{\hat{y}}||^2 + ||\boldsymbol{\epsilon}||^2 \]</div>
+<p>Now, let’s consider the inverse problem: given <span class="math notranslate nohighlight">\(\mathbf{\hat{y}}\)</span>, what is the corresponding <span class="math notranslate nohighlight">\(\mathbf{y}\)</span>? The first impulse in this situation is to re-visit</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{\hat{y}} = \mathbf{P}_V \mathbf{y}\]</div>
+<p>and see if you can somehow compute the inverse of <span class="math notranslate nohighlight">\(\mathbf{P}_V\)</span>. This will not work because the projection matrix does not possess a unique inverse. In the following figure, the vertical sheet represents all vectors in the space that have exactly the same projection, <span class="math notranslate nohighlight">\(\mathbf{\hat{y}}\)</span>. Thus, there is no unique solution to the inverse problem which is to say that it is “ill-posed”.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#http://stackoverflow.com/questions/10374930/matplotlib-annotating-a-3d-scatter-plot
+
+from mpl_toolkits.mplot3d import proj3d
+import matplotlib.patches as patches
+import mpl_toolkits.mplot3d.art3d as art3d
+import matplotlib.pyplot as plt
+import numpy as np
+
+fig = plt.figure()
+fig.set_size_inches([8,8])
+
+ax = fig.add_subplot(111, projection=&#39;3d&#39;)
+
+ax.set_aspect(1)
+ax.set_xlim([0,2])
+ax.set_ylim([0,2])
+ax.set_zlim([0,2])
+ax.set_aspect(1)
+ax.set_xlabel(&#39;x-axis&#39;,fontsize=16)
+ax.set_ylabel(&#39;y-axis&#39;,fontsize=16)
+ax.set_zlabel(&#39;z-axis&#39;,fontsize=16)
+
+y = matrix([1,1,1]).T 
+V = matrix([[1,0.25], # columns are v_1, v_2
+            [0,0.50],
+            [0,0.00]])
+
+alpha=inv(V.T*V)*V.T*y # optimal coefficients
+P = V*inv(V.T*V)*V.T
+yhat = P*y         # approximant
+
+
+u = np.linspace(0, 2*np.pi, 100)
+v = np.linspace(0, np.pi, 100)
+
+xx = np.outer(np.cos(u), np.sin(v))
+yy = np.outer(np.sin(u), np.sin(v))
+zz = np.outer(np.ones(np.size(u)), np.cos(v))
+
+sphere=ax.plot_surface(xx+y[0,0], yy+y[1,0], zz+y[2,0],  
+                       rstride=4, cstride=4, color=&#39;gray&#39;,alpha=0.3,lw=0.25)
+
+ax.plot3D([y[0,0],0],[y[1,0],0],[y[2,0],0],&#39;r-&#39;,lw=3)
+ax.plot3D([y[0,0]],[y[1,0]],[y[2,0]],&#39;ro&#39;)
+
+ax.plot3D([V[0,0],0],[V[1,0],0],[V[2,0],0],&#39;b-&#39;,lw=3)
+ax.plot3D([V[0,0]],[V[1,0]],[V[2,0]],&#39;bo&#39;)
+ax.plot3D([V[0,1],0],[V[1,1],0],[V[2,1],0],&#39;b-&#39;,lw=3)
+ax.plot3D([V[0,1]],[V[1,1]],[V[2,1]],&#39;bo&#39;)
+
+ax.plot3D([yhat[0,0],0],[yhat[1,0],0],[yhat[2,0],0],&#39;g--&#39;,lw=3)
+ax.plot3D([yhat[0,0]],[yhat[1,0]],[yhat[2,0]],&#39;go&#39;)
+
+
+x2, y2, _ = proj3d.proj_transform(y[0,0],y[1,0],y[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{y}$&quot;, 
+    xy = (x2, y2), xytext = (40, 20), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(yhat[0,0],yhat[1,0],yhat[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\hat{\mathbf{y}}$&quot;, 
+    xy = (x2, y2), xytext = (40, 10), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(V[0,0],V[1,0],V[2,0], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{v}_1$&quot;, 
+    xy = (x2, y2), xytext = (120, 10), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+x2, y2, _ = proj3d.proj_transform(V[0,1],V[1,1],V[2,1], ax.get_proj())
+ax.annotate(
+    &quot;$\mathbf{v}_2$&quot;, 
+    xy = (x2, y2), xytext = (-30, 30), fontsize=24,
+    textcoords = &#39;offset points&#39;, ha = &#39;right&#39;, va = &#39;bottom&#39;,
+    bbox = dict(boxstyle = &#39;round,pad=0.5&#39;, fc = &#39;yellow&#39;, alpha = 0.5),
+    arrowprops = dict(arrowstyle = &#39;-&gt;&#39;, connectionstyle = &#39;arc3,rad=0&#39;))
+
+xx = array([0,yhat[0],yhat[0]])
+yy = array([0,yhat[1],yhat[1]])
+zz = array([0,0,2])
+
+ax.add_collection3d( art3d.Poly3DCollection([zip(xx,yy,zz)],alpha=0.15,color=&#39;m&#39;) )
+ax.set_title(r&#39;The magenta sheet contains vectors with the same projection, $\mathbf{\hat{y}}$&#39;)
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/e40276856321bbf47d82f9c6bef5ba6a943dc2514a093464b80b56575ab9bd5f.png" src="../_images/e40276856321bbf47d82f9c6bef5ba6a943dc2514a093464b80b56575ab9bd5f.png" />
+</div>
+</div>
+<p>Thus, since the unique inverse does not exist, we can impose constraints on the solution to enforce a unique solution. For example, since there are many <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> that correspond to the same  <span class="math notranslate nohighlight">\(\mathbf{\hat{y}}\)</span>, we can pick the one that has the shortest length, <span class="math notranslate nohighlight">\(||\mathbf{y} ||\)</span>. Thus, we can solve this inverse projection problem by enforcing additional constraints.</p>
+<p>Consider the following constrained minimization problem:</p>
+<div class="math notranslate nohighlight">
+\[ \min_y \mathbf{y}^T \mathbf{y}\]</div>
+<p>subject to:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{v_1}^T \mathbf{y} = c_1\]</div>
+<div class="math notranslate nohighlight">
+\[ \mathbf{v_2}^T \mathbf{y} = c_2\]</div>
+<p>Here, we have the same setup as before: we want to minimize something with a set of constraints. We can re-write the constraints in a more familiar form as</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{V}^T \mathbf{y} = \mathbf{c}\]</div>
+<p>We can multiply both sides to obtain the even more familiar form:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{V} (\mathbf{V}^T \mathbf{V})^{-1} \mathbf{V}^T \mathbf{y} = \mathbf{V} (\mathbf{V}^T \mathbf{V})^{-1}\mathbf{c} \]</div>
+<p>which by cleaning up the notation gives,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{P}_V \mathbf{y} = \mathbf{\hat{y}} \]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[  \mathbf{\hat{y}}  = \mathbf{V} (\mathbf{V}^T \mathbf{V})^{-1}\mathbf{c}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{P}_V=\mathbf{V} (\mathbf{V}^T \mathbf{V})^{-1} \mathbf{V}^T \]</div>
+<p>So far, nothing has really happened yet. We’ve just rewritten the constraints as a projection, but we still don’t know how to find the <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> of minimum length. To do that, we turn to the Pythagorean relationship we pointed out earlier,</p>
+<div class="math notranslate nohighlight">
+\[ ||\mathbf{y}||^2  = ||\mathbf{\hat{y}}||^2 + ||\boldsymbol{\epsilon}||^2 \]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{\epsilon} = \mathbf{y} - \mathbf{\hat{y}}\)</span>. So, we have</p>
+<div class="math notranslate nohighlight">
+\[ ||\mathbf{y}||^2  = ||\mathbf{\hat{y}}||^2 + || \mathbf{y} - \mathbf{\hat{y}}||^2 \ge 0\]</div>
+<p>and since this is always non-negative, the only way to minimize <span class="math notranslate nohighlight">\(||\mathbf{y}||^2\)</span> is to set</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{y} = \mathbf{\hat{y}} =  \mathbf{V} (\mathbf{V}^T \mathbf{V})^{-1}\mathbf{c}  \]</div>
+<p>which is the solution to our constrained minimization problem.</p>
+<p>If that seems shockingly easy, remember that we have already done all the heavy lifting by solving the projection problem. Here, all we have done is re-phrased the same problem.</p>
+<p>Let’s see this in action using <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code> for comparison. Here’s the problem</p>
+<div class="math notranslate nohighlight">
+\[ \min_y \mathbf{y}^T \mathbf{y}\]</div>
+<p>subject to:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{e_1}^T \mathbf{y} = 1\]</div>
+<div class="math notranslate nohighlight">
+\[ \mathbf{e_2}^T \mathbf{y} = 1\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{e}_i\)</span> is the coordinate vector that is zero everywhere except for the <span class="math notranslate nohighlight">\(i^{th}\)</span> entry.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from scipy.optimize import minimize
+
+# constraints formatted for scipy.optimize.minimize
+cons = [{&#39;type&#39;:&#39;eq&#39;,&#39;fun&#39;:lambda x: x[0]-1,&#39;jac&#39;:None},
+        {&#39;type&#39;:&#39;eq&#39;,&#39;fun&#39;:lambda x: x[1]-1,&#39;jac&#39;:None},
+        ]
+
+init_point = np.array([1,2,3,0]) # initial guess
+ysol= minimize(lambda x: np.dot(x,x),init_point,constraints=cons,method=&#39;SLSQP&#39;)
+
+# using projection method
+c = np.matrix([[1,1,0,0]]).T     # RHS constraint vector
+V = np.matrix(np.eye(4)[:,0:2])
+ysol_p =  V*np.linalg.inv(V.T*V)*V.T*c
+
+print &#39;scipy optimize solution:&#39;,
+print ysol[&#39;x&#39;]
+print &#39;projection solution:&#39;,
+print np.array(ysol_p).flatten()
+
+print np.allclose(np.array(ysol_p).flat,ysol[&#39;x&#39;],atol=1e-6)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>scipy optimize solution: [  1.00000000e+00   1.00000000e+00  -2.17476398e-08  -2.93995881e-08]
+projection solution: [ 1.  1.  0.  0.]
+True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="weighted-constrained-minimization">
+<h1>Weighted Constrained Minimization<a class="headerlink" href="#weighted-constrained-minimization" title="Link to this heading">#</a></h1>
+<p>We can again pursue a more general problem using the same technique:</p>
+<div class="math notranslate nohighlight">
+\[ \min_y \mathbf{y}^T \mathbf{Q} \mathbf{y} \]</div>
+<p>subject to:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{V}^T \mathbf{y} = \mathbf{c}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{Q}\)</span> is a positive definite matrix. In this case, we can define <span class="math notranslate nohighlight">\(\eta\)</span> such that:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{y} = \mathbf{Q}^{-1} \boldsymbol{\eta}\]</div>
+<p>and re-write the constraint as</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{V}^T \mathbf{Q}^{-1} \boldsymbol{\eta} = \mathbf{c}\]</div>
+<p>and multiply both sides,</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{P}_V \boldsymbol{\eta}=\mathbf{V} ( \mathbf{V}^T \mathbf{Q^{-1} V})^{-1} \mathbf{c} \]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{P}_V=\mathbf{V} ( \mathbf{V}^T \mathbf{Q^{-1} V})^{-1} \mathbf{V}^T \mathbf{Q}^{-1}\]</div>
+<p>To sum up, the minimal <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> that solves this constrained minimization problem is</p>
+<div class="math notranslate nohighlight">
+\[ \mathbf{y}_o = \mathbf{V} ( \mathbf{V}^T \mathbf{Q^{-1} V})^{-1} \mathbf{c}\]</div>
+<p>Once again, let’s illustrate this using <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code> in the following</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from scipy.optimize import minimize
+
+# constraints formatted for scipy.optimize.minimize
+cons = [{&#39;type&#39;:&#39;eq&#39;,&#39;fun&#39;:lambda x: x[0]-1,&#39;jac&#39;:None},
+        {&#39;type&#39;:&#39;eq&#39;,&#39;fun&#39;:lambda x: x[1]-1,&#39;jac&#39;:None},
+        ]
+
+Q = np.diag ([1,2,3,4])
+
+
+init_point = np.array([1,2,3,0]) # initial guess
+ysol= minimize(lambda x: np.dot(x,np.dot(Q,x)),init_point,constraints=cons,method=&#39;SLSQP&#39;)
+
+# using projection method
+Qinv = np.linalg.inv(Q)
+c = np.matrix([[1,1,0,0]]).T     # RHS constraint vector
+V = np.matrix(np.eye(4)[:,0:2])
+ysol_p =  V*np.linalg.inv(V.T*Qinv*V)*V.T*Qinv*c
+print &#39;scipy optimize solution:&#39;,
+print ysol[&#39;x&#39;]
+print &#39;projection solution:&#39;,
+print np.array(ysol_p).flatten()
+print np.allclose(np.array(ysol_p).flat,ysol[&#39;x&#39;],atol=1e-5)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>scipy optimize solution: [  1.00000000e+00   1.00000000e+00  -9.93437889e-09  -2.31626259e-06]
+projection solution: [ 1.  1.  0.  0.]
+True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>In this section, we pulled yet another powerful result from the projection concept we developed previously. We showed how “inverse projection” can lead to the solution of the classic constrained minimization problem. Although there are many approaches to the same problem, by once again appealing to the power projection method, we can maintain our intuitive geometric intuition.</p>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>This post was created using the <a class="reference external" href="https://github.com/ipython/nbconvert">nbconvert</a> utility from the source <a class="reference internal" href="#www.ipython.org"><span class="xref myst">IPython Notebook</span></a> which is available for <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Inverse_Projection_Constrained_Optimization.ipynb">download</a> from the main github <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing">site</a> for this blog. The projection concept is masterfully discussed in the classic Strang, G. (2003). <em>Introduction to linear algebra</em>. Wellesley Cambridge Pr. Also, some of Dr. Strang’s excellent lectures are available on <a class="reference external" href="http://ocw.mit.edu/courses/mathematics/18-06-linear-algebra-spring-2010/">MIT Courseware</a>. I highly recommend these as well as the book.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Projection_mdim.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Projection in Multiple Dimensions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Gauss_Markov.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Inverse Projection</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#weighted-constrained-minimization">Weighted Constrained Minimization</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

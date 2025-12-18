@@ -1,0 +1,837 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Conditional_Expectation_Projection';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Weighted distances" href="Projection.html" />
+    <link rel="prev" title="Introduction" href="Conditional_expectation_MSE_Ex.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Conditional_Expectation_Projection.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Conditional_Expectation_Projection.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inner-product-for-random-variables">Inner Product for Random Variables</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-expectation-as-projection">Conditional Expectation as Projection</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix">Appendix</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proof-of-mmse-of-conditional-expectation-by-optimization">Proof of MMSE of Conditional expectation by Optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliography">Bibliography</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<p>In these pages, I have tried to distill and illustrate the keys concepts needed in statistical signal processing, and in this section, we will cover the most fundamental statistical result that underpins statistical signal processing. The last sections on <a class="reference external" href="http://python-for-signal-processing.blogspot.com/2012/11/conditional-expectation-and-mean.html">conditional expectation</a> and <a class="reference external" href="http://python-for-signal-processing.blogspot.com/2012/11/the-projection-concept.html">projection</a> are prerequisites for what follows. Please review those before continuing.</p>
+</section>
+<section id="inner-product-for-random-variables">
+<h1>Inner Product for Random Variables<a class="headerlink" href="#inner-product-for-random-variables" title="Link to this heading">#</a></h1>
+<p>From our previous work on projection for vectors in <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>, we have a good geometric grasp on how projection is related to minimum mean squared error (MMSE). It turns out by one abstract step, we can carry all of our geometric interpretations to the space of random variables.</p>
+<p>For example, we previously noted that at the point of projection, we had</p>
+<div class="math notranslate nohighlight">
+\[ ( \mathbf{y} - \mathbf{v}_{opt} )^T \mathbf{v} = 0\]</div>
+<p>which by noting the inner product slightly more abstractly as <span class="math notranslate nohighlight">\(\langle\mathbf{x},\mathbf{y} \rangle = \mathbf{x}^T \mathbf{y}\)</span>, we can express as</p>
+<div class="math notranslate nohighlight">
+\[\langle \mathbf{y} - \mathbf{v}_{opt},\mathbf{v} \rangle = 0  \]</div>
+<p>and, in fact, by defining the inner product for the random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[ \langle X,Y \rangle = \mathbb{E}(X Y)\]</div>
+<p>we remarkably have the same relationship:</p>
+<div class="math notranslate nohighlight">
+\[\langle X-h_{opt}(Y),Y \rangle = 0  \]</div>
+<p>which holds not for vectors in <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>, but for random variables <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> and functions of those random variables. Exactly why this is true is technical, but it turns out that one can build up the <strong>entire theory of probability</strong> this way (see Nelson,1987), by using the expectation as an inner product.</p>
+<p>Furthermore, by abstracting out the inner product concept, we have drawn a clean line between MMSE optimization problems, geometry, and random variables. That’s  a lot of mileage to get a out of an abstraction and it is key to everything we pursue in statistical signal processing because now we can shift between these interpretations to address real problems. Soon, we’ll see how to do this with some examples, but first we will collect one staggering result that flows naturally from this abstraction.</p>
+</section>
+<section id="conditional-expectation-as-projection">
+<h1>Conditional Expectation as Projection<a class="headerlink" href="#conditional-expectation-as-projection" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="http://python-for-signal-processing.blogspot.com/2012/11/conditional-expectation-and-mean.html">Previously</a>, we noted that the conditional expectation is the minimum mean squared error (MMSE) solution to the following problem:</p>
+<div class="math notranslate nohighlight">
+\[ \min_h \int_{\mathbb{R}} (x - h(y) )^2 dx \]</div>
+<p>with the minimizing <span class="math notranslate nohighlight">\(h_{opt}(Y) \)</span> as</p>
+<div class="math notranslate nohighlight">
+\[ h_{opt}(Y) = \mathbb{E}(X|Y) \]</div>
+<p>which is another way of saying that among all possible functions <span class="math notranslate nohighlight">\(h(Y)\)</span>, the one that minimizes the MSE is <span class="math notranslate nohighlight">\( \mathbb{E}(X|Y)\)</span> (see appendix for a quick proof). From our discussion on <a class="reference external" href="http://python-for-signal-processing.blogspot.com/2012/11/the-projection-concept.html">projection</a>, we noted that these MMSE solutions can be thought of as projections onto a subspace that characterizes <span class="math notranslate nohighlight">\(Y\)</span>. For example, we previously noted that at the point of projection, we have</p>
+<div class="math notranslate nohighlight">
+\[\langle X-h_{opt}(Y),Y \rangle = 0 \]</div>
+<p>but since we know that the MMSE solution</p>
+<div class="math notranslate nohighlight">
+\[ h_{opt}(Y) = \mathbb{E}(X|Y) \]</div>
+<p>we have by direct substitution,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}( X-\mathbb{E}(X|Y), Y) = 0\]</div>
+<p>That last step seems pretty innocuous, but it is the step that ties MMSE to conditional expectation to the inner project abstraction, and in so doing, reveals the conditional expectation to be a projection operator for random variables. Before we develop this further, let’s grab some quick dividends:</p>
+<p>From the previous equation, by linearity of the expectation, we may obtain,</p>
+<div class="math notranslate nohighlight">
+\[  \mathbb{E}(X Y) =  \mathbb{E}(Y \mathbb{E}(X|Y))\]</div>
+<p>which we could have found by using the formal definition of conditional expectation,</p>
+<p>\begin{equation}
+\mathbb{E}(X|Y) = \int_{\mathbb{R}^2} x \frac{f_{X,Y}(x,y)}{f_Y(y)} dx dy
+\end{equation}</p>
+<p>and direct integration,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(Y \mathbb{E}(X|Y))= \int_{\mathbb{R}} y \int_{\mathbb{R}} x \frac{f_{X,Y}(x,y)}{f_Y(y)}  f_Y(y) dx dy =\int_{\mathbb{R}^2} x y f_{X,Y}(x,y) dx dy =\mathbb{E}( X Y) \]</div>
+<p>which is good to know, but not very geometrically intuitive. And this lack of geometric intuition makes it hard to apply these concepts and keep track of these relationships.</p>
+<p>We can keep pursuing this analogy and obtain the length of the error term as</p>
+<div class="math notranslate nohighlight">
+\[ \langle X-h_{opt}(Y),X-h_{opt}(Y)  \rangle = \langle X,X  \rangle - \langle h_{opt}(Y),h_{opt}(Y)  \rangle  \]</div>
+<p>and then by substituting all the notation we obtain</p>
+<p>\begin{equation}
+\mathbb{E}(X-  \mathbb{E}(X|Y))^2 = \mathbb{E}(X)^2 - \mathbb{E}(\mathbb{E}(X|Y) )^2<br />
+\end{equation}</p>
+<p>which would be tough to compute by direct integration.</p>
+<p>We recognize that <span class="math notranslate nohighlight">\(\mathbb{E}(X|Y)\)</span> <em>is</em> in fact <strong>a projection operator</strong>. Recall previously that we noted that the projection operator is idempotent, which means that once we project something onto a subspace, further projections essentially do nothing. Well, in the space of random variables, <span class="math notranslate nohighlight">\(\mathbb{E}(X|\cdot\)</span>) is the idempotent projection as we can show by noting that</p>
+<div class="math notranslate nohighlight">
+\[ h_{opt} = \mathbb{E}(X|Y)\]</div>
+<p>is purely a function of <span class="math notranslate nohighlight">\(Y\)</span>, so that</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(h_{opt}(Y)|Y) = h_{opt}(Y) \]</div>
+<p>since <span class="math notranslate nohighlight">\(Y\)</span> is fixed and this  is the statement of idempotency. Thus, conditional expectation is the corresponding projection operator in this space of random variables. With this happy fact, we can continue to carry over our geometric interpretations of projections for vectors (<span class="math notranslate nohighlight">\(\mathbf{v}\)</span>) into random variables ( <span class="math notranslate nohighlight">\(X\)</span> ).</p>
+<p>Now that we have just stuffed our toolbox, let’s consider some example conditional expectations obtained by using brute force to find the optimal MMSE function <span class="math notranslate nohighlight">\(h_{opt}\)</span> as well as by using the definition of the conditional expectation.</p>
+</section>
+<section id="example">
+<h1>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h1>
+<p>Suppose we have a random variable, <span class="math notranslate nohighlight">\(X\)</span>, then what constant is closest to <span class="math notranslate nohighlight">\(X\)</span> in the mean-squared-sense (MSE)? In other words, which <span class="math notranslate nohighlight">\(c\)</span> minimizes the following:</p>
+<div class="math notranslate nohighlight">
+\[ J = \mathbb{E}( X - c )^2 \]</div>
+<p>we can work this out as</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}( X - c )^2 = \mathbb{E}(c^2 - 2 c X + X^2) = c^2-2 c \mathbb{E}(X) + \mathbb{E}(X^2) \]</div>
+<p>and then take the first derivative with respect to <span class="math notranslate nohighlight">\(c\)</span> and solve:</p>
+<div class="math notranslate nohighlight">
+\[ c_{opt}=\mathbb{E}(X) \]</div>
+<p>Remember that <span class="math notranslate nohighlight">\(X\)</span> can take on all kinds of values, but this says that the closest number to <span class="math notranslate nohighlight">\(X\)</span> in the MSE sense is <span class="math notranslate nohighlight">\(\mathbb{E}(X)\)</span>.</p>
+<p>Coming at this same problem using our inner product, we know that at the point of projection</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}((X-c_{opt}) 1) = 0\]</div>
+<p>where the <span class="math notranslate nohighlight">\(1\)</span> represents the space of constants (i.e. <span class="math notranslate nohighlight">\(c \cdot 1 \)</span>)  we are projecting on. This, by linearity of the expectation, gives</p>
+<div class="math notranslate nohighlight">
+\[ c_{opt}=\mathbb{E}(X) \]</div>
+<p>Because <span class="math notranslate nohighlight">\(\mathbb{E}(X|Y)\)</span> is the projection operator, with <span class="math notranslate nohighlight">\(Y=\Omega\)</span> (the entire underlying probability space), we have, using the definintion of conditional expectation:</p>
+<div class="math notranslate nohighlight">
+\[  \mathbb{E}(X|Y=\Omega) = \mathbb{E}(X)  \]</div>
+<p>Thus, we just worked the same problem three ways (optimization, inner product, projection).</p>
+</section>
+<section id="id1">
+<h1>Example<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>Let’s consider the following example with probability density <span class="math notranslate nohighlight">\(f_{X,Y}= x + y \)</span> where <span class="math notranslate nohighlight">\((x,y) \in [0,1]^2\)</span> and compute the conditional expectation straight from the definition:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{ E}(X|Y) = \int_0^1 x \frac{f_{X,Y}(x,y)}{f_Y(y)} dx=  \int_0^1 x \frac{x+y}{y+1/2} dx =\frac{3 y + 2}{6 y + 3} \]</div>
+<p>That was pretty easy because the density function was so simple. Now, let’s do it the hard way by going directly for the MMSE solution <span class="math notranslate nohighlight">\(h(Y)\)</span>. Then,</p>
+<div class="math notranslate nohighlight">
+\[ \min_h \int_0^1\int_0^1 (x - h(y) )^2 f_{X,Y}(x,y)dx dy = \min_h \int_0^1  y h^2 {\left (y \right )} - y h{\left (y \right )} + \frac{1}{3} y + \frac{1}{2} h^{2}{\left (y \right )} - \frac{2}{3} h{\left (y \right )} + \frac{1}{4} dy \]</div>
+<p>Now we have to find a function <span class="math notranslate nohighlight">\(h\)</span> that is going to minimize this. Solving for a function, as opposed to solving for a number, is generally very, very hard, but because we are integrating over a finite interval, we can use the Euler-Lagrange method from variational calculus to take the derivative of the integrand with respect to the function <span class="math notranslate nohighlight">\(h(y)\)</span> and set it to zero. Euler-Lagrange methods will be the topic of a later section, but for now we just want the result, namely,</p>
+<div class="math notranslate nohighlight">
+\[ 2 y h{\left (y \right )} - y + h{\left (y \right )} - \frac{2}{3} =0 \]</div>
+<p>Solving this gives</p>
+<div class="math notranslate nohighlight">
+\[ h_{opt}(y)= \frac{3 y + 2}{6 y + 3} \]</div>
+<p>Finally, we can try solving this using our inner product as</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}( (X - h(Y)) Y ) = 0\]</div>
+<p>Writing this out gives,</p>
+<div class="math notranslate nohighlight">
+\[ \int_0^1 \int_0^1  (x-h(y))(x+y) dx dy = \int_0^1 \frac{y\,\left(2 + 3\,y -  3\,\left( 1 + 2\,y \right) \,h(y)\right) }{6} dy = 0\]</div>
+<p>and if this is zero everywhere, then the integrand must be zero,</p>
+<div class="math notranslate nohighlight">
+\[ 2 y + 3 y^2 - 3 y h(y) - 6 y^2 h(y)=0 \]</div>
+<p>and solving this for <span class="math notranslate nohighlight">\(h(y)\)</span> gives the same solution:</p>
+<div class="math notranslate nohighlight">
+\[ h_{opt}(y)= \frac{3 y + 2}{6 y + 3} \]</div>
+<p>Thus, doing it by the definition, optimization, or inner product gives us the same answer; but, in general, no method is necessarily easier because they both involve potentially difficult or impossible integration, optimization, or functional equation solving. The point is that now that we have a deep toolbox, we can pick and choose which tools we want to apply for different problems.</p>
+<p>Before we leave this example, let’s use <code class="docutils literal notranslate"><span class="pre">sympy</span></code> to verify the length of the error function we found earlier:</p>
+<p>\begin{equation}
+\mathbb{E}(X-  \mathbb{E}(X|Y))^2 = \mathbb{E}(X)^2 - \mathbb{E}(\mathbb{E}(X|Y) )^2<br />
+\end{equation}</p>
+<p>that is based on the Pythagorean theorem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from sympy.abc import y,x
+from sympy import integrate, simplify
+
+fxy = x + y                 # joint density
+fy = integrate(fxy,(x,0,1)) # marginal density
+fx = integrate(fxy,(y,0,1)) # marginal density
+
+h = (3*y+2)/(6*y+3) # conditional expectation
+LHS=integrate((x - h)**2 *fxy, (x,0,1),(y,0,1)) # from the definition
+RHS=integrate( (x)**2 *fx, (x,0,1)) - integrate( (h)**2 *fy, (y,0,1)) # using Pythagorean theorem
+print simplify(LHS-RHS)==0
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>In this section, we have pulled together all the projection and least-squares optimization ideas from the previous posts to draw a clean line between our geometric notions of projection from vectors in <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span> to general random variables. This resulted in the remarkable realization that the conditional expectation is in fact a projection operator for random variables. The key idea is that because we have these relationships, we can approach difficult problems in multiple ways, depending on which way is more intuitive or tractable in a particular situation. In these pages, we will again and again come back to these intuitions because they form the backbone of statistical signal processing.</p>
+<p>In the next section, we will have a lot of fun with these ideas working out some examples that are usually solved using more general tools from measure theory.</p>
+<p>Note that the book by Mikosch (1998) has some excellent sections covering much of this material in more detail. Mikosch has a very geometric view of the material as well.</p>
+</section>
+<section id="appendix">
+<h1>Appendix<a class="headerlink" href="#appendix" title="Link to this heading">#</a></h1>
+<section id="proof-of-mmse-of-conditional-expectation-by-optimization">
+<h2>Proof of MMSE of Conditional expectation by Optimization<a class="headerlink" href="#proof-of-mmse-of-conditional-expectation-by-optimization" title="Link to this heading">#</a></h2>
+<div class="math notranslate nohighlight">
+\[ \min_h \int_\mathbb{R^2} | X - h(Y) |^2 f_{x,y}(X,Y) dx dy \]</div>
+<div class="math notranslate nohighlight">
+\[ \min_h \int_\mathbb{R^2} | X |^2 f_{x,y}(X,Y) dx dy + \int_\mathbb{R^2} | h(Y) |^2 f_{x,y}(X,Y) dx dy - \int_\mathbb{R^2} 2 X h(Y) f_{x,y}(X,Y) dx dy \]</div>
+<p>Now, we want to maximize the following:</p>
+<div class="math notranslate nohighlight">
+\[ \max_h \int_\mathbb{R^2}  X h(Y) f_{x,y}(X,Y) dx dy  \]</div>
+<p>Breaking up the integral using the definition of conditional expectation</p>
+<div class="math notranslate nohighlight">
+\[ \max_h \int_\mathbb{R}   \left(\int_\mathbb{R} X  f_{x|y}(X|Y) dx \right)h(Y) f_Y(Y)   dy  \]</div>
+<div class="math notranslate nohighlight">
+\[ \max_h \int_\mathbb{R} \mathbb{E}(X|Y) h(Y)f_Y(Y)   dy  \]</div>
+<p>From properties of the Cauchy-Schwarz inequality, we know that the maximum happens when <span class="math notranslate nohighlight">\(h_{opt}(Y) = \mathbb{E}(X|Y)\)</span>, so we have found the optimal <span class="math notranslate nohighlight">\(h(Y)\)</span> function as :</p>
+<div class="math notranslate nohighlight">
+\[ h_{opt}(Y) = \mathbb{E}(X|Y)\]</div>
+<p>which shows that the optimal function is the conditional expectation.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>This post was created using the <a class="reference external" href="https://github.com/ipython/nbconvert">nbconvert</a> utility from the source <a class="reference internal" href="#www.ipython.org"><span class="xref myst">IPython Notebook</span></a> which is available for <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Conditional_Expectation_Projection.ipynb">download</a> from the main github <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing">site</a> for this blog.</p>
+</section>
+<section id="bibliography">
+<h2>Bibliography<a class="headerlink" href="#bibliography" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Nelson, Edward. Radically Elementary Probability Theory.(AM-117). Vol. 117. Princeton University Press, 1987.</p></li>
+<li><p>Mikosch, Thomas. Elementary stochastic calculus with finance in view. Vol. 6. World Scientific Publishing Company Incorporated, 1998.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Conditional_expectation_MSE_Ex.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Projection.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Weighted distances</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inner-product-for-random-variables">Inner Product for Random Variables</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#conditional-expectation-as-projection">Conditional Expectation as Projection</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix">Appendix</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#proof-of-mmse-of-conditional-expectation-by-optimization">Proof of MMSE of Conditional expectation by Optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bibliography">Bibliography</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

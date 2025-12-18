@@ -1,0 +1,921 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Filtering: Part 2 &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Filtering_Part2';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Filtering: Part 3" href="Filtering_Part3.html" />
+    <link rel="prev" title="Filtering: Part 1" href="Filtering_Part1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Frequency Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Filtering: Part 1</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Filtering: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Filtering: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_2_Sampling_Theorem.html">Chapter 2: Sampling Theorem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_3_Discrete_Fourier_transform.html">Chapter 3: Discrete Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_4_Spectral_analysis.html">Chapter 4: Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_5_Finite_impulse_response_filters.html">Chapter 5: Finite Impulse Response Filters</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Filtering_Part2.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Filtering_Part2.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Filtering: Part 2</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windowing-method">Windowing Method</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-windows-for-fir-filter-design">Using Windows for FIR Filter Design</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="filtering-part-2">
+<h1>Filtering: Part 2<a class="headerlink" href="#filtering-part-2" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>In this section, we start designing FIR filters using the windowing design method. This is the most straightforward design method and it will illustrate the concepts we  developed in the previous section.</p>
+<section id="windowing-method">
+<h3>Windowing Method<a class="headerlink" href="#windowing-method" title="Link to this heading">#</a></h3>
+<p>The window method of FIR filter design starts by constructing the ideal filter response, <span class="math notranslate nohighlight">\( H_d(\omega) \)</span>. For example, consider the ideal lowpass filter,</p>
+<div class="math notranslate nohighlight">
+\[ |H_d(\omega)| =1 \forall \omega \in (-\omega_c,\omega_c) \]</div>
+<p>and zero otherwise. The  inverse Fourier transform is the sequence,</p>
+<div class="math notranslate nohighlight">
+\[ h_n = \frac{\omega_c}{\pi}\frac{\sin (\omega_c n )}{\omega_c n} \]</div>
+<p>if <span class="math notranslate nohighlight">\( n \neq 0 \)</span> and</p>
+<div class="math notranslate nohighlight">
+\[ h_{n=0} = \frac{\omega_c}{\pi} \]</div>
+<p>This is obviously non-causal and infinitely long. We can shift the sequence by an arbitrary amount and then truncate to fix both problems, respectively.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="c1"># omega_c = pi/4</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span>
+
+<span class="n">wc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">512</span> <span class="c1"># DFT size</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">M</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">wc</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">wc</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>  <span class="c1"># see definition of np.sinc()</span>
+
+<span class="n">w</span><span class="p">,</span><span class="n">Hh</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">whole</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">worN</span><span class="o">=</span><span class="n">N</span><span class="p">)</span> <span class="c1"># get entire frequency domain</span>
+<span class="n">wx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="c1"># shift to center for plotting</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="n">M</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;amplitude&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">Hh</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">xmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">([</span><span class="o">-</span><span class="n">wc</span><span class="p">,</span> <span class="n">wc</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$|H(\omega)| $&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">Hh</span><span class="p">))))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">([</span><span class="o">-</span><span class="n">wc</span><span class="p">,</span><span class="n">wc</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$20\log_</span><span class="si">{10}</span><span class="s2">|H(\omega)|$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="c1">#ax.axis(ymin=-40, xmax=np.pi/2)</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$20\\log_{10}|H(\\omega)|$&#39;)
+</pre></div>
+</div>
+<img alt="../_images/0eea6a650982a428963bc91d34a4350aa9d369a74cc20e5a734db95ca9623341.png" src="../_images/0eea6a650982a428963bc91d34a4350aa9d369a74cc20e5a734db95ca9623341.png" />
+</div>
+</div>
+<p>The figure above shows the filter sequence <span class="math notranslate nohighlight">\( h_n \)</span> in the top plot. This has been shifted over to enforce causality. The middle plot shows <span class="math notranslate nohighlight">\( |H(\omega)| \)</span> as a function of frequency. The vertical green lines show <span class="math notranslate nohighlight">\( \pm\omega_c \)</span> limits and the horizontal green line shows the ideal response, <span class="math notranslate nohighlight">\( |H_d(\omega)| \)</span>. The bottom plot shows <span class="math notranslate nohighlight">\( 20\log_{10} |H(\omega)| \)</span> as a function of frequency. The middle plot reveals  rippling in the passband that increases towards the edge of the passband. This is known as the <em>Gibbs phenomenon</em> and we need to examine it carefully because it is a serious form of distortion.</p>
+<p>Truncating the filter coefficients is the same as multiplying the infinitely-long desired filter sequence (<span class="math notranslate nohighlight">\( h_{d} \)</span>) by a rectangular window (<span class="math notranslate nohighlight">\( w_n \)</span>); this is equivalent to a convolution in the frequency domain between  the desired reponse, <span class="math notranslate nohighlight">\( H_d(\omega) \)</span>, and <span class="math notranslate nohighlight">\( W(\omega)\)</span>, the Fourier transform of the rectangular window. Thus, the filter output is</p>
+<div class="math notranslate nohighlight">
+\[ Y(\omega)  = \frac{1}{2\pi}\int_{-\pi}^{\pi} H_d(\xi) W(\omega-\xi) d\xi = \frac{1}{2\pi}\int_{-\omega_c}^{\omega_c}W(\omega-\xi) d\xi\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[ W(\omega)=\sum_{n=0}^{N_s-1} \exp \left( -j\omega n \right) \]</div>
+<p>Because everything is finite, we can combine these   two equations to  obtain the following:</p>
+<div class="math notranslate nohighlight">
+\[ Y(\omega) = \frac{1}{2\pi}\sum_{n=0}^{N_s-1}\int_{-\omega_c}^{\omega_c} \exp \left( -j(\omega-\xi) n \right) d\xi =\frac{1}{\pi}\sum_{n=0}^{N_s-1}\frac{\sin(n\omega_c)}{n} \hspace{1em}\exp(j\omega n) \]</div>
+<p>We can expand the summation term to obtain,</p>
+<div class="math notranslate nohighlight">
+\[ Y(\omega) = \frac{1}{\pi}\sum_{n=0}^{N_s-1}\frac{\cos(n\omega)\sin(n\omega_c)+j\sin(n\omega)\sin(n\omega_c)}{n} \]</div>
+<p>To understand the Gibbs phenomenon at the edges where <span class="math notranslate nohighlight">\( \omega=\omega_c \)</span>, we recall the following two trigonometric identities:</p>
+<div class="math notranslate nohighlight">
+\[ 2\cos(n\omega)\sin(n\omega_c)= \sin(n\omega+n\omega_c)-\sin(n\omega-n\omega_c) \]</div>
+<p>and likewise,</p>
+<div class="math notranslate nohighlight">
+\[ 2\sin(n\omega)\sin(n\omega_c)= \cos(n\omega-n\omega_c)-\cos(n\omega+n\omega_c) \]</div>
+<p>These two identities show that as <span class="math notranslate nohighlight">\( \omega \rightarrow \omega_c \)</span>, the surviving terms in <span class="math notranslate nohighlight">\( Y(\omega) \)</span> summation oscillate at double the cut-off frequency (i.e <span class="math notranslate nohighlight">\( 2\omega_c \)</span>) which accounts for the intense rippling effect as <span class="math notranslate nohighlight">\( \omega \)</span> moves from <span class="math notranslate nohighlight">\( \omega=0 \)</span> to <span class="math notranslate nohighlight">\(\omega=\omega_c\)</span>. Consider the real part of <span class="math notranslate nohighlight">\( Y(\omega) \)</span> when <span class="math notranslate nohighlight">\( \omega \lt \omega_c \)</span>,</p>
+<div class="math notranslate nohighlight">
+\[ Y_{re}(\omega) = \frac{1}{\pi}\sum_{n=0}^{N_s-1}\frac{\sin(n\omega+n\omega_c)-\sin(n\omega-n\omega_c)}{2 n} \]</div>
+<p>In this case, <span class="math notranslate nohighlight">\( \sin(n\omega-n\omega_c) \lt 0 \)</span> so it contributes positively (i.e. constructive interference) to the summation. When <span class="math notranslate nohighlight">\(\omega \gt \omega_c  \)</span>, the sign  reverses and destructive interference reduces the real part. This is the mechanism that characterizes the transition from the passband to the stopband.</p>
+<p>The following figure illustrates this effect.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">omega</span><span class="p">,(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">omega</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">+</span><span class="n">k</span><span class="o">*</span><span class="n">wc</span><span class="p">)</span><span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">omega</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]</span><span class="o">-</span><span class="n">k</span><span class="o">*</span><span class="n">wc</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$Y_</span><span class="si">{re}</span><span class="s2">(\omega)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\omega_c = \pi/4$&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; $\omega $&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="s1">&#39;$0$&#39;</span><span class="p">,</span><span class="sa">r</span><span class="s1">&#39;$\frac{\pi}</span><span class="si">{4}</span><span class="s1">$&#39;</span><span class="p">,</span><span class="sa">r</span><span class="s1">&#39;$\frac{\pi}</span><span class="si">{2}</span><span class="s1">$&#39;</span><span class="p">,</span><span class="sa">r</span><span class="s1">&#39;$\frac{3\pi}</span><span class="si">{4}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;$\pi$&#39;</span><span class="p">],</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s2">&quot;Gibbs phenomenon&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
+            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span>
+            <span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">,</span>
+            <span class="n">arrowprops</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;facecolor&#39;</span><span class="p">:</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;arrowstyle&#39;</span><span class="p">:</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">})</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(20, 0, &#39;Gibbs phenomenon&#39;)
+</pre></div>
+</div>
+<img alt="../_images/255572eaed32510d7c2b276dfbf7fd4c224d2f14369cd54834d997930342f607.png" src="../_images/255572eaed32510d7c2b276dfbf7fd4c224d2f14369cd54834d997930342f607.png" />
+</div>
+</div>
+<p>Now that we have a grip on the the Gibbs phenomenon, we need to control this form of distortion. Fortunately, we already have all of the tools in place from our prior discussion of window functions.</p>
+</section>
+</section>
+<section id="using-windows-for-fir-filter-design">
+<h2>Using Windows for FIR Filter Design<a class="headerlink" href="#using-windows-for-fir-filter-design" title="Link to this heading">#</a></h2>
+<p>The root of the Gibbs phenomenon is the sudden truncation of the filter sequence by the rectangular window. We can mitigate this effect by  smoothly  guiding the filter coefficients to zero using a window function.  The following figure is the same as before but now we use a Hamming window to terminate the ideal filter sequence.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">4</span>
+
+<span class="n">M</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">512</span> <span class="c1"># DFT size</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">M</span><span class="p">,</span><span class="n">M</span><span class="p">)</span>
+<span class="n">win</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">wc</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">wc</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">*</span><span class="n">win</span>  <span class="c1"># see definition of np.sinc()</span>
+
+<span class="n">w</span><span class="p">,</span><span class="n">Hh</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">whole</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">worN</span><span class="o">=</span><span class="n">N</span><span class="p">)</span> <span class="c1"># get entire frequency domain</span>
+<span class="n">wx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="c1"># shift to center for plotting</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="n">M</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;amplitude&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">Hh</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">xmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="n">xmin</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">([</span><span class="o">-</span><span class="n">wc</span><span class="p">,</span><span class="n">wc</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span><span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$|H(\omega)| $&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftshift</span><span class="p">(</span><span class="n">Hh</span><span class="p">))))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">80</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">([</span><span class="o">-</span><span class="n">wc</span><span class="p">,</span><span class="n">wc</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">80</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$20\log_</span><span class="si">{10}</span><span class="s2">|H(\omega)| $&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="c1">#ax.axis(ymin=-40,xmax=pi/2)</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;$20\\log_{10}|H(\\omega)| $&#39;)
+</pre></div>
+</div>
+<img alt="../_images/740ccd600bfad93a0779c8812bec51ffa3d575bdc0067c0c6c161716c5c011d6.png" src="../_images/740ccd600bfad93a0779c8812bec51ffa3d575bdc0067c0c6c161716c5c011d6.png" />
+</div>
+</div>
+<p>The figure above shows the frequency response using a Hamming window to gently terminate  the filter sequence. Note that the Gibbs effect is significantly reduced, producing a much flatter mainlobe at the cost of a wider mainlobe. The mainlobe widens because the mainlobe of the Hamming window is wider than that of the rectangular window. The much lower sidelobes of   the Hamming window flattens the Gibbs phenomenon at the edge of the passband.</p>
+<p>I invite you to download the IPython notebook corresponding to this post and try the above for different values of <span class="math notranslate nohighlight">\( M \)</span>. Note that drop from the passband to the sidelobes steepens with increasing <span class="math notranslate nohighlight">\( M \)</span>. As we have seen before with window functions, this is because the window’s mainlobe narrows with increasing sequence length. Naturally, you can use other window functions besides Hamming and change the sidelobe level and mainlobe width. The most popular window used for this method of filter design is the Kaiser-Bessel window because it provides extra parameters for tuning the frequency response.</p>
+<p>Let’s consider a design example using Kaiser-Bessel and the filter design tools in the <code class="docutils literal notranslate"><span class="pre">signal.fir_filter_design</span></code> module.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">signal.fir_filter_design</span></code> module provides functions for filter design using the Kaiser-Bessel window ( among other windows). For example, to design a lowpass filter using the  Kaiser-Bessel window, we need the a subset of the following parameters: maximum passband ripple (<span class="math notranslate nohighlight">\( \delta \)</span>), width of the transition region,  Kaiser-Bessel parameter <span class="math notranslate nohighlight">\(\beta\)</span>, and the number of filter taps. The <code class="docutils literal notranslate"><span class="pre">fir_filter_design</span></code> provides tools to solve for some of these parameters given others. For example, the <code class="docutils literal notranslate"><span class="pre">fir_filter_design.kaiserord()</span></code> function  can determine the number of taps given the maximum allowable passband ripple and the width of the transition region.</p>
+<p>Consider the following low pass filter specification.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Ns</span> <span class="o">=</span> <span class="mi">300</span> <span class="c1"># number of samples </span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1024</span> <span class="c1"># DFT size</span>
+
+<span class="n">fs</span> <span class="o">=</span> <span class="mf">1e3</span> <span class="c1"># sample rate in Hz</span>
+<span class="n">fpass</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1"># in Hz</span>
+<span class="n">fstop</span> <span class="o">=</span> <span class="mi">150</span> <span class="c1"># in Hz</span>
+<span class="n">delta</span> <span class="o">=</span> <span class="mi">60</span> <span class="c1"># in dB, desired attenuation in stopband</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we need to determine the number of tabs and the  Kaiser-Bessel <span class="math notranslate nohighlight">\( \beta \)</span> parameter using the <code class="docutils literal notranslate"><span class="pre">fir_filter_design.kaiserord()</span></code> function as shown below.  For the FIR window design method, the <span class="math notranslate nohighlight">\( \delta \)</span> parameter is simultaneously the maximum allowable passband ripple and the desired attenuation in the stopband.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rectangle</span>
+
+<span class="n">M</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">fir_filter_design</span><span class="o">.</span><span class="n">kaiserord</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="p">(</span><span class="n">fstop</span><span class="o">-</span><span class="n">fpass</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">fs</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span>
+
+<span class="n">hn</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">firwin</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="p">(</span><span class="n">fstop</span><span class="o">+</span><span class="n">fpass</span><span class="p">)</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;kaiser&#39;</span><span class="p">,</span><span class="n">beta</span><span class="p">),</span> <span class="n">nyq</span><span class="o">=</span><span class="n">fs</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+<span class="n">w</span><span class="p">,</span><span class="n">H</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="n">hn</span><span class="p">)</span> <span class="c1"># frequency response</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">fs</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">H</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;frequency( Hz )&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$20\log_</span><span class="si">{10}</span><span class="s2"> |H(f)| $&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">ymin</span><span class="p">,</span><span class="n">ymax</span> <span class="o">=</span> <span class="o">-</span><span class="mi">80</span><span class="p">,</span><span class="mi">5</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">ymax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="n">ymin</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="n">fpass</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">ymax</span><span class="o">-</span><span class="n">ymin</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">fpass</span><span class="p">,</span><span class="n">ymin</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="n">fstop</span><span class="o">-</span><span class="n">fpass</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">ymax</span><span class="o">-</span><span class="n">ymin</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">fstop</span><span class="p">,</span><span class="n">ymin</span><span class="p">),</span> <span class="n">width</span><span class="o">=</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">fstop</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">ymax</span><span class="o">-</span><span class="n">ymin</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Number of taps=</span><span class="si">%d</span><span class="s2">&quot;</span><span class="o">%</span><span class="k">M</span>)
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="s1">&#39;passband&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="s1">&#39;stopband&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/84e649000025949ba1f9d18d98241f0488cb15ffeacd4eaaa73e78f3e4477129.png" src="../_images/84e649000025949ba1f9d18d98241f0488cb15ffeacd4eaaa73e78f3e4477129.png" />
+</div>
+</div>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<p>In the following, let’s consider the performance of the filter with two equal-amplitude single-frequency tones, one in the passband and one in the stopband.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># two-tone example using filter</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">Ns</span><span class="p">)</span><span class="o">/</span><span class="n">fs</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">30</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">200</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">hn</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;filter input&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Y</span><span class="p">)),</span><span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;filter output&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;dB&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;frequency (Hz)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;attenuated in</span><span class="se">\n</span><span class="s1">stopband&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">32</span><span class="p">),</span>
+             <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">,</span>
+             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+            <span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9064a8a663918cb0dff99932f982eb6203b34ab96e935eaec6f1fc103b613e0c.png" src="../_images/9064a8a663918cb0dff99932f982eb6203b34ab96e935eaec6f1fc103b613e0c.png" />
+</div>
+</div>
+<p>The figure above shows the frequency domain input and the corresponding filtered output. Because second tone is in the stopband, and its relative energy is approximately 40 dB, it is completely extinguished by the filter, whose attenuation in the stopband is 60 dB. I invite you to download the IPython Notebook corresponding to this section and try different amplitude values for the tone in the stopband.</p>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>The window design method is the easiest FIR design method to understand and it draws upon intuitions regarding window function that we have previously developed. The Kaiser-Bessel method is widely used because it provides design flexibility and easy-to-understand filter  specifications. Furthermore, there are many closed form approximations to the various derived terms (e.g. <span class="math notranslate nohighlight">\( \beta \)</span>, <span class="math notranslate nohighlight">\( M \)</span>) which means that time-consuming iterative algorithms are not necessary and that engineering trade-offs appear explicitly in a formula.</p>
+<p>In the next section we consider Parks-McClellan  FIR design that solves for the desired filter sequence using a powerful iterative exchange algorithm that generally  results in filters with fewer taps for the same level of performance.</p>
+<p>As usual, the corresponding IPython notebook for this post  is available for download <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Filtering_Part2.ipynb">here</a>.</p>
+<p>Comments and corrections welcome!</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Proakis, John G. ,<em>Digital signal processing: principles algorithms and applications</em>. Pearson Education India, 2001.</p></li>
+<li><p>Oppenheim, Schafer, “Discrete-Time Signal Processing”, p.475-476.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python361064bit3b840f9918f246278fc4b65bf6247be2",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python361064bit3b840f9918f246278fc4b65bf6247be2'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Filtering_Part1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Filtering: Part 1</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Filtering_Part3.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Filtering: Part 3</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#windowing-method">Windowing Method</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-windows-for-fir-filter-design">Using Windows for FIR Filter Design</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

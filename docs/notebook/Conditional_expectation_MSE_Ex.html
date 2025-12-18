@@ -1,0 +1,1061 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Introduction &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Conditional_expectation_MSE_Ex';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction" href="Conditional_Expectation_Projection.html" />
+    <link rel="prev" title="Summary" href="Conditional_expectation_MSE.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Sampling Theorem: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Frequency Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">More Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Windowing: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Windowing: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Windowing: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Filtering: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Filtering: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Filtering: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Sampling Monte Carlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_2_Sampling_Theorem.html">Chapter 2: Sampling Theorem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_3_Discrete_Fourier_transform.html">Chapter 3: Discrete Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_4_Spectral_analysis.html">Chapter 4: Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_5_Finite_impulse_response_filters.html">Chapter 5: Finite Impulse Response Filters</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Conditional_expectation_MSE_Ex.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Conditional_expectation_MSE_Ex.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<p>Brzezniak (2000) is a great book because it approaches conditional expectation through a sequence of exercises, which is what we are trying to do here. The main difference is that Brzezniak takes a more abstract measure-theoretic approach to the same problems. Note that you <em>do</em> need to grasp the measure-theoretic to move into more advanced areas in stochastic processes, but for what we have covered so far, working the same problems in his text using our methods is illuminating. It always helps to have more than one way to solve <em>any</em> problem.  I urge you to get a copy of his book or at least look at some pages on Google Books. I have numbered the examples corresponding to the book.</p>
+</section>
+<section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h1>
+<p>This is Example 2.1 from Brzezniak:</p>
+<blockquote>
+<div><p>Three coins, 10p, 20p and 50p are tossed. The values of those coins that land heads up are added to work out the total amount. What is the expected total amount given that two coins have landed heads up?</p>
+</div></blockquote>
+<p>In this case we have we want to compute <span class="math notranslate nohighlight">\(\mathbb{E}(\xi|\eta)\)</span> where</p>
+<div class="math notranslate nohighlight">
+\[ \xi = 10 X_{10} + 20 X_{20} +50 X_{50} \]</div>
+<p>where <span class="math notranslate nohighlight">\(X_i \in \{ 0,1\} \)</span>. This represents the sum total value of the heads-up coins. The <span class="math notranslate nohighlight">\(\eta\)</span> represents the fact that only two of the three coins are heads-up. Note</p>
+<div class="math notranslate nohighlight">
+\[\eta = X_{10} X_{20} (1-X_{50})+ (1-X_{10}) X_{20} X_{50}+ X_{10} (1-X_{20}) X_{50} \]</div>
+<p>is a function that is only non-zero when two of the three coins is heads. Each triple term catches each of these three possibilities. For example, the first term is when the 10p and 20p are heads up  and the 50p is heads down.</p>
+<p>To compute the conditional expectation, we want to find a function <span class="math notranslate nohighlight">\(h\)</span> of <span class="math notranslate nohighlight">\(\eta\)</span> that minimizes the MSE</p>
+<div class="math notranslate nohighlight">
+\[ \sum_{X\in\{0,1\}^3} \frac{1}{8} (\xi - h( \eta ))^2 \]</div>
+<p>where the sum is taken over all possible triples of outcomes for <span class="math notranslate nohighlight">\( \{X_{10} , X_{20} ,X_{50}\}\)</span> and the <span class="math notranslate nohighlight">\(\frac{1}{8} = \frac{1}{2^3} \)</span> since each coin has a <span class="math notranslate nohighlight">\(\frac{1}{2}\)</span> chance of coming up heads.</p>
+<p>Now, the question boils down to what function <span class="math notranslate nohighlight">\(h(\eta)\)</span> should we try? Note that <span class="math notranslate nohighlight">\(\eta \in \{0,1\}\)</span> so <span class="math notranslate nohighlight">\(h\)</span> takes on only two values. Thus, we only have to try <span class="math notranslate nohighlight">\(h(\eta)=\alpha \eta\)</span>  and find <span class="math notranslate nohighlight">\(\alpha\)</span>. Writing this out gives,</p>
+<div class="math notranslate nohighlight">
+\[ \sum_{X\in\{0,1\}^3} \frac{1}{8} (\xi - \alpha( \eta ))^2 \]</div>
+<p>which boils down to solving for <span class="math notranslate nohighlight">\(\alpha\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\langle \xi , \eta \rangle = \alpha \langle \eta,\eta \rangle\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[ \langle \xi , \eta \rangle =\sum_{X\in\{0,1\}^3} \frac{1}{8} (\xi  \eta ) \]</div>
+<p>This is tedious and a perfect job for <code class="docutils literal notranslate"><span class="pre">sympy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import sympy as S
+
+eta = S.Symbol(&#39;eta&#39;)
+xi = S.Symbol(&#39;xi&#39;)
+X10 = S.Symbol(&#39;X10&#39;)
+X20 = S.Symbol(&#39;X20&#39;)
+X50 = S.Symbol(&#39;X50&#39;)
+
+eta = X10 * X20 *(1-X50 )+ X10 * (1-X20) *(X50 )+ (1-X10) * X20 *(X50 )
+xi = 10*X10 +20* X20+ 50*X50 
+
+num=S.summation(xi*eta,(X10,0,1),(X20,0,1),(X50,0,1))
+den=S.summation(eta*eta,(X10,0,1),(X20,0,1),(X50,0,1))
+alpha=num/den
+print alpha
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>160/3
+</pre></div>
+</div>
+</div>
+</div>
+<p>This means that</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\xi|\eta) = \frac{160}{3} \eta \]</div>
+<p>which we can check with a quick simulation</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from numpy import array
+
+x=np.random.randint(0,2,(3,5000))
+print (160/3.,np.dot(x[:,x.sum(axis=0)==2].T,array([10,20,50])).mean())
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(53.333333333333336, 53.243528790279981)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="example">
+<h1>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h1>
+<p>This is example 2.2:</p>
+<blockquote>
+<div><p>Three coins, 10p, 20p and 50p are tossed as before. What is the conditional expectation of the total amount shown by the three coins given the total amount shown by the 10p and 20p coins only?</p>
+</div></blockquote>
+<p>For this problem,</p>
+<div class="math notranslate nohighlight">
+\[\eta = 30 X_{10} X_{20} + 20 (1-X_{10}) X_{20}  + 10 X_{10} (1-X_{20})  \]</div>
+<p>which takes on three values (10,20,30) and only considers the 10p and 20p coins. Here, we’ll look for affine functions, <span class="math notranslate nohighlight">\(h(\eta) = a \eta + b \)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from sympy.abc import a,b
+
+eta = X10 * X20 * 30 + X10 * (1-X20) *(10 )+ (1-X10) * X20 *(20 )
+h = a*eta + b
+
+J=S.summation((xi - h)**2 * S.Rational(1,8),(X10,0,1),(X20,0,1),(X50,0,1))
+
+sol=S.solve( [S.diff(J,a), S.diff(J,b)],(a,b) )
+print sol
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{b: 25, a: 1}
+</pre></div>
+</div>
+</div>
+</div>
+<p>This means that</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\xi|\eta) = 25+ \eta \]</div>
+<p>since <span class="math notranslate nohighlight">\(\eta\)</span> takes on only four values, <span class="math notranslate nohighlight">\(\{0,10,20,30\}\)</span>, we can write this out as</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\xi|\eta=0) = 25  \]</div>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\xi|\eta=10) = 35  \]</div>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\xi|\eta=20) = 45  \]</div>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\xi|\eta=30) = 55  \]</div>
+<p>The following is  a quick simulation to demonstrate this.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>x=np.random.randint(0,2,(3,5000))  # random samples for 3 coins tossed
+eta=np.dot(x[:2,:].T,array([10,20])) # sum of 10p and 20p
+
+print np.dot(x[:,eta==0].T,array([10,20,50])).mean() # E(xi|eta=0)
+print np.dot(x[:,eta==10].T,array([10,20,50])).mean()# E(xi|eta=10)
+print np.dot(x[:,eta==20].T,array([10,20,50])).mean()# E(xi|eta=20)
+print np.dot(x[:,eta==30].T,array([10,20,50])).mean()# E(xi|eta=30)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>25.1587301587
+34.3410852713
+43.7323358271
+56.6238973536
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="id1">
+<h1>Example<a class="headerlink" href="#id1" title="Link to this heading">#</a></h1>
+<p>This is Example 2.3</p>
+<p><img alt="alt text" src="notebook/files/ex23.jpg" /></p>
+<p>Note that “Lebesgue measure” on <span class="math notranslate nohighlight">\([0,1]\)</span> just means uniformly distributed on that interval. Also, note the the <code class="docutils literal notranslate"><span class="pre">Piecewise</span></code> object in <code class="docutils literal notranslate"><span class="pre">sympy</span></code> is not complete at this point in its development, so we’ll have to work around that in the following.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%pylab inline
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Populating the interactive namespace from numpy and matplotlib
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>x=S.Symbol(&#39;x&#39;)
+c=S.Symbol(&#39;c&#39;)
+
+xi = 2*x**2
+
+eta=S.Piecewise((1,S.And(S.Gt(x,0),S.Lt(x,S.Rational(1,3)))),  #  0 &lt; x &lt; 1/3
+                (2,S.And(S.Gt(x,S.Rational(1,3)),S.Lt(x,S.Rational(2,3)))), # 1/3 &lt; x &lt; 2/3,
+                (0,S.And(S.Gt(x,S.Rational(2,3)),S.Lt(x,1))), 
+                )
+
+
+h = a + b*eta + c*eta**2 
+J=S.integrate((xi - h)**2 ,(x,0,1))
+
+sol=S.solve( [S.diff(J,a), 
+              S.diff(J,b),
+              S.diff(J,c),
+              ],
+              (a,b,c) )
+print sol
+
+print S.piecewise_fold(h.subs(sol))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{c: 8/9, b: -20/9, a: 38/27}
+Piecewise((2/27, And(x &lt; 1/3, x &gt; 0)), (14/27, And(x &lt; 2/3, x &gt; 1/3)), (38/27, And(x &lt; 1, x &gt; 2/3)))
+</pre></div>
+</div>
+</div>
+</div>
+<p>Thus, collecting this result gives:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\xi|\eta) = \frac{38}{27} - \frac{20}{9}\eta + \frac{8}{9} \eta^2\]</div>
+<p>which can be re-written as a piecewise function as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbb{E}(\xi|\eta) =\begin{cases} \frac{2}{27} &amp; \text{for}\: 0 &lt; x &lt; \frac{1}{3} \\\frac{14}{27} &amp; \text{for}\: \frac{1}{3} &lt; x &lt; \frac{2}{3} \\\frac{38}{27} &amp; \text{for}\: \frac{2}{3}&lt;x &lt; 1 \end{cases}
+\end{split}\]</div>
+<p>The following is a quick simulation to demonstrate this.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>x = np.random.rand(1000)
+f,ax= subplots()
+ax.hist(2*x**2,bins=array([0,1/3.,2/3.,1])**2*2,normed=True,alpha=.5)
+ax.vlines([2/27.,14/27.,38/27.],0,ax.get_ylim()[1],linestyles=&#39;--&#39;)
+ax.set_xlabel(r&#39;$2 x^2$&#39;,fontsize=18);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a9976eb89df6e0c7e30d7c16d1e537572f861cf39001ebe4ec6e02424bd357e6.png" src="../_images/a9976eb89df6e0c7e30d7c16d1e537572f861cf39001ebe4ec6e02424bd357e6.png" />
+</div>
+</div>
+<p>This plot shows the intervals that correspond to the respective domains of <span class="math notranslate nohighlight">\(\eta\)</span> with the vertical dotted lines showing the <span class="math notranslate nohighlight">\(\mathbb{E}(\xi|\eta) \)</span> for that piece.</p>
+</section>
+<section id="id2">
+<h1>Example<a class="headerlink" href="#id2" title="Link to this heading">#</a></h1>
+<p>This is Example 2.4</p>
+<p><img alt="alt text" src="notebook/files/ex24.jpg" /></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>x,a=S.symbols(&#39;x,a&#39;)
+
+xi = 2*x**2
+
+half = S.Rational(1,2)
+
+eta_0=S.Piecewise((2, S.And(S.Ge(x,0), S.Lt(x,half))), 
+                  (0, S.And(S.Ge(x,half), S.Le(x,1))))
+
+eta_1=S.Piecewise((0, S.Lt(x,half)),
+                  (x, S.And(S.Ge(x,half),S.Le(x,1))))
+
+
+
+v=S.var(&#39;b:3&#39;) # coefficients for quadratic function of eta
+h = a*eta_0 + (eta_1**np.arange(len(v))*v).sum()
+J=S.integrate((xi - h)**2 ,(x,0,1))
+sol=S.solve([J.diff(i) for i in v+(a,)],v+(a,))
+hsol = h.subs(sol)
+f=S.lambdify(x,hsol,&#39;numpy&#39;)
+print S.piecewise_fold(h.subs(sol))
+t = np.linspace(0,1,51,endpoint=False)
+
+fig,ax = subplots()
+ax.plot(t, 2*t**2,label=r&#39;$\xi=2 x^2$&#39;)
+ax.plot(t,[f(i) for i in t],&#39;-x&#39;,label=r&#39;$\mathbb{E}(\xi|\eta)$&#39;)
+ax.plot(t,map(S.lambdify(x,eta_0+eta_1),t),label=r&#39;$\eta(x)$&#39;)
+ax.set_ylim(ymax = 2.3)
+ax.grid()
+ax.legend(loc=0);
+#ax.plot(t,map(S.lambdify(x,eta),t))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Piecewise((0, x &lt; 1/2), (2*x**2, And(x &lt;= 1, x &gt;= 1/2)))
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x840a310&gt;
+</pre></div>
+</div>
+<img alt="../_images/54ac19738940b111b6365631ef4556d5b48a2a2c3e44e20584dbb24cc51bbb18.png" src="../_images/54ac19738940b111b6365631ef4556d5b48a2a2c3e44e20584dbb24cc51bbb18.png" />
+</div>
+</div>
+<p>The figure shows the <span class="math notranslate nohighlight">\(\mathbb{E}(\xi|\eta)\)</span> against <span class="math notranslate nohighlight">\(\xi\)</span> and <span class="math notranslate nohighlight">\(\eta\)</span>. Note that <span class="math notranslate nohighlight">\(\xi= \mathbb{E}(\xi|\eta)= 2 x^2\)</span> when <span class="math notranslate nohighlight">\(x\in[0,\frac{1}{2}]\)</span> . Assembling the solution gives,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathbb{E}(\xi|\eta) =\begin{cases} \frac{1}{6} &amp; \text{for}\: 0 \le x &lt; \frac{1}{2} \\ 2 x^2 &amp; \text{for}\: \frac{1}{2} &lt; x \le 1 \end{cases}\end{split}\]</div>
+<p>This example warrants more a more detailed explanation since <span class="math notranslate nohighlight">\(\eta\)</span> is more complicated. The first question is why did we choose <span class="math notranslate nohighlight">\(h(\eta)\)</span> as a quadratic function? Since <span class="math notranslate nohighlight">\(\xi\)</span> is a squared function of <span class="math notranslate nohighlight">\(x\)</span> and since <span class="math notranslate nohighlight">\(x\)</span> is part of <span class="math notranslate nohighlight">\(\eta\)</span>, we chose a quadratic function so that <span class="math notranslate nohighlight">\(h(\eta)\)</span> would contain a <span class="math notranslate nohighlight">\(x^2\)</span> in the domain where <span class="math notranslate nohighlight">\(\eta=x\)</span>. The motivation is that we are asking for a function <span class="math notranslate nohighlight">\(h(x)\)</span> that most closely approximates <span class="math notranslate nohighlight">\(2x^2\)</span>. Well, obviously, the exact function is <span class="math notranslate nohighlight">\(h(x)=2 x^2\)</span>! Thus, we want <span class="math notranslate nohighlight">\(h(x)=2 x^2\)</span> over the domain where <span class="math notranslate nohighlight">\(\eta=x\)</span>, which is <span class="math notranslate nohighlight">\(x\in[\frac{1}{2},1]\)</span> and that is exactly what we have.</p>
+<p>We could have used our inner product by considering two separate functions,</p>
+<p><span class="math notranslate nohighlight">\(\eta_1 (x) = 2\)</span></p>
+<p>where <span class="math notranslate nohighlight">\(x\in [0,\frac{1}{2}]\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[\eta_2 (x) = x\]</div>
+<p>where <span class="math notranslate nohighlight">\(x\in [\frac{1}{2},1]\)</span>. Thus, at the point of projection, we have</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}((2 x^2 - 2 c) \cdot 2) = 0\]</div>
+<p>which leads to</p>
+<div class="math notranslate nohighlight">
+\[\int_0^{\frac{1}{2}} 2 x^2 \cdot 2 dx = \int_0^{\frac{1}{2}} c 2 \cdot 2   dx \]</div>
+<p>and a solution for <span class="math notranslate nohighlight">\(c\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[ c = \frac{1}{12} \]</div>
+<p>Assembling the solution for <span class="math notranslate nohighlight">\(x\in[0,\frac{1}{2}]\)</span> gives</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\xi|\eta) =  \frac{2}{12}\]</div>
+<p>We can do the same thing for the other piece, <span class="math notranslate nohighlight">\(\eta_2\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}((2 x^2 - c x^2) \cdot x) = 0\]</div>
+<p>which, by inspection, gives <span class="math notranslate nohighlight">\(c=2\)</span>. Thus, for <span class="math notranslate nohighlight">\(x\in[\frac{1}{2},1]\)</span> , we have</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\xi|\eta)= 2 x^2\]</div>
+<p>which is what we had before.</p>
+</section>
+<section id="id3">
+<h1>Example<a class="headerlink" href="#id3" title="Link to this heading">#</a></h1>
+<p>This is Exercise 2.6</p>
+<p><img alt="alt text" src="notebook/files/ex26.jpg" /></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>x,a=S.symbols(&#39;x,a&#39;)
+
+xi = 2*x**2
+eta = 1 - abs(2*x-1)
+
+half = S.Rational(1,2)
+
+eta=S.Piecewise((1+(2*x-1), S.And(S.Ge(x,0),S.Lt(x,half))),
+                (1-(2*x-1), S.And(S.Ge(x,half),S.Lt(x,1))))
+
+v=S.var(&#39;b:3&#39;) # assume h is quadratic in eta
+
+h = (eta**np.arange(len(v))*v).sum()
+
+J=S.integrate((xi - h)**2 ,(x,0,1))
+sol=S.solve([J.diff(i) for i in v],v)
+hsol = h.subs(sol)
+
+print S.piecewise_fold(h.subs(sol))
+
+t = np.linspace(0,1,51,endpoint=False)
+
+fig,ax = subplots()
+fig.set_size_inches(5,5)
+
+ax.plot(t, 2*t**2,label=r&#39;$\xi=2 x^2$&#39;)
+ax.plot(t,[hsol.subs(x,i) for i in t],&#39;-x&#39;,label=r&#39;$\mathbb{E}(\xi|\eta)$&#39;)
+ax.plot(t,map(S.lambdify(x,eta),t),label=r&#39;$\eta(x)$&#39;)
+ax.legend(loc=0)
+ax.grid()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Piecewise((2*x**2 - 2*x + 1, And(x &lt; 1/2, x &gt;= 0)), (2*x + (-2*x + 2)**2/2 - 1, And(x &lt; 1, x &gt;= 1/2)))
+</pre></div>
+</div>
+<img alt="../_images/d4b989803c6277970a45d551a73008742ad9d934f6b0fc9ca40e08c70e468458.png" src="../_images/d4b989803c6277970a45d551a73008742ad9d934f6b0fc9ca40e08c70e468458.png" />
+</div>
+</div>
+<p>The figure shows that the <span class="math notranslate nohighlight">\(\mathbb{E}(\xi|\eta)\)</span> is continuous over the entire domain. The code above solves for the conditional expectation using optimization assuming that <span class="math notranslate nohighlight">\(h\)</span> is a quadratic function of <span class="math notranslate nohighlight">\(\eta\)</span>, but we can also do it by using the inner product. Thus,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}\left((2 x^2 - h(\eta_1(x)) )\eta_1(x)\right)= \int_0^{\frac{1}{2}} (2 x^2 - h(\eta_1(x)) )\eta_1(x)  dx = 0\]</div>
+<p>where <span class="math notranslate nohighlight">\(\eta_1 = 2x \)</span> for <span class="math notranslate nohighlight">\(x\in [0,\frac{1}{2}]\)</span>. We can re-write this in terms of <span class="math notranslate nohighlight">\(\eta_1\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[ \int_0^1 \left(\frac{\eta_1^2}{2}-h(\eta_1)\right)\eta_1 d\eta_1\]</div>
+<p>and the solution jumps right out as <span class="math notranslate nohighlight">\(h(\eta_1)=\frac{\eta_1^2}{2}\)</span>. Note that <span class="math notranslate nohighlight">\(\eta_1\in[0,1]\)</span>. Doing the same thing for the other piece,</p>
+<div class="math notranslate nohighlight">
+\[ \eta_2  = 2 - 2 x, \hspace{1em} \forall x\in[\frac{1}{2},1]\]</div>
+<p>gives,</p>
+<div class="math notranslate nohighlight">
+\[ \int_0^1 \left(\frac{(2-\eta_2)^2}{2}-h(\eta_2)\right)\eta_2 d\eta_2\]</div>
+<p>and again, the optimal <span class="math notranslate nohighlight">\(h(\eta_2)\)</span> jumps right out as</p>
+<div class="math notranslate nohighlight">
+\[  h(\eta_2) = \frac{(2-\eta_2)^2}{2} , \hspace{1em} \forall \eta_2\in[0,1]\]</div>
+<p>and since <span class="math notranslate nohighlight">\(\eta_2\)</span> and <span class="math notranslate nohighlight">\(\eta_2\)</span> represent the same variable over the same domain we can just add these up to get the full solution:</p>
+<div class="math notranslate nohighlight">
+\[ h(\eta) = \frac{1}{2} \left( 2 - 2 \eta + \eta^2\right) \]</div>
+<p>and then back-substituting each piece for <span class="math notranslate nohighlight">\(x\)</span> produces the same solution as <code class="docutils literal notranslate"><span class="pre">sympy</span></code>.</p>
+</section>
+<section id="id4">
+<h1>Example<a class="headerlink" href="#id4" title="Link to this heading">#</a></h1>
+<p>This is Exercise 2.14</p>
+<p><img alt="alt text" src="notebook/files/ex214.jpg" /></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>x,a=S.symbols(&#39;x,a&#39;)
+half = S.Rational(1,2)
+
+xi = 2*x**2
+eta=S.Piecewise((2*x,    S.And(S.Ge(x,0),S.Lt(x,half))), 
+                ((2*x-1),S.Ge(x,half)),
+               )
+
+v=S.var(&#39;b:3&#39;)
+
+h = (eta**np.arange(len(v))*v).sum()
+
+J=S.integrate((xi - h)**2 ,(x,0,1))
+sol=S.solve([J.diff(i) for i in v],v)
+hsol = h.subs(sol)
+
+print S.piecewise_fold(h.subs(sol))
+
+t = np.linspace(0,1,51,endpoint=False)
+
+fig,ax = subplots()
+fig.set_size_inches(5,5)
+
+ax.plot(t, 2*t**2,label=r&#39;$\xi=2 x^2$&#39;)
+ax.plot(t,[hsol.subs(x,i) for i in t],&#39;-x&#39;,label=r&#39;$\mathbb{E}(\xi|\eta)$&#39;)
+ax.plot(t,map(S.lambdify(x,eta),t),label=r&#39;$\eta(x)$&#39;)
+ax.legend(loc=0)
+ax.grid()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Piecewise((2*x**2 + x + 1/4, And(x &lt; 1/2, x &gt;= 0)), (x + (2*x - 1)**2/2 - 1/4, x &gt;= 1/2))
+</pre></div>
+</div>
+<img alt="../_images/843cc491259008b2eed16e6cb9058ae8023b9f9df2c1c82be683129be1a1e17b.png" src="../_images/843cc491259008b2eed16e6cb9058ae8023b9f9df2c1c82be683129be1a1e17b.png" />
+</div>
+</div>
+<p>As before, using the inner product for this problem, gives:</p>
+<div class="math notranslate nohighlight">
+\[ \int_0^1 \left(\frac{\eta_1^2}{2}-h(\eta_1)\right)\eta_1 d\eta_1=0\]</div>
+<p>and the solution jumps right out as
+$<span class="math notranslate nohighlight">\(h(\eta_1)=\frac{\eta_1^2}{2}  , \hspace{1em} \forall \eta_1\in[0,1\)</span>$</p>
+<p>where <span class="math notranslate nohighlight">\(\eta_1(x)=2x\)</span>. Doing the same thing for <span class="math notranslate nohighlight">\(\eta_2=2x-1\)</span> gives,</p>
+<div class="math notranslate nohighlight">
+\[ \int_0^1 \left(\frac{(1+\eta_2)^2}{2}-h(\eta_2)\right)\eta_1 d\eta_2=0\]</div>
+<p>with</p>
+<div class="math notranslate nohighlight">
+\[h(\eta_2)=\frac{(1+\eta_2)^2}{2} , \hspace{1em} \forall \eta_2\in[0,1]\]</div>
+<p>and then adding these up as before gives the full solution:</p>
+<div class="math notranslate nohighlight">
+\[ h(\eta)= \frac{1}{2} +\eta + \eta^2\]</div>
+<p>Back-substituting each piece for <span class="math notranslate nohighlight">\(x\)</span> produces the same solution as <code class="docutils literal notranslate"><span class="pre">sympy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>xs = np.random.rand(100)
+print np.mean([(2*i**2-hsol.subs(x,i))**2 for i in xs])
+print S.integrate((2*x**2-hsol)**2,(x,0,1)).evalf()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.282679822464177
+0.270833333333333
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>We worked out some of the great examples in Brzezniak’s book using our methods as a way to show multiple ways to solve the same problem. In particular, comparing Brzezniak’s more measure-theoretic methods to our less abstract techniques is a great way to get a handle on those concepts which you will need for more advanced study in stochastic process.</p>
+<p>As usual, the corresponding <a class="reference internal" href="#www.ipython.org"><span class="xref myst">IPython Notebook</span></a> notebook for this post  is available for download <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Conditional_expectation_MSE_Ex.ipynb">here</a></p>
+<p>Comments and corrections welcome!</p>
+</section>
+<section id="references">
+<h1>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Brzezniak, Zdzislaw, and Tomasz Zastawniak. Basic stochastic processes: a course through exercises. Springer, 2000.</p></li>
+</ul>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Conditional_expectation_MSE.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Summary</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Conditional_Expectation_Projection.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Example</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

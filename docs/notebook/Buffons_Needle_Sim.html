@@ -1,0 +1,1036 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Buffon’s Needle &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Buffons_Needle_Sim';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction" href="Sampling_Monte_Carlo.html" />
+    <link rel="prev" title="Basic Definitions" href="Markov_chains.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Buffons_Needle_Sim.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Buffons_Needle_Sim.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Buffon’s Needle</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Buffon’s Needle</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-simulation">Setting up the Simulation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#relative-errors-and-using-weighting-for-better-efficiency">Relative Errors and Using Weighting for Better Efficiency</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-analytical-results">Appendix: Analytical Results</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#%qtconsole
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from IPython.core.display import HTML
+def css_styling():
+    styles = open(&quot;styles/custom.css&quot;, &quot;r&quot;).read()
+    return HTML(styles)
+css_styling()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>
+    @font-face {
+        font-family: "Computer Modern";
+        src: url('http://mirrors.ctan.org/fonts/cm-unicode/fonts/otf/cmunss.otf');
+    }
+    div.cell{
+        width:800px;
+        margin-left:16% !important;
+        margin-right:auto;
+    }
+    h1 {
+        font-family: Helvetica, serif;
+    }
+    h4{
+        margin-top:12px;
+        margin-bottom: 3px;
+       }
+    div.text_cell_render{
+        font-family: Cambria,Computer Modern, "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+        line-height: 145%;
+        font-size: 130%;
+        width:800px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .CodeMirror{
+            font-family:"Aurulent Sans Mono","Source Code Pro", source-code-pro,Consolas, monospace;
+    }
+    .prompt{
+        display: None;
+    }
+    .text_cell_render h5 {
+        font-weight: 300;
+        font-size: 16pt;
+        color: #4057A1;
+        font-style: italic;
+        margin-bottom: .5em;
+        margin-top: 0.5em;
+        display: block;
+    }
+    
+    .warning{
+        color: rgb( 240, 20, 20 )
+        }  
+
+    BODY {background-color:#FBF5E6}
+
+</style>
+<script>
+    MathJax.Hub.Config({
+                        TeX: {
+                           extensions: ["AMSmath.js"]
+                           },
+                tex2jax: {
+                    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                    displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+                },
+                displayAlign: 'center', // Change this to 'center' to center equations.
+                "HTML-CSS": {
+                    styles: {'.MathJax_Display': {"margin": 4}}
+                }
+        });
+</script>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import json
+s = json.load( open(&quot;styles/bmh_matplotlibrc.json&quot;) )
+matplotlib.rcParams.update(s)
+</pre></div>
+</div>
+</div>
+</div>
+<section id="buffon-s-needle">
+<h1>Buffon’s Needle<a class="headerlink" href="#buffon-s-needle" title="Link to this heading">#</a></h1>
+<p>The problem is to randomly drop a needle on the unit square and count the number of times that the needle touches (or “cuts”) the edge of the square. This is a well-studied  problem, but instead of the usual tack of going directly for the analytical result (see appendix), we instead write a quick simulation that we’ll later refine to obtain more precise results more efficiently. This methodology is common in Monte Carlo methods and we will work through this example in careful detail.</p>
+<p>Buffon’s needle is a classic problem that is easy to understand, and complex enough to be characteristic of much more difficult problems encountered in practice. The overall idea is that when the problem is too complex to analyze analytically (at least in the general case), we write representative computer models that can drive a numerical solution and motivate analytical solutions, even if only on special cases.</p>
+</section>
+<section id="setting-up-the-simulation">
+<h1>Setting up the Simulation<a class="headerlink" href="#setting-up-the-simulation" title="Link to this heading">#</a></h1>
+<p>The following code-block sets up the random needle position and orientation and creates the corresponding matplotlib primitives to be drawn in the figure. As shown, the simulation chooses a random center point for the needle in the unit square and then chooses a random angle <span class="math notranslate nohighlight">\(\theta \in (0,\pi)\)</span> as the needle’s orientation. Because the needle pivots at its center, we only need <span class="math notranslate nohighlight">\(\theta\)</span> in this range.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from __future__ import  division
+from matplotlib.lines import Line2D
+from matplotlib.patches import Rectangle
+
+def needle_gen(L=0.5):
+    &#39;&#39;&#39;Drops needle on unit square. Return dictionary describing needle position and 
+    orientation. The `cut` key in the dictionary is True when the needle intersects 
+    an edge of the unit square and is False otherwise.
+    
+    L := length of needle (default = 0.5)
+    &#39;&#39;&#39;
+    assert 0&lt;L&lt;1
+    xc,yc = rand(2) # uniform random in [0,1] for each coordinate dimension
+    ang = rand()*pi # uniform random angle in [0,pi]
+    x0,y0 = xc-L/2*cos(ang),yc-L/2*sin(ang) # coordinates for one end of needle 
+    xe,ye = xc+L/2*cos(ang),yc+L/2*sin(ang) # coordinates for the other end
+    not_cut = (0&lt;x0&lt;1) and (0&lt;y0&lt;1) and (0&lt;xe&lt;1) and (0&lt;ye&lt;1)
+    return dict(x0=x0,y0=y0,xc=xc,yc=yc,xe=xe,ye=ye,ang=ang,cut=( not not_cut ))
+
+
+def draw_needle(ax,d):
+    &#39;&#39;&#39;
+    Draw needle symbol on given axis.
+    
+    If red, then the line cuts an edge of the unit square. If blue, then it does not. 
+    One end of the needle is marked with a `o` symbol and the other end is unmarked. 
+    
+    ax := matplotlib axes to draw needle symbol
+    d := dictionary output from needle_gen
+    &#39;&#39;&#39;
+    for i,j in d.iteritems(): exec(&#39;%s=%r&#39;%(i,j)) # dump dictionary in local namespace
+    if cut: 
+        line= [Line2D([x0,xe],[y0,ye],color=&#39;r&#39;,alpha=0.3), 
+               Line2D([xc],[yc],marker=&#39;o&#39;,color=&#39;r&#39;)] 
+    else:   
+        line= [Line2D([x0,xe],[y0,ye],alpha=0.3), 
+               Line2D([xc],[yc],marker=&#39;o&#39;,alpha=0.3)] 
+    for i in line: 
+        ax.add_line(i)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can simulate the dropping event on the square (yellow background ). The red needles cut the edge of the square and the blue ones are completely contained therein. The circle marker shows the needle position.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>L=0.5
+
+samples = [needle_gen() for i in range(500)]
+
+def draw_sim(samples,L=0.5):
+    &#39;Draw simulation results. Package this plot for reuse later&#39;
+    fig,ax=subplots()
+    fig.set_size_inches(5,5)
+    
+    red_count=0
+    n=len(samples)
+    for k in samples:
+        red_count+=k[&#39;cut&#39;]
+        draw_needle(ax,k)
+        
+    ax.set_aspect(1) # set aspect ratio to 1
+    ax.add_patch(Rectangle((0,0),1,1,alpha=0.3,color=&#39;y&#39;)) # unit square background is light yellow
+    ax.set_xlabel(&#39;x-direction&#39;)
+    ax.set_ylabel(&#39;y-direction&#39;)
+    ax.axis([-.1,1.1,-.1,1.1]) # add some space around the unit square
+    ax.set_title(r&#39;$\mathbb{P}$ (cut)=%3.2f&#39;% (red_count/n))
+    ax.grid()
+
+draw_sim(samples)    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ae5fc154f3dcf88ea106e8ac6c5b5404bc22187dbe4865b0107f30be01779842.png" src="../_images/ae5fc154f3dcf88ea106e8ac6c5b5404bc22187dbe4865b0107f30be01779842.png" />
+</div>
+</div>
+<p>The figure above is a good visual check of our simulation and helps motivate our reasoning. Now, we want to concentrate on counting the number of cuts and then use that to estimate the probability of a cut.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fig,axs = subplots(1,2)
+fig.set_size_inches((12,2))
+ax=axs[0]
+samples=np.array([[needle_gen(L)[&#39;cut&#39;] for i in range(300)] for k in range(100)])
+
+ax.plot(np.mean(samples,axis=1),&#39;o-&#39;,alpha=0.3)
+ax.axis(xmax=samples.shape[0])
+ax.set_xlabel(r&#39;$trial$&#39;,fontsize=18)
+ax.set_ylabel(&#39;$\mathbb{\hat{P}}(cut)$&#39;,fontsize=18)
+ax.set_title(&#39;$\overline{\mathbb{\hat{P}}}(cut) = %3.3f,\hat{\sigma}=%3.3f$&#39;%
+             (samples.mean(),(samples.mean(1)).std()))
+ax.grid()
+
+ax = axs[1]
+ax.hist( samples.mean(1));
+ax.set_title(&#39;Distribution of Mean Estimates&#39;);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/3cd51965218bc65f3c6ebe662ef0d4749cd1dd5e810622977d861407f2d133b8.png" src="../_images/3cd51965218bc65f3c6ebe662ef0d4749cd1dd5e810622977d861407f2d133b8.png" />
+</div>
+</div>
+<p>The figure above shows some statistical history of our Monte Carlo simulation. The <code class="docutils literal notranslate"><span class="pre">samples</span></code> array in the prior code-block is a 100x300 matrix of True/False values indicating cut or no-cut. The overall average of this array is our estimate of the probability of a cut. In other words, we count the number of cuts and divide by the total number of needle drops to obtain the estimated probability (approximately 55% in this case of <span class="math notranslate nohighlight">\(L=1/2\)</span>). The plot on the left shows the average across each of the 300 columns. Thus, there are 100 such column-wise averages (recall the <code class="docutils literal notranslate"><span class="pre">samples</span></code> matrix is 100x300). The title shows the estimated standard deviation across these 100 columnwise averages.</p>
+<p>The plot on the right shows a histogram of the column-wise averages. Why did we partition the simulated samples like this and compute column-wise instead of just using all the data at once? Because we want to get a sense of the spread of the estimates by computing the standard error. If we used all our samples at once, we would not be able to do this even though we’ll still use our average of these averages to get our ultimate probability of a cut!</p>
+<p>Naturally, if we wanted to improve the standard deviation of our ensemble of columnwise means, we could simply run a larger simulation, but remember that the standard error only improves at the rate of <span class="math notranslate nohighlight">\(\sqrt{N}\)</span> (where <span class="math notranslate nohighlight">\(N\)</span> is the number of samples) so we’d need a sample run <em>four</em> times as large to improve the standard error by a factor of <em>two</em>. Furthermore, we need to understand the mechanics of this problem better per unit of computing time.</p>
+</section>
+<section id="relative-errors-and-using-weighting-for-better-efficiency">
+<h1>Relative Errors and Using Weighting for Better Efficiency<a class="headerlink" href="#relative-errors-and-using-weighting-for-better-efficiency" title="Link to this heading">#</a></h1>
+<p>There’s nothing wrong with the way we have been using the simulation so far, but in the first figure all of those blue needles did not help us compute the probability we were after because they did not touch the edges of the square. Yes, we could reverse the reasoning and use the blue instead of the red for our estimation, but that does not escape the basic problem. For example, if the length of the needle were really short in comparison, then there would have been a lot of blue in our initial plot (try this using this IPython notebook!). In the extreme case, we could find ourselves in a situation where we run the simulation for a long time and not have a single cut! We want to use our valuable computer time to create samples that will improve our estimated solution.</p>
+<p>To recap, we computed a matrix of (100x300) cases of needle drops. Each of element of <code class="docutils literal notranslate"><span class="pre">samples</span></code> in the code above is a <code class="docutils literal notranslate"><span class="pre">True/False</span></code> value as to whether or not the needle touched the edge of the square. We averaged over the 300 columns to compute the estimated probability of a cut (the mean value of the boolean array in this case).  The estimated standard deviation is taken over the ensemble of these estimated means.</p>
+<p>A common way to evaluate the quality of the simulated result is to compute the <em>relative error</em>, which is the ratio of the estimated standard deviation of the mean to the estimated mean using <em>all</em> of the samples (<span class="math notranslate nohighlight">\(R_e\)</span>). This is computed in the title of the figure below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fig,ax=subplots()
+fig.set_size_inches(12,2)
+ax.plot(samples.mean(1))
+ax.set_title(r&#39;$\hat{\sigma}=%2.3f,R_e=%2.3f$&#39;% (samples.mean(1).std(),samples.mean(1).std()/samples.mean()), fontsize=18)
+ax.set_xlabel(&#39;sample history index&#39;,fontsize=16)
+ax.set_ylabel(&#39;$\mathbb{\hat{P}}(cut)$&#39;,fontsize=18);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/03447152886b12fb1395506e4c7c213b8bc8f8da024304c6fa0de5e8664abfa4.png" src="../_images/03447152886b12fb1395506e4c7c213b8bc8f8da024304c6fa0de5e8664abfa4.png" />
+</div>
+</div>
+<p>So far, our relative error is pretty good (the rule of thumb is below 5%), but let’s see how we do when the needle length is smaller? The code-block below draws the corresponding figure for the simulation for this case.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>L=0.1
+
+samples_d=[needle_gen(L) for i in range(300*100)]
+samples = np.array([k[&#39;cut&#39;] for k in samples_d]).reshape(100,300)
+
+def draw_sample_history(samples):
+    fig,ax=subplots()
+    fig.set_size_inches(12,2)
+    mn = samples.mean(1)
+    ax.plot(mn)
+    ax.set_title(r&#39;$\hat{\sigma}=%2.3f,R_e=%2.3f$&#39;% (mn.std(),
+                                                     mn.std()/mn.mean()), fontsize=18)
+    ax.set_xlabel(&#39;sample history index&#39;,fontsize=16)
+    ax.set_ylabel(&#39;$\mathbb{\hat{P}}(cut)$&#39;,fontsize=18);
+
+draw_sample_history(samples)    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/4a2eed539b9238c347952c8053434d40c7ddf52849e1de02f063a2de6bb6b077.png" src="../_images/4a2eed539b9238c347952c8053434d40c7ddf52849e1de02f063a2de6bb6b077.png" />
+</div>
+</div>
+<p>The figure above shows that for shorter needles, we did <em>not</em> do so well for relative error. This situation is illustrated in the figure below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>draw_sim(samples_d[:500])   
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bafa4f0bac596e6c6d9ca3a14840d3897c63c6f2256f1ad5ccc1debdf5b9564a.png" src="../_images/bafa4f0bac596e6c6d9ca3a14840d3897c63c6f2256f1ad5ccc1debdf5b9564a.png" />
+</div>
+</div>
+<p>The figure shows there are very few cuts in our simulation with the short needle (red needles). To remedy this, we can alter the code to bias for randomly generating x-coordinates that are within needle length of an edge instead of uniformly random in the unit interval.  The code-block below makes this change for the x-coordinate.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def needle_gen_b(L=0.5):
+    &#39;&#39;&#39;Drops needle on unit square using a biased strategy. Return dictionary describing 
+    needle position and orientation. The `cut` key in the dictionary is True when the
+    needle intersects an edge of the unit square and is False otherwise.
+    
+    L := length of needle (default = 0.5)
+    &#39;&#39;&#39;
+    assert 0&lt;L&lt;1
+    yc = rand() # uniform on unit interval
+    r = L*rand()/2.
+    xc = r if rand()&lt;0.5 else (1-r) # pick either edge 50/50
+    ang = rand()*pi # uniform random angle in [0,pi]
+    x0,y0 = xc-L/2*cos(ang),yc-L/2*sin(ang) # coordinates for one end of needle 
+    xe,ye = xc+L/2*cos(ang),yc+L/2*sin(ang) # coordinates for the other end
+    not_cut = (0&lt;x0&lt;1) and (0&lt;y0&lt;1) and (0&lt;xe&lt;1) and (0&lt;ye&lt;1)
+    return dict(x0=x0,y0=y0,xc=xc,yc=yc,xe=xe,ye=ye,ang=ang,cut=( not not_cut ))
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we re-run this simulation using this biased method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>samples_b=[needle_gen_b(L) for i in range(300*100) ] # create biased samples
+draw_sim(samples_b[:500])
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/021659eb6983567730a18299b0220a16672eca2ff8862c742f5da2489bc7ee85.png" src="../_images/021659eb6983567730a18299b0220a16672eca2ff8862c742f5da2489bc7ee85.png" />
+</div>
+</div>
+<p>The figure above shows that the samples are now clustered at both vertical edges, and, compared with the unbiased simulation, there are more red needles, indicating that we now have more relevent samples.</p>
+<p>The next figure shows the sample history and relative error which is now <strong>much</strong> better than before.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>no_bias_samples = samples # save for later
+samples = np.array([k[&#39;cut&#39;] for k in samples_b]).reshape(100,300)
+
+draw_sample_history(samples);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/80f8a0dd90c97a5b236401ff563ee0758c27735b3cd0fe60a1badbfe58299f43.png" src="../_images/80f8a0dd90c97a5b236401ff563ee0758c27735b3cd0fe60a1badbfe58299f43.png" />
+</div>
+</div>
+<p>Now, that we have a tighter result, we need to make sure we have not changed the result by correcting for the bias we introduced. The probability of being near the edges in the x-direction is <span class="math notranslate nohighlight">\(2 L\)</span>. We have to multiply our estimated probability by this <em>weighting</em> factor.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fig,ax=subplots()
+fig.set_size_inches(10,3)
+ax.hist(no_bias_samples.mean(1),alpha=0.3,normed=1,label=&#39;unbiased&#39;)
+ax.hist(samples.mean(1)*2*L,alpha=0.3,normed=1,label=&#39;biased&#39;)
+ax.legend(loc=0)
+ax.set_title(&#39;Biased samples more efficiently produce useful samples&#39;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x82697f0&gt;
+</pre></div>
+</div>
+<img alt="../_images/07682754a993eea020f8a0e19a4b94e253497d608104df61e121071408c088ec.png" src="../_images/07682754a993eea020f8a0e19a4b94e253497d608104df61e121071408c088ec.png" />
+</div>
+</div>
+<p>The histogram above shows the spread of the biased samples is much tighter than before, which is what the relative error we just computed is getting at. Still, it’s good to back this up with a quick plot.</p>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>In this section, we illustrated some basic concepts of Monte Carlo methods by examing the famous problem of Buffon’s needle. We showed how to code up a quick simulation that visually reveals the key issues and then how to boil this down into a simulation to compute the estimated solution. We also showed how to create biased samples to improve the overall efficiency and precision of our result.</p>
+<p>I carefully used the word <a class="reference external" href="https://en.wikipedia.org/wiki/Accuracy_and_precision"><em>precision</em></a> as opposed to <em>accuracy</em> because we have created a tighter estimate (as measured by relative error), but how do we know that this is the <em>correct</em> (i.e. accurate) answer? We don’t! In this case, we can solve for the analytical solution (shown in the appendix), but in general, this is <em>way</em> too hard to do, otherwise we wouldn’t bother with the simulation in the first place.</p>
+<p>The reality is that we have to do what we can using Monte Carlo methods and then carefully consider their computed results using as much domain knowledge as we can muster. In this section, we made the extra effort to generate some visual results along the way as a sanity-check and doing so is <em>always</em> worth the extra effort, when feasible. Furthermore, this kind of intermediate result can sometimes suggest a narrow special case for which we <em>can</em> generate a related analytical solution that we can use to further develop our simulation.</p>
+<p>As usual, the IPython Notebook corresponding to this section is available for download <a class="reference external" href="http://github.com/unpingco/Pig-in-the-Python/blob/master/Buffons_Needle_Sim.ipynb">here</a>. Play around with the various parameters as suggested above on your own to see what else you can discover about this famouse problem.</p>
+</section>
+<section id="appendix-analytical-results">
+<h1>Appendix: Analytical Results<a class="headerlink" href="#appendix-analytical-results" title="Link to this heading">#</a></h1>
+<p>In this appendix, we carefully derive the analytical solution for our problem using excessive detail. Note that <span class="math notranslate nohighlight">\(x_c\)</span> is the needle’s center. The needle is entirely contained in the square (at least in the x-direction) when the following two conditions hold:</p>
+<div class="math notranslate nohighlight">
+\[ 0 &lt; x_c - L/2 \cos(\theta) &lt; 1 \]</div>
+<div class="math notranslate nohighlight">
+\[ 0 &lt; x_c + L/2 \cos(\theta) &lt; 1 \]</div>
+<p>combining these two into one big inequality gives:</p>
+<div class="math notranslate nohighlight">
+\[ \max(-L/2 \cos(\theta) , L/2 \cos(\theta) ) &lt;  x_c &lt; \min(1-L/2 \cos(\theta) , 1+L/2 \cos(\theta) )\]</div>
+<p>In the case where <span class="math notranslate nohighlight">\(0&lt; \theta &lt; \pi/2 \)</span>, we additionally have the following:</p>
+<div class="math notranslate nohighlight">
+\[  L/2 \cos(\theta)  &lt;  x_c &lt; 1-L/2 \cos(\theta) \]</div>
+<p>Because <span class="math notranslate nohighlight">\(\theta\)</span> is uniformly distributed between <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(\pi\)</span>, for this domain of <span class="math notranslate nohighlight">\(\theta\)</span> and <span class="math notranslate nohighlight">\(x_c\)</span>, we have the probability of the needle being contained completely in the square (in the x-direction) as the following:</p>
+<div class="math notranslate nohighlight">
+\[ \frac{1}{\pi}\int_0^{\pi/2} \int_{L/2 \cos(\theta)}^{1-L/2 \cos(\theta)} dx_c d\theta = \frac{1}{\pi}\int_0^{\pi/2} 1-L \cos(\theta) d\theta = \frac{1}{2} - \frac{L}{\pi} \]</div>
+<p>Now, we can consider the other half of the domain of <span class="math notranslate nohighlight">\(\theta\)</span>, <span class="math notranslate nohighlight">\( \pi/2 &lt; \theta &lt; \pi \)</span>, where we have</p>
+<div class="math notranslate nohighlight">
+\[  -L/2 \cos(\theta)  &lt;  x_c &lt; 1+L/2 \cos(\theta)\]</div>
+<p>Then, following the same reasoning as before we obtain:</p>
+<div class="math notranslate nohighlight">
+\[ \frac{1}{\pi}\int_{\pi/2}^{\pi} \int_{-L/2 \cos(\theta)}^{1+L/2 \cos(\theta)} dx_c d\theta = \frac{1}{\pi}\int_{\pi/2}^{\pi} 1+L \cos(\theta) d\theta = \frac{1}{2} - \frac{L}{\pi} \]</div>
+<p>Thus, combining these two results gives the probability of the needle <strong>not</strong>  cutting the edge in the x-direction as the following:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}(\text{no x-cut}) = 1 - \frac{2 L}{\pi}\]</div>
+<p>Now, we can pursue exactly the same line of reasoning for the y-direction, or, just recognize that by symmetry it would be exactly the same as for the x-direction.  Nonetheless, let’s be thorough and reproduce the reasoning for the y-direction, just to be on the safe side.</p>
+<p>As before, the condition in the y-direction for the needle being entirely contained in the square in the y-direction is the following:</p>
+<div class="math notranslate nohighlight">
+\[ \max(-L/2 \sin(\theta) , L/2 \sin(\theta) ) &lt;  y_c &lt; \min(1-L/2 \sin(\theta) , 1+L/2 \sin(\theta) )\]</div>
+<p>which can be combined into one big inequality, given the restrictions on <span class="math notranslate nohighlight">\(\theta \in (0,\pi)\)</span> as shown:</p>
+<div class="math notranslate nohighlight">
+\[  L/2 \sin(\theta) &lt;  y_c &lt; 1-L/2 \sin(\theta) \]</div>
+<p>Then, integrating this out as before, we obtain</p>
+<div class="math notranslate nohighlight">
+\[ \frac{1}{\pi}\int_0^{\pi} \int_{L/2 \sin(\theta)}^{1-L/2 \sin(\theta)} dy_c d\theta = \frac{1}{\pi}\int_0^{\pi} 1-L \sin(\theta) d\theta = 1 - \frac{2 L}{\pi} \]</div>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}(\text{no y-cut}) = 1 - \frac{2 L}{\pi}\]</div>
+<p>which is exactly what we got for the x-direction. It’s usually worth the extra work to check things like this instead of trying to be too clever too early.</p>
+<p>Then, combining the x-direction and y-direction results, we obtain,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}(\text{no cut}) = \left(1 - \frac{2 L}{\pi}\right)^2\]</div>
+<p>so that</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}(\text{cut}) =1-\mathbb{P}(\text{no cut}) = 1-\left(1 - \frac{2 L}{\pi}\right)^2\]</div>
+<p>which we code next.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>prob_cut= lambda l:(1-(1-2*l/pi)**2)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can use this result later to check or Monte Carlo estimates. Try it!</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Markov_chains.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Basic Definitions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Sampling_Monte_Carlo.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Buffon’s Needle</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-simulation">Setting up the Simulation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#relative-errors-and-using-weighting-for-better-efficiency">Relative Errors and Using Weighting for Better Efficiency</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-analytical-results">Appendix: Analytical Results</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,869 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chapter 3: Discrete Fourier Transform &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'book-version/Chapter_3_Discrete_Fourier_transform';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Chapter 4: Spectral Analysis" href="Chapter_4_Spectral_analysis.html" />
+    <link rel="prev" title="Chapter 2: Sampling Theorem" href="Chapter_2_Sampling_Theorem.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Fourier_Transform.html">Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Frequency_Resolution.html">Frequency Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Filtering_Part1.html">Filtering: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Filtering_Part2.html">Filtering: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Filtering_Part3.html">Filtering: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Chapter_2_Sampling_Theorem.html">Chapter 2: Sampling Theorem</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 3: Discrete Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_Spectral_analysis.html">Chapter 4: Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_5_Finite_impulse_response_filters.html">Chapter 5: Finite Impulse Response Filters</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fbook-version/Chapter_3_Discrete_Fourier_transform.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/book-version/Chapter_3_Discrete_Fourier_transform.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 3: Discrete Fourier Transform</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-3-discrete-fourier-transform">
+<h1>Chapter 3: Discrete Fourier Transform<a class="headerlink" href="#chapter-3-discrete-fourier-transform" title="Link to this heading">#</a></h1>
+<p>The following is setup code to draw the DFT glyphs. The strategy is to construct matplotlib patches and then use them as tiles for each piece of the DFT in 3D. Start notebook with the <code class="docutils literal notranslate"> <span class="pre">--pylab</span></code> flag to all the matplotlib and numpy material loaded.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def facet_filled(x,alpha=0.5,color=&#39;b&#39;):
+    &#39;construct 3D facet from adjacent points filled to zero&#39;
+    a,b=x
+    a0= a*array([1,1,0])
+    b0= b*array([1,1,0])
+    ve = vstack([a,a0,b0,b])      # create closed polygon facet
+    poly = Poly3DCollection([ve]) # create facet
+    poly.set_alpha(alpha)         # set transparency
+    poly.set_color(color)         
+    return poly
+
+def drawDFTView(X,ax=None,fig=None):
+    &#39;Draws 3D diagram given DFT matrix&#39;
+    a=2*pi/len(X)*arange(len(X))
+    d=vstack([cos(a),sin(a),array(abs(X)).flatten()]).T
+    if ax is None and fig is None:
+        fig = plt.figure()
+        fig.set_size_inches(6,6)
+        
+    if ax is None: # add ax to existing figure
+        ax = fig.add_subplot(1, 1, 1, projection=&#39;3d&#39;)
+        
+    ax.axis([-1,1,-1,1])          # x-y limits
+    ax.set_zlim([0,d[:,2].max()]) # z-limit
+    ax.set_aspect(1)              # aspect ratio
+    ax.view_init(azim=-30)        # camera view position
+    a=FancyArrow(0,0,1,0,width=0.02,length_includes_head=True)
+    ax.add_patch(a)
+    b=FancyArrow(0,0,0,1,width=0.02,length_includes_head=True)
+    ax.add_patch(b)
+    art3d.patch_2d_to_3d(a) # format 2D patch for 3D plot
+    art3d.patch_2d_to_3d(b)
+    ax.axis(&#39;off&#39;)
+
+    sl=[slice(i,i+2) for i in range(d.shape[0]-2)] # collect neighboring points
+    for s in sl:
+      poly=facet_filled(d[s,:])
+      ax.add_collection3d(poly)
+     
+    # edge polygons    
+    ax.add_collection3d(facet_filled(d[[-1,0],:]))
+    ax.add_collection3d(facet_filled(d[[-2,-1],:]))
+
+def drawInOut(X,v,return_axes=False):
+    fig = plt.figure()
+    fig.set_size_inches(8,8)
+    gs = gridspec.GridSpec(8,6)
+        
+    ax1 = plt.subplot(gs[3:5,:2])
+    ax2 = plt.subplot(gs[:,2:],projection=&#39;3d&#39;)
+    
+    ax1.stem(arange(len(v)),v)
+    ymin,ymax= ax1.get_ylim()
+    ax1.set_ylim(ymax = ymax*1.2, ymin = ymin*1.2)
+    ax1.set_title(&#39;Signal&#39;)
+    ax1.set_xlabel(&#39;n&#39;)
+    ax1.tick_params(labelsize=8)
+    
+    drawDFTView(X,ax2)
+    if return_axes:
+        return ax1,ax2
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># must start notebook with --pylab flag
+
+from matplotlib.patches import FancyArrow
+import mpl_toolkits.mplot3d.art3d as art3d
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+import matplotlib.gridspec as gridspec
+
+def dftmatrix(Nfft=32,N=None):
+    &#39;construct DFT matrix&#39;
+    k= np.arange(Nfft)
+    if N is None: N = Nfft
+    n = arange(N)
+    U = matrix(exp(1j* 2*pi/Nfft *k*n[:,None])) # use numpy broadcasting to create matrix
+    return U/sqrt(Nfft)
+
+Nfft=16
+v = ones((16,1))
+U = dftmatrix(Nfft=Nfft,N=16)
+# --- 
+# hardcoded constants to format complicated figure
+
+gs = gridspec.GridSpec(8,12)
+gs.update(wspace=1, left=0.01)
+
+fig =figure(figsize=(10,5))
+ax0 = subplot(gs[:,:3])
+fig.add_subplot(ax0)
+
+ax0.set_aspect(1)
+a=2*pi/Nfft*arange(Nfft)
+
+colors = [&#39;k&#39;,&#39;b&#39;,&#39;r&#39;,&#39;m&#39;,&#39;g&#39;,&#39;Brown&#39;,&#39;DarkBlue&#39;,&#39;Tomato&#39;,&#39;Violet&#39;, &#39;Tan&#39;,&#39;Salmon&#39;,&#39;Pink&#39;,
+          &#39;SaddleBrown&#39;, &#39;SpringGreen&#39;, &#39;RosyBrown&#39;,&#39;Silver&#39;,]
+
+for j,i in enumerate(a):
+  ax0.add_patch(FancyArrow(0,0,cos(i),sin(i),width=0.02,
+                            length_includes_head=True,edgecolor=colors[j]))
+
+ax0.text(1,0.1,&#39;0&#39;,fontsize=16)
+ax0.text(0.1,1,r&#39;$\frac{\pi}{2}$&#39;,fontsize=22)
+ax0.text(-1,0.1,r&#39;$\pi$&#39;,fontsize=18)
+ax0.text(0.1,-1.2,r&#39;$\frac{3\pi}{2}$&#39;,fontsize=22)
+ax0.axis(array([-1,1,-1,1])*1.45)
+ax0.set_title(&#39;Radial Frequency&#39;,fontsize=18)
+ax0.set_xlabel(&#39;Real&#39;)
+ax0.set_ylabel(&#39;Imaginary&#39;)
+
+# plots in the middle column
+for i in range(8):
+  ax=subplot(gs[i,4:8])
+  ax.set_xticks([]);  ax.set_yticks([])
+  ax.set_ylabel(r&#39;$\omega_{%d}=%d\times\frac{2\pi}{16}$&#39;%(i,i),fontsize=16,
+                rotation=&#39;horizontal&#39;)
+  ax.plot(U.real[:,i],&#39;-o&#39;,color=colors[i])
+  ax.plot(U.imag[:,i],&#39;--o&#39;,color=colors[i],alpha=0.2)
+  #ax.axis(ymax=4/Nfft*1.1,ymin=-4/Nfft*1.1)
+ax.set_xticks(arange(16))
+ax.set_xlabel(&#39;n&#39;)
+
+# plots in the far right column
+for i in range(8):
+  ax=subplot(gs[i,8:])
+  ax.set_xticks([]);  ax.set_yticks([])
+  ax.set_ylabel(r&#39;$\omega_{%d}=%d\times\frac{2\pi}{16}$&#39;%(i+8,i+8),fontsize=16,
+                rotation=&#39;horizontal&#39;)
+  ax.plot(U.real[:,i+8],&#39;-o&#39;,color=colors[i+8])
+  ax.plot(U.imag[:,i+8],&#39;--o&#39;,color=colors[i+8],alpha=0.2)
+  #ax.axis(ymax=4/Nfft*1.1,ymin=-4/Nfft*1.1)    
+  ax.yaxis.set_label_position(&#39;right&#39;)
+ax.set_xticks(arange(16))
+ax.set_xlabel(&#39;n&#39;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x6657590&gt;
+</pre></div>
+</div>
+<img alt="../_images/1f973ebbf95cabe2b956a322283ff167b10805b562619a5f4d8ba7e6179475a7.png" src="../_images/1f973ebbf95cabe2b956a322283ff167b10805b562619a5f4d8ba7e6179475a7.png" />
+</div>
+</div>
+<p>Figure shows the discrete frequencies on the unit circle and their corresponding real and imaginary parts that are the columns of <span class="math notranslate nohighlight">\(\mathbf{U}\)</span>.  The pinwheel on the left shows each discrete frequency on the unit circle corresponding to each of the columns of the <span class="math notranslate nohighlight">\(\mathbf{U}\)</span> matrix  shown on the right. These are color coded corresponding to the graphs on the right. For example, the <span class="math notranslate nohighlight">\(k=1\)</span> column of the <span class="math notranslate nohighlight">\(\mathbf{U}\)</span> matrix (i.e. <span class="math notranslate nohighlight">\( \mathbf{u}_1 \)</span>) corresponds to discrete frequency <span class="math notranslate nohighlight">\(\omega_1=\frac{2\pi}{16}\)</span> marked on the y-axis label which is shown in the second row down the middle column in the figure. The real part of <span class="math notranslate nohighlight">\( \mathbf{u}_1 \)</span> is plotted in bold and the corresponding imaginary part is muted in the background because it is just an out-of-phase version of the real part. These real/imaginary parts shown in the graphs correspond to the conjugacy relationships on the leftmost radial plot. For example, <span class="math notranslate nohighlight">\(\omega_1\)</span> and <span class="math notranslate nohighlight">\(\omega_{15}\)</span> are complex conjugates and their corresponding imaginary parts are inverted as shown in the plots on the right.  Figure is the most important graphic in this entire book so please make sure to review it carefully.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>U = dftmatrix(64,16) 
+x = ones((16,1)) 
+X = U.H*x
+
+fig,ax=subplots()
+fig.set_size_inches((8,4))
+ax.set_aspect(0.8)
+ax.grid()
+ax.plot(arange(0,64)*2*pi/64.,abs(X),&#39;o-&#39;)
+ax.set_ylabel(r&#39;$|X(\omega)|$&#39;,fontsize=18)
+ax.set_xticks([0, pi/2., pi, 3*pi/2,2*pi])
+ax.set_xlabel(r&#39;$\omega$&#39;,fontsize=16)
+ax.axis([0, 2*pi,0,2.1])
+ax.set_xticklabels([&#39;0&#39;,r&#39;$\frac{\pi}{2}$&#39;, r&#39;$\pi$&#39;,r&#39;$\frac{3\pi}{2}$&#39;, r&#39;$2\pi$&#39;],
+                   fontsize=18);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/8ba11578d132cb08d5f7ec1777b07a05cbc27bceffc8374635930fac30675927.png" src="../_images/8ba11578d132cb08d5f7ec1777b07a05cbc27bceffc8374635930fac30675927.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>U = dftmatrix(64,16)
+x = ones((16,1))
+X = U.H*x
+
+fig,ax=subplots()
+fig.set_size_inches((8,4))
+
+ax.set_aspect(0.8) # aspect ratio
+ax.plot(arange(0,64)*2*pi/64.,abs(X),&#39;o-&#39;,label=&#39;zero padded&#39;)
+ax.stem(arange(0,16)*2*pi/16.,abs(dftmatrix(16).H*x),
+        markerfmt=&#39;gs&#39;, basefmt=&#39;g-&#39;,linefmt=&#39;g-&#39;,
+        label=&#39;no padding&#39;)
+ax.set_xlabel(r&#39;$\omega$&#39;,fontsize=18)
+ax.set_ylabel(r&#39;$|X(\omega)|$&#39;,fontsize=18)
+ax.set_xticks([0, pi/2., pi, 3*pi/2,2*pi])
+ax.axis([-.1, 2*pi,-.1,4.1])
+ax.legend(loc=0,fontsize=18)
+ax.set_xticklabels([&#39;0&#39;,r&#39;$\frac{\pi}{2}$&#39;, r&#39;$\pi$&#39;,r&#39;$\frac{3\pi}{2}$&#39;, r&#39;$2\pi$&#39;],
+                   fontsize=18);
+ax.set_title(&#39;Zero padding samples more frequencies&#39;);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/0154259637465dc29399b72eda991b801cff2952d5b8257faf5fda82b7802d72.png" src="../_images/0154259637465dc29399b72eda991b801cff2952d5b8257faf5fda82b7802d72.png" />
+</div>
+</div>
+<p>As shown in figure, without zero-padding, <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is the <span class="math notranslate nohighlight">\( 0^{th} \)</span> column of the 16-point DFT matrix and so all the coefficients except for the <span class="math notranslate nohighlight">\(0^{th}\)</span> column are zero due to orthonormality (shown by the green squares).  But, the zero-padded 64-element-long <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> vector is definitely not a column of the 64-point DFT matrix so we would not expect all the other terms to be zero. In fact, the other terms account for the 63 other discrete frequencies that are plotted in the figure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>v = U[:,6].real
+ax1,ax2=drawInOut(U.H*v,v,return_axes=1) 
+ax1.set_title(r&#39;$\omega=\frac{2\pi 5}{16}$&#39;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x5ec8b50&gt;
+</pre></div>
+</div>
+<img alt="../_images/015e67b977e7f218fde4abc3290b0d9458064aca8409cb76c450bbe15e156722.png" src="../_images/015e67b977e7f218fde4abc3290b0d9458064aca8409cb76c450bbe15e156722.png" />
+</div>
+</div>
+<p>Figure shows the symmetric lobes of the DFT of a real signal. The plot on the left is the signal in the sampled time-domain and the plot on the right is its DFT-magnitude glyph.  Because the input signal is real, the DFT is symmetric.  Recall that every <span class="math notranslate nohighlight">\(\mathbf{u}_i\)</span> had its complex conjugate, <span class="math notranslate nohighlight">\(\mathbf{u}_{N-i}\)</span>, and since the real parts of complex conjugates are the same and there is no imaginary part in the real-valued input signal, the resulting corresponding inner products are complex conjugates and thus have the same magnitudes.   This fact has extremely important computational consequences for the fast implemention of the DFT (i.e. FFT), but that is a story for another day.  For now, it’s enough to recognize the symmetry of the DFT of real signals and how it arises.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>v = matrix(cos(pi*arange(0,16))).T
+ax1,ax2=drawInOut(U.H*v,v,return_axes=1)
+ax1.set_title(&#39;Highest Frequency&#39;)
+v = ones((16,1))
+ax1,ax2=drawInOut(U.H*v,v,return_axes=1)
+ax1.set_title(&#39;Lowest Frequency&#39;)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x74c4570&gt;
+</pre></div>
+</div>
+<img alt="../_images/d1b396944d53caf01b4153149ef77f9ddf9a6c5486cfda0e438847c985185444.png" src="../_images/d1b396944d53caf01b4153149ef77f9ddf9a6c5486cfda0e438847c985185444.png" />
+<img alt="../_images/d06eb05e4bf9ab308383bddbd9025cde65005d6ad1a9534d5b7ac91e27c06d91.png" src="../_images/d06eb05e4bf9ab308383bddbd9025cde65005d6ad1a9534d5b7ac91e27c06d91.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>a=2*pi/64.*arange(64)
+d=vstack([cos(a),sin(a),array(abs(X)).flatten()]).T
+
+fig = plt.figure()
+fig.set_size_inches(6,6)
+ax = fig.add_subplot(1, 1, 1, projection=&#39;3d&#39;)
+ax.axis([-1,1,-1,1])
+ax.set_zlim([0,d[:,2].max()])
+ax.set_aspect(1)
+ax.view_init(azim=-30)
+
+ax.set_xlabel(&#39;real&#39;)
+ax.set_ylabel(&#39;imag&#39;)
+ax.set_zlabel(&#39;Abs&#39;)
+ax.set_title(&#39;64-Point DFT Magnitude&#39;)
+
+sl=[slice(i,i+2) for i in range(d.shape[0]-2)] # collect neighboring points
+for s in sl:
+  poly=facet_filled(d[s,:])
+  ax.add_collection3d(poly)
+ 
+# edge polygons    
+ax.add_collection3d(facet_filled(d[[-1,0],:]))
+ax.add_collection3d(facet_filled(d[[-2,-1],:]))
+
+# add 0 and pi/2 arrows for reference
+a=FancyArrow(0,0,1,0,width=0.02,length_includes_head=True)
+ax.add_patch(a)
+b=FancyArrow(0,0,0,1,width=0.02,length_includes_head=True)
+ax.add_patch(b)
+art3d.patch_2d_to_3d(a)
+art3d.patch_2d_to_3d(b)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f4cbae25b5b890b89a433c539e9d1d5c2bdad7989af27651ca1c370a1217f4a7.png" src="../_images/f4cbae25b5b890b89a433c539e9d1d5c2bdad7989af27651ca1c370a1217f4a7.png" />
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./book-version"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Chapter_2_Sampling_Theorem.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 2: Sampling Theorem</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Chapter_4_Spectral_analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chapter 4: Spectral Analysis</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

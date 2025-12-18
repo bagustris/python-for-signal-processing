@@ -1,0 +1,886 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Frequency Resolution &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Frequency_Resolution';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Introduction" href="More_Fourier_Transform.html" />
+    <link rel="prev" title="Fourier Transform" href="Fourier_Transform.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Fourier Transform</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Frequency Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Filtering: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Filtering: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Filtering: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_2_Sampling_Theorem.html">Chapter 2: Sampling Theorem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_3_Discrete_Fourier_transform.html">Chapter 3: Discrete Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_4_Spectral_analysis.html">Chapter 4: Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_5_Finite_impulse_response_filters.html">Chapter 5: Finite Impulse Response Filters</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Frequency_Resolution.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Frequency_Resolution.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Frequency Resolution</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seeking-better-frequency-resolution-with-longer-dft">Seeking Better Frequency Resolution with Longer DFT</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-uncertainty-principle-strikes-back">The Uncertainty Principle Strikes Back</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#circular-convolution">Circular Convolution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="frequency-resolution">
+<h1>Frequency Resolution<a class="headerlink" href="#frequency-resolution" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>In this section, we consider the very important problem of resolving two nearby frequencies using the DFT. This spectral analysis problem is one of the cornerstone problems in signal processing and we therefore highlight some nuances. We also investigate the circular convolution as a tool to uncover the mechanics of frequency resolution as the uncertainty principle emerges again.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">64</span> <span class="c1"># N- DFT size</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="mi">64</span> <span class="c1"># sampling frequency</span>
+<span class="n">f</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># one signal</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span> <span class="c1"># time-domain samples</span>
+<span class="n">deltaf</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span> <span class="c1"># second nearby frequency</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="c1"># 2 Hz frequency difference</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="n">Nf</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\delta f = 2$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="n">deltaf</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="c1"># delta_f frequency difference</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="n">Nf</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\delta f = 1/2$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymax</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/292a7e9b67c2bbcc433c3750ebc19a0b2a207b1fa4c8449be5276e9de6c1cfef.png" src="../_images/292a7e9b67c2bbcc433c3750ebc19a0b2a207b1fa4c8449be5276e9de6c1cfef.png" />
+</div>
+</div>
+</section>
+<section id="seeking-better-frequency-resolution-with-longer-dft">
+<h2>Seeking Better Frequency Resolution with Longer DFT<a class="headerlink" href="#seeking-better-frequency-resolution-with-longer-dft" title="Link to this heading">#</a></h2>
+<p>The top plot above shows the magnitude of the DFT for an input that is the sum of two frequencies separated by 2 Hz. Using the parameters we have chosen for the DFT, we can easily see there are two distinct frequencies in the input signal. The bottom plot shows the same thing except that here the frequencies are only separated by 0.5 Hz and, in this case, the two frequencies are not so easy to separate. From this figure, it would be difficult to conclude how many frequencies are present and at what magnitude.</p>
+<p>At this point, the usual next step is to increase the size of the DFT since the frequency resolution is <span class="math notranslate nohighlight">\(f_s/N\)</span>. Thus, the idea is to increase this resolution until the two frequencies separate. This is shown in the next figure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Nf</span> <span class="o">=</span> <span class="mi">64</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$N=</span><span class="si">%d</span><span class="s1">$&#39;</span><span class="o">%</span><span class="k">Nf</span>,fontsize=18)
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">64</span><span class="o">*</span><span class="mi">4</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$N=</span><span class="si">%d</span><span class="s1">$&#39;</span><span class="o">%</span><span class="k">Nf</span>,fontsize=18)
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymax</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ea8038c6158b3d94275d14658ce5f7296083e5df407ad267d4249a49f387445b.png" src="../_images/ea8038c6158b3d94275d14658ce5f7296083e5df407ad267d4249a49f387445b.png" />
+</div>
+</div>
+<p>As the figure above shows, increasing the size of the DFT did not help matters much. Why is this? Didn’t we increase the frequency resolution using a larger DFT? Why can’t we separate frequencies now?</p>
+</section>
+<section id="the-uncertainty-principle-strikes-back">
+<h2>The Uncertainty Principle Strikes Back<a class="headerlink" href="#the-uncertainty-principle-strikes-back" title="Link to this heading">#</a></h2>
+<p>The problem here  is a manifestation the uncertainty principle we <a class="reference external" href="http://python-for-signal-processing.blogspot.com/2012/09/investigating-sampling-theorem-in-this.html">previously discussed</a>. Remember that taking a larger DFT doesn’t add anything new; it just picks off more discrete frequencies on the unit circle.  Note that we want to analyze a particular signal <span class="math notranslate nohighlight">\(x(t)\)</span>, but we have only a <em>finite section</em> of that signal. In other words, what we really have are samples of the product of <span class="math notranslate nohighlight">\(x(t),t\in \mathbb{R}\)</span> and a rectangular time-window, <span class="math notranslate nohighlight">\(r(t)\)</span>, that is zero except <span class="math notranslate nohighlight">\(r(t)=1 \Leftrightarrow t\in[0,1]\)</span>. This means that the DFT is structured according to the rectangular window, which explains the <code class="docutils literal notranslate"><span class="pre">sinc</span></code> shapes we have seen here.</p>
+<p>The following figure shows the updated DFT using a longer duration rectangular window.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="n">fs</span><span class="p">)</span>
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="n">deltaf</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">64</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$N=</span><span class="si">%d</span><span class="s1">$&#39;</span><span class="o">%</span><span class="k">Nf</span>,fontsize=18)
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">64</span><span class="o">*</span><span class="mi">8</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">fs</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">),</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$N=</span><span class="si">%d</span><span class="s1">$&#39;</span><span class="o">%</span><span class="k">Nf</span>,fontsize=18)
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(k)|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymax</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bfa98805af77881b731472ca6b082ff3673f33384a8be4f35fe4e287052334e0.png" src="../_images/bfa98805af77881b731472ca6b082ff3673f33384a8be4f35fe4e287052334e0.png" />
+</div>
+</div>
+<p>The top plot in the figure above shows the DFT of the longer duration signal with <span class="math notranslate nohighlight">\(N=128\)</span>. The bottom plot shows the same signal with larger DFT length of <span class="math notranslate nohighlight">\(N=512\)</span> and a clear separation between the two frequencies. Thus, as opposed to the previous case, a longer DFT <em>did</em> resolve the nearby frequencies, but it needed a longer duration signal to do it. Why is this? Consider the DFT of the rectangular windows of length <span class="math notranslate nohighlight">\(N_s\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[ X[k] = \frac{1}{\sqrt N}\sum_{n=0}^{N_s-1} \exp\left( \frac{2\pi}{N} k n \right) \]</div>
+<p>after some re-arrangement, this reduces to</p>
+<div class="math notranslate nohighlight">
+\[ |X[k]|=\frac{ 1}{\sqrt N}\left|\frac{\sin \left( N_s  \frac{2\pi}{N} k\right)}{\sin \left( \frac{2\pi}{N} k \right)}\right|\]</div>
+<p>which bears a strong resemblence to our <a class="reference external" href="http://python-for-signal-processing.blogspot.com/2012/09/investigating-sampling-theorem-in-this.html">original</a> <code class="docutils literal notranslate"><span class="pre">sinc</span></code> function. The following figure is a plot of this function</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">abs_sinc</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span><span class="n">Ns</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">k</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">1.0e-20</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span> <span class="n">Ns</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">y</span><span class="o">/</span><span class="n">N</span><span class="p">))</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">abs_sinc</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span><span class="n">Ns</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;duration=10&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">abs_sinc</span><span class="p">(</span><span class="n">N</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span><span class="n">Ns</span><span class="o">=</span><span class="mi">20</span><span class="p">),</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;duration=20&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;DFT Index&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|X(\Omega_k)|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Rectangular Windows DFTs&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/998f16e030ade3ffa2d96eef72ff0ec4d7d88e2b4b29650f0b46320b96a6397b.png" src="../_images/998f16e030ade3ffa2d96eef72ff0ec4d7d88e2b4b29650f0b46320b96a6397b.png" />
+</div>
+</div>
+<p>Note that the DFT grows taller and narrower as the  sampling duration increases (i.e. longer rectangular window).   The amplitude growth occurs because the longer window accumulates more “energy” than the shorter window. The length of the DFT is the same for both lines shown so only the length of the rectangular window varies. The point is that taking a longer duration rectangular window improves the frequency resolution! This fact is just the uncertainty principle at work. Looking at the <code class="docutils literal notranslate"><span class="pre">sinc</span></code> formula, the null-to-null width of the main lobe in frequency terms is the following</p>
+<div class="math notranslate nohighlight">
+\[ \delta f  = 2\frac{N}{2 N_s}  \frac{f_s}{N} =\frac{f_s}{N_s} \]</div>
+<p>Thus, two frequencies that differ by at least this amount should be resolvable in these plots.</p>
+<p>Thus, in our last example, we had <span class="math notranslate nohighlight">\(f_s= 64,N_s = 128 \Rightarrow \delta f = 1/2\)</span> Hz and we were trying to separate two frequencies 0.5 Hz apart so we were right on the edge in this case.  I invite you to download this IPython notebook and try longer or shorter signal durations to see how these plots change. Incidentally, this is where some define the notion of <em>frequency bin</em> as the DFT resolution (<span class="math notranslate nohighlight">\( f_s/N \)</span>) divided by this minimal resolution, <span class="math notranslate nohighlight">\( f_s/N_s \)</span> which gives <span class="math notranslate nohighlight">\( N_s/N \)</span>. In other words, the DFT measures frequency in discrete <em>bins</em> of minimal resolution, <span class="math notranslate nohighlight">\( N_s/N \)</span>.</p>
+<p>However, sampling over a longer duration only helps when the signal frequencies are <em>stable</em> over the longer duration. If these frequencies drift during the longer sampling interval or otherwise become contaminated with other signals, then advanced techniques become necessary.</p>
+<p>Let’s consider in detail how the DFT of the rectangular window affects resolution by considering the circular convolution.</p>
+</section>
+<section id="circular-convolution">
+<h2>Circular Convolution<a class="headerlink" href="#circular-convolution" title="Link to this heading">#</a></h2>
+<p>Suppose we want to compute the DFT of a product <span class="math notranslate nohighlight">\(z_n=x_n y_n\)</span> as shown below,</p>
+<div class="math notranslate nohighlight">
+\[ Z_k = \frac{1}{\sqrt N}\sum_{n=0}^{N-1} (x_n y_n) W_N^{n k} \]</div>
+<p>in terms of the respective DFTs of <span class="math notranslate nohighlight">\(x_n\)</span> and <span class="math notranslate nohighlight">\(y_n\)</span>, <span class="math notranslate nohighlight">\(X_k\)</span> and <span class="math notranslate nohighlight">\(Y_k\)</span>, respectively, where</p>
+<div class="math notranslate nohighlight">
+\[ x_n = \frac{1}{\sqrt N}\sum_{p=0}^{N-1} X_p  W_N^{-n p} \]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[ y_n = \frac{1}{\sqrt N}\sum_{m=0}^{N-1} Y_m  W_N^{-n m} \]</div>
+<p>Then, substituting back in gives,</p>
+<div class="math notranslate nohighlight">
+\[Z_k = \frac{1}{\sqrt N} \frac{1}{N} \sum_{p=0}^{N-1} X_p \sum_{m=0}^{N-1} Y_m \sum_{n=0}^{N-1} W_N^{n k -n p - n m}\]</div>
+<p>The last term evaluates to</p>
+<div class="math notranslate nohighlight">
+\[ \sum_{n=0}^{N-1} W_N^{n k -n p - n m} = \frac{1-W_N^{N(k-p-m)}}{1-W_N^{k-p-m}} \hspace{2em} = \frac{1-e^{j2\pi(k-p-m)}}{1-e^{j 2\pi  (k-p-m)/N}}\]</div>
+<p>This is zero everywhere except where <span class="math notranslate nohighlight">\(k-p-m= q N\)</span> (<span class="math notranslate nohighlight">\(q\in \mathbb{Z}\)</span>) in which case it is <span class="math notranslate nohighlight">\(N\)</span>. Substituting all this back into our expression gives the <em>circular convolution</em>  usually denoted as</p>
+<div class="math notranslate nohighlight">
+\[ Z_k = \frac{1}{\sqrt N} \sum_{p=0}^{N-1} X_p  Y_{((k-p))_N} = X_k \otimes_N Y_k \]</div>
+<p>where the double subscripted parenthesis emphasizes the periodic nature of the index. The circular convolution tells us to compute the DFT <span class="math notranslate nohighlight">\(Z_k\)</span> directly from the corresponding DFTs <span class="math notranslate nohighlight">\(X_k\)</span> and <span class="math notranslate nohighlight">\(Y_k\)</span>.</p>
+<p>Let’s work through an example to see this in action.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">dftmatrix</span><span class="p">(</span><span class="n">Nfft</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span><span class="n">N</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s1">&#39;construct DFT matrix&#39;</span>
+    <span class="n">k</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nfft</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">N</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="n">N</span> <span class="o">=</span> <span class="n">Nfft</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="n">Nfft</span> <span class="o">*</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">[:,</span><span class="kc">None</span><span class="p">]))</span> <span class="c1"># use numpy broadcasting to create matrix</span>
+    <span class="k">return</span> <span class="n">U</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nfft</span><span class="p">)</span>
+
+<span class="n">Nf</span> <span class="o">=</span> <span class="mi">32</span> <span class="c1"># DFT size</span>
+<span class="n">U</span> <span class="o">=</span> <span class="n">dftmatrix</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span><span class="n">Nf</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">U</span><span class="p">[:,</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">real</span> <span class="c1"># input signal</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">U</span><span class="o">.</span><span class="n">H</span><span class="o">*</span><span class="n">x</span> <span class="c1"># DFT of input</span>
+<span class="n">rect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">int</span><span class="p">(</span><span class="n">Nf</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span> <span class="c1"># short rectangular window</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="nb">int</span><span class="p">(</span><span class="n">Nf</span><span class="o">/</span><span class="mi">2</span><span class="p">)]</span> <span class="c1"># product of rectangular window and x (i.e. chopped version of x) </span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">dftmatrix</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span><span class="n">Nf</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">H</span><span class="o">*</span><span class="n">rect</span> <span class="c1"># DFT of rectangular window</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">dftmatrix</span><span class="p">(</span><span class="n">Nf</span><span class="p">,</span><span class="n">Nf</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">H</span><span class="o">*</span><span class="n">z</span>    <span class="c1"># DFT of product of x_n and r_n</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">idx</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">)[:,</span><span class="kc">None</span><span class="p">]</span> <span class="c1"># use numpy broadcasting to setup summand&#39;s indices</span>
+<span class="n">idx</span><span class="p">[</span><span class="n">idx</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span><span class="o">+=</span><span class="n">Nf</span> <span class="c1"># add periodic Nf to negative indices for wraparound</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span> <span class="c1"># k^th frequency index</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">flat</span><span class="p">):</span>
+    <span class="c1">#markerline, stemlines, baseline = j.stem(np.arange(Nf),abs(R[idx[:,i],0])/np.sqrt(Nf))</span>
+    <span class="c1">#setp(markerline, &#39;markersize&#39;, 3.)</span>
+    <span class="n">j</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">),</span><span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">)</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">idx</span><span class="p">[:,</span><span class="n">i</span><span class="p">],</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">flat</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">markerline</span><span class="p">,</span> <span class="n">stemlines</span><span class="p">,</span> <span class="n">baseline</span> <span class="o">=</span><span class="n">j</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Nf</span><span class="p">),</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span> <span class="s1">&#39;markersize&#39;</span><span class="p">,</span> <span class="mf">4.</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">markerline</span><span class="p">,</span><span class="s1">&#39;markerfacecolor&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">stemlines</span><span class="p">,</span><span class="s1">&#39;color&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">j</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+    <span class="n">j</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;k=</span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="k">i</span>,fontsize=8)
+    
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/16c2298084fba5a76810e2cbd8c25db617fd168328d386b4126633b4bb7f4d8f.png" src="../_images/16c2298084fba5a76810e2cbd8c25db617fd168328d386b4126633b4bb7f4d8f.png" />
+</div>
+</div>
+<p>The figure above shows the <font color="blue">rectangular window DFT in blue, <span class="math notranslate nohighlight">\(R_k\)</span></font> against the sinusoid <font color="red">input signal in red, <span class="math notranslate nohighlight">\(X_k\)</span></font>, for each value of <span class="math notranslate nohighlight">\(k\)</span> as the two terms slide past each other from left to right, top to bottom. In other words, the <span class="math notranslate nohighlight">\(k^{th}\)</span> term in <span class="math notranslate nohighlight">\(Z_k\)</span>, the DFT of the product <span class="math notranslate nohighlight">\(x_n r_n \)</span>, can be thought of as the inner-product of the red and blue lines. This is not exactly true because we are just plotting magnitudes and not the real/imaginary parts, but it’s enough to understand the mechanics of the circular convolution.</p>
+<p>A good way to think about the rectangular window’s <code class="docutils literal notranslate"><span class="pre">sinc</span></code> shape as it slides past the input signal is as a <em>probe</em> with a resolution defined by its mainlobe width. For example, in frame <span class="math notranslate nohighlight">\(k=12\)</span>, we see that the peak of the rectangular window coincides with the peak of the input frequency so we should expect a large value for <span class="math notranslate nohighlight">\(Z_{k=12}\)</span> which is shown below. However, if the rectangular window were shorter, corresponding to a wider mainlobe width, then two nearby frequencies could be draped in the same mainlobe and would then be indistinguishable in the resulting DFT because the DFT for that value of <span class="math notranslate nohighlight">\(k\)</span> is the inner-product (i.e. a complex number) of the two overlapping graphs.</p>
+<p>The figure below shows the direct computation of the DFT of <span class="math notranslate nohighlight">\(Z_k\)</span> matches the circular convolution method using <span class="math notranslate nohighlight">\(X_k\)</span> and <span class="math notranslate nohighlight">\(R_k\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="nb">abs</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">X</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Nf</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$|Z_k|$ = $X_k\otimes_N R_k$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">Z</span><span class="p">),</span><span class="s1">&#39;o&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$|Z_k|$ by DFT&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;DFT index,k&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$|Z_k|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()</span><span class="o">.</span><span class="n">max</span><span class="p">()))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7041599b0e4403d0654ffd6ae2872d63312bf022d532d35e2fc804f410da8027.png" src="../_images/7041599b0e4403d0654ffd6ae2872d63312bf022d532d35e2fc804f410da8027.png" />
+</div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>In this section, we unpacked the issues involved in resolving two nearby frequencies using the DFT and once again confronted the uncertainty principle in action. We realized that longer DFTs cannot distinguish nearby frequencies unless the signal is sampled over a sufficient duration. Additionally, we developed the circular convolution as a tool to visualize the exactly how a longer sampling duration helps resolve frequencies.</p>
+<p>As usual, the original corresponding IPython notebook for this post  is available for download <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Frequency_Resolution.ipynb">here</a>.</p>
+<p>Comments and corrections welcome!</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Oppenheim, A. V., and A. S. Willsky. “Signals and Systems.” Prentice-Hall, (1997).</p></li>
+<li><p>Proakis, John G. “Digital signal processing: principles algorithms and applications”. Pearson Education India, 2001.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python361064bit3b840f9918f246278fc4b65bf6247be2",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python361064bit3b840f9918f246278fc4b65bf6247be2'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Fourier_Transform.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Fourier Transform</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="More_Fourier_Transform.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#seeking-better-frequency-resolution-with-longer-dft">Seeking Better Frequency Resolution with Longer DFT</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-uncertainty-principle-strikes-back">The Uncertainty Principle Strikes Back</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#circular-convolution">Circular Convolution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

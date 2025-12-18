@@ -1,0 +1,919 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Maximum Likelihood Estimation &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Maximum_likelihood';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Expectation Maximization" href="Expectation_Maximization.html" />
+    <link rel="prev" title="Introduction" href="Gauss_Markov.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Maximum_likelihood.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Maximum_likelihood.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Maximum Likelihood Estimation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Maximum Likelihood Estimation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-coin-flipping-experiment">Setting up the Coin Flipping Experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-the-experiment">Simulating the Experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-density-for-the-estimator">Probability Density for the Estimator</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confidence-intervals">Confidence Intervals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="maximum-likelihood-estimation">
+<h1>Maximum Likelihood Estimation<a class="headerlink" href="#maximum-likelihood-estimation" title="Link to this heading">#</a></h1>
+<p>Maximum likelihood estimation is one of the key techniques employed in statistical signal processing for a wide variety of applications from signal detection to parameter estimation. In the following, we consider a simple experiment and work through the details of maximum likelihood estimation to ensure that we understand the concept in one of its simplest applications.</p>
+<section id="setting-up-the-coin-flipping-experiment">
+<h2>Setting up the Coin Flipping Experiment<a class="headerlink" href="#setting-up-the-coin-flipping-experiment" title="Link to this heading">#</a></h2>
+<p>Suppose we have coin and want to estimate the probability of heads (<span class="math notranslate nohighlight">\(p\)</span>) for it. The coin is Bernoulli distributed:</p>
+<div class="math notranslate nohighlight">
+\[ \phi(x)= p^x (1-p)^{(1-x)} \]</div>
+<p>where <span class="math notranslate nohighlight">\(x\)</span> is the outcome, <em>1</em> for heads and <em>0</em> for tails. The <span class="math notranslate nohighlight">\(n\)</span> independent flips, we have the likelihood:</p>
+<div class="math notranslate nohighlight">
+\[ \mathcal{L}(p|\mathbf{x})= \prod_{i=1}^n p^{ x_i }(1-p)^{1-x_i} \]</div>
+<p>This is basically notation. We have just substituted everything into <span class="math notranslate nohighlight">\( \phi(x)\)</span> under the independent-trials assumption.</p>
+<p>The idea of <em>maximum likelihood</em> is to maximize this as the function of <span class="math notranslate nohighlight">\(p\)</span> after plugging in all of the <span class="math notranslate nohighlight">\(x_i\)</span> data. This means that our estimator, <span class="math notranslate nohighlight">\(\hat{p}\)</span> , is a function of the observed <span class="math notranslate nohighlight">\(x_i\)</span> data, and as such, is a random variable with its own distribution.</p>
+</section>
+<section id="simulating-the-experiment">
+<h2>Simulating the Experiment<a class="headerlink" href="#simulating-the-experiment" title="Link to this heading">#</a></h2>
+<p>We need the following code to simulate coin flipping.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%matplotlib inline
+from __future__ import division
+from scipy.stats import bernoulli 
+import numpy as np
+
+p_true=1/2 # this is the value we will try to estimate from the observed data
+fp=bernoulli(p_true)
+
+def sample(n=10):
+    &#39;simulate coin flipping&#39;
+    return fp.rvs(n)# flip it n times
+
+xs = sample(100) # generate some samples
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can write out the likelihood function using <code class="docutils literal notranslate"><span class="pre">sympy</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import sympy
+from sympy.abc import x, z
+p=sympy.symbols(&#39;p&#39;,positive=True)
+
+L=p**x*(1-p)**(1-x)
+J=np.prod([L.subs(x,i) for i in xs]) # objective function to maximize
+</pre></div>
+</div>
+</div>
+</div>
+<p>Below, we find the maximum using basic calculus. Note that taking the <code class="docutils literal notranslate"><span class="pre">log</span></code> of <span class="math notranslate nohighlight">\(J\)</span> makes the maximization problem tractable but doesn’t change the extrema.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>logJ=sympy.expand_log(sympy.log(J))
+sol=sympy.solve(sympy.diff(logJ,p),p)[0]
+
+x=linspace(0,1,100)
+plot(x,map(sympy.lambdify(p,logJ,&#39;numpy&#39;),x),sol,logJ.subs(p,sol),&#39;o&#39;,
+                                          p_true,logJ.subs(p,p_true),&#39;s&#39;,)
+xlabel(&#39;$p$&#39;,fontsize=18)
+ylabel(&#39;Likelihood&#39;,fontsize=18)
+title(&#39;Estimate not equal to true value&#39;,fontsize=18)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Python27\lib\site-packages\numpy\__init__.py:1: RuntimeWarning: divide by zero encountered in log
+  &quot;&quot;&quot;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0xcb707f0&gt;
+</pre></div>
+</div>
+<img alt="../_images/ad2f42ad159aba88a8abc6503d9571430ac8bb00a7c74f566d506e4cfb799387.png" src="../_images/ad2f42ad159aba88a8abc6503d9571430ac8bb00a7c74f566d506e4cfb799387.png" />
+</div>
+</div>
+<p>Note that our estimator <span class="math notranslate nohighlight">\(\hat{p}\)</span> (red circle) is not equal to the true value of <span class="math notranslate nohighlight">\(p\)</span> (green square), but it is at the maximum of the likelihood function. This may sound disturbing, but keep in mind this estimate is a function of the random data; and since that data can change, the ultimate estimate can likewise change. I invite you to run this notebook a few times to observe  this. Remember that the estimator is a <em>function</em> of the data and is thus also a <em>random variable</em>, just like the data is.</p>
+<p>Let’s write some code to empirically examine the behavior of the maximum likelihood estimator using a simulation of multiple trials. All we’re doing here is combining the last few blocks of code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def estimator_gen(niter=10,ns=100):
+    &#39;generate data to estimate distribution of maximum likelihood estimator&#39;
+    out=[]
+    x=sympy.symbols(&#39;x&#39;,real=True)
+    L=   p**x*(1-p)**(1-x)
+    for i in range(niter):
+        xs = sample(ns) # generate some samples from the experiment
+        J=np.prod([L.subs(x,i) for i in xs]) # objective function to maximize
+        logJ=sympy.expand_log(sympy.log(J)) 
+        sol=sympy.solve(sympy.diff(logJ,p),p)[0]
+        out.append(float(sol.evalf()))
+    return out if len(out)&gt;1 else out[0] # return scalar if list contains only 1 term
+    
+etries = estimator_gen(100) # this may take awhile, depending on how much data you want to generate
+hist(etries) # histogram of maximum likelihood estimator
+title(&#39;$\mu=%3.3f,\sigma=%3.3f$&#39;%(mean(etries),std(etries)),fontsize=18)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0xcee5cd0&gt;
+</pre></div>
+</div>
+<img alt="../_images/551e0cfcafc54b9347144b75220ff877c518fd60be9f04dee91480f288c8f3a0.png" src="../_images/551e0cfcafc54b9347144b75220ff877c518fd60be9f04dee91480f288c8f3a0.png" />
+</div>
+</div>
+<p>Note that the mean of the estimator (<span class="math notranslate nohighlight">\(\mu\)</span>) is pretty close to the true value, but looks can be deceiving. The only way to know for sure is to check if the estimator is unbiased, namely, if</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}(\hat{p}) = p \]</div>
+<p>Because this problem is simple, we can solve for this in general noting that since <span class="math notranslate nohighlight">\(x=0\)</span> or <span class="math notranslate nohighlight">\(x=1\)</span>, the terms in the product of <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> above are either <span class="math notranslate nohighlight">\(p\)</span>, if <span class="math notranslate nohighlight">\(x_i=1\)</span> or <span class="math notranslate nohighlight">\(1-p\)</span> if <span class="math notranslate nohighlight">\(x_i=0\)</span>. This means that we can write</p>
+<div class="math notranslate nohighlight">
+\[ \mathcal{L}(p|\mathbf{x})= p^{\sum_{i=1}^n x_i}(1-p)^{n-\sum_{i=1}^n x_i} \]</div>
+<p>with corresponding log as</p>
+<div class="math notranslate nohighlight">
+\[ J=\log(\mathcal{L}(p|\mathbf{x})) =  \log(p)  \sum_{i=1}^n x_i +   \log(1-p) \left(n-\sum_{i=1}^n x_i\right)\]</div>
+<p>Taking the derivative of this gives:</p>
+<div class="math notranslate nohighlight">
+\[  \frac{dJ}{dp} = \frac{1}{p}\sum_{i=1}^n x_i + \frac{(n-\sum_{i=1}^n x_i)}{p-1} \]</div>
+<p>and solving this leads to</p>
+<div class="math notranslate nohighlight">
+\[  \hat{p} = \frac{1}{ n} \sum_{i=1}^n x_i \]</div>
+<p>This is our <em>estimator</em> for <span class="math notranslate nohighlight">\(p\)</span>. Up til now, we have been using <code class="docutils literal notranslate"><span class="pre">sympy</span></code> to solve for this based on the data <span class="math notranslate nohighlight">\(x_i\)</span> but now we have it generally and don’t have to solve for it again. To check if this estimator is biased, we compute its expectation:</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}\left(\hat{p}\right) =\frac{1}{n}\sum_i^n \mathbb{E}(x_i) = \frac{1}{n} n \mathbb{E}(x_i) \]</div>
+<p>by linearity of the expectation and where</p>
+<div class="math notranslate nohighlight">
+\[\mathbb{E}(x_i)  = p\]</div>
+<p>Therefore,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}\left(\hat{p}\right) =p \]</div>
+<p>This means that the esimator is unbiased. This is good news. We almost always want our estimators to be unbiased. Similarly,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}\left(\hat{p}^2\right) = \frac{1}{n^2} \mathbb{E}\left[\left(  \sum_{i=1}^n x_i \right)^2 \right]\]</div>
+<p>and where</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}\left(x_i^2\right) =p\]</div>
+<p>and by the independence assumption,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}\left(x_i x_j\right) =\mathbb{E}(x_i)\mathbb{E}( x_j) =p^2\]</div>
+<p>Thus,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E}\left(\hat{p}^2\right) =\left(\frac{1}{n^2}\right) n 
+\left[
+p+(n-1)p^2
+\right]
+\]</div>
+<p>So, the variance of the estimator, <span class="math notranslate nohighlight">\(\hat{p}\)</span> is the following:</p>
+<div class="math notranslate nohighlight">
+\[ \sigma_\hat{p}^2 = \mathbb{E}\left(\hat{p}^2\right)- \mathbb{E}\left(\hat{p}\right)^2  = \frac{p(1-p)}{n} \]</div>
+<p>Note that the <span class="math notranslate nohighlight">\(n\)</span> in the denominator means that the variance asymptotically goes to zero as <span class="math notranslate nohighlight">\(n\)</span> increases (i.e. we consider more and more samples). This is good news also because it means that more and more coin flips leads to a better estimate of the underlying <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<p>Unfortunately, this formula for the variance is practically useless because we have to know <span class="math notranslate nohighlight">\(p\)</span> to compute it and <span class="math notranslate nohighlight">\(p\)</span> is the parameter we are trying to estimate in the first place! But, looking at <span class="math notranslate nohighlight">\( \sigma_\hat{p}^2 \)</span>, we can immediately notice that if <span class="math notranslate nohighlight">\(p=0\)</span>, then there is no estimator variance because the outcomes are guaranteed to be tails. Also, the maximum of this variance, for whatever <span class="math notranslate nohighlight">\(n\)</span>, happens at <span class="math notranslate nohighlight">\(p=1/2\)</span>. This is our worst case scenario and the only way to compensate is with more samples (i.e. larger <span class="math notranslate nohighlight">\(n\)</span>).</p>
+<p>All we have computed is the mean and variance of the estimator. In general, this is insufficient to characterize the underlying probability density of <span class="math notranslate nohighlight">\(\hat{p}\)</span>, except if we somehow knew that  <span class="math notranslate nohighlight">\(\hat{p}\)</span> were normally distributed. This is where the powerful <a class="reference external" href="http://mathworld.wolfram.com/CentralLimitTheorem.html"><em>central limit theorem</em></a> comes in. The form of the estimator, which is just a mean estimator, implies that we can apply this theorem and conclude that  <span class="math notranslate nohighlight">\(\hat{p}\)</span> is normally distributed. However, there’s a wrinkle here: the theorem tells us that  <span class="math notranslate nohighlight">\(\hat{p}\)</span> is asymptotically normal, it doesn’t quantify how many samples <span class="math notranslate nohighlight">\(n\)</span> we need to approach this asymptotic paradise. In our simulation this is no problem since we can generate as much data as we like, but in the real world, with a costly experiment, each sample may be precious. In the following, we won’t apply this theorem and instead proceed analytically.</p>
+</section>
+<section id="probability-density-for-the-estimator">
+<h2>Probability Density for the Estimator<a class="headerlink" href="#probability-density-for-the-estimator" title="Link to this heading">#</a></h2>
+<p>To write out the full density for <span class="math notranslate nohighlight">\(\hat{p}\)</span>, we first have to ask what is the probability that the estimator will equal a specific value and the tally up all the ways that could happen with their corresponding probabilities. For example, what is the probability that</p>
+<div class="math notranslate nohighlight">
+\[  \hat{p} = \frac{1}{n}\sum_{i=1}^n x_i  = 0 \]</div>
+<p>This can only happen one way: when <span class="math notranslate nohighlight">\(x_i=0 \hspace{0.5em} \forall i\)</span>. The probability of this happening can be computed from the density</p>
+<div class="math notranslate nohighlight">
+\[ f(\mathbf{x},p)= \prod_{i=1}^n \left(p^{x_i} (1-p)^{1-x_i}  \right) \]</div>
+<div class="math notranslate nohighlight">
+\[ f\left(\sum_{i=1}^n x_i  = 0,p\right)= \left(1-p\right)^n  \]</div>
+<p>Likewise, if <span class="math notranslate nohighlight">\(\lbrace x_i \rbrace\)</span> has one <span class="math notranslate nohighlight">\(i^{th}\)</span>  value equal to one, then</p>
+<div class="math notranslate nohighlight">
+\[ f\left(\sum_{i=1}^n x_i  = 1,p\right)= n p \prod_{i=1}^{n-1} \left(1-p\right)\]</div>
+<p>where the <span class="math notranslate nohighlight">\(n\)</span> comes from the <span class="math notranslate nohighlight">\(n\)</span> ways to pick one value equal to one from the <span class="math notranslate nohighlight">\(n\)</span> elements <span class="math notranslate nohighlight">\(x_i\)</span>. Continuing this way, we can construct the entire density as</p>
+<div class="math notranslate nohighlight">
+\[ f\left(\sum_{i=1}^n x_i  = k,p\right)= \binom{n}{k} p^k  (1-p)^{n-k}  \]</div>
+<p>where the term on the left is the binomial coefficient of <span class="math notranslate nohighlight">\(n\)</span> things taken <span class="math notranslate nohighlight">\(k\)</span> at a time. This is the binomial distribution and it’s not the density for <span class="math notranslate nohighlight">\(\hat{p}\)</span>, but rather for <span class="math notranslate nohighlight">\(n\hat{p}\)</span>. We’ll leave this as-is because it’s easier to work with below. We just have to remember to keep track of the <span class="math notranslate nohighlight">\(n\)</span> factor.</p>
+<section id="confidence-intervals">
+<h3>Confidence Intervals<a class="headerlink" href="#confidence-intervals" title="Link to this heading">#</a></h3>
+<p>Now that we have the full density for <span class="math notranslate nohighlight">\(\hat{p}\)</span>, we are ready to ask some meaningful questions. For example,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}\left( | \hat{p}-p | \le \epsilon p \right) \]</div>
+<p>Or, in words, what is the probability we can get within <span class="math notranslate nohighlight">\(\epsilon\)</span> percent of the true value of <span class="math notranslate nohighlight">\(p\)</span>. Rewriting,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}\left(  p - \epsilon p \lt \hat{p} \lt p + \epsilon p \right) = \mathbb{P}\left(  n p - n \epsilon p \lt \sum_{i=1}^n x_i   \lt n p + n \epsilon p \right)\]</div>
+<p>Let’s plug in some live numbers here for our worst case scenario where <span class="math notranslate nohighlight">\(p=1/2\)</span>. Then, if <span class="math notranslate nohighlight">\(\epsilon = 1/100\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}\left( \frac{99 n}{200} \lt \sum_{i=1}^n x_i   \lt \frac{101 n}{200} \right)\]</div>
+<p>Since the sum in integer-valued, we need <span class="math notranslate nohighlight">\(n&gt; 100\)</span> to even compute this. Thus, if <span class="math notranslate nohighlight">\(n=101\)</span> we have</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}\left( \frac{9999}{200} \lt \sum_{i=1}^{101} x_i   \lt \frac{10201}{200} \right) = f\left(\sum_{i=1}^{101} x_i  = 50,p\right)= \binom{101}{50} (1/2)^{50}  (1-1/2)^{101-50} = 0.079\]</div>
+<p>This means that in the worst-case scenario for <span class="math notranslate nohighlight">\(p=1/2\)</span>, given <span class="math notranslate nohighlight">\(n=101\)</span> trials, we will only get within 1% of the actual <span class="math notranslate nohighlight">\(p=1/2\)</span> about 8% of the time. If you feel disappointed, that only means you’ve been paying attention. What if the coin was really heavy and it was costly to repeat this 101 times? Then, we would be within 1% of the actual value only 8% of the time. Those odds are terrible.</p>
+<p>Let’s come at this another way: given I could only flip the coin 100 times, how close could I come to the true underlying value with high probability (say, 95%)? In this case we are seeking to solve for <span class="math notranslate nohighlight">\(\epsilon\)</span>. Plugging in gives,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}\left(  50 - 50 \epsilon \lt \sum_{i=1}^{100} x_i   \lt 50 + 50 \epsilon  \right) = 0.95\]</div>
+<p>which we have to solve for <span class="math notranslate nohighlight">\(\epsilon\)</span>. Fortunately, all the tools we need to solve for this are already in <code class="docutils literal notranslate"><span class="pre">scipy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import scipy.stats
+
+b=scipy.stats.binom(100,.5) # n=100, p = 0.5, distribution of the estimator \hat{p}
+
+f,ax= subplots()
+ax.stem(arange(0,101),b.pmf(arange(0,101))) # heres the density of the sum of x_i
+
+g = lambda i:b.pmf(arange(-i,i)+50).sum() # symmetric sum the probability around the mean
+print &#39;this is pretty close to 0.95:%r&#39;%g(10)
+ax.vlines( [50+10,50-10],0 ,ax.get_ylim()[1] ,color=&#39;r&#39;,lw=3.)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>this is pretty close to 0.95:0.95395593307062954
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.LineCollection at 0xd079630&gt;
+</pre></div>
+</div>
+<img alt="../_images/1733821ab448afdfebcde293f85ec8b34a9941c530255d3fed00ad255ec78a30.png" src="../_images/1733821ab448afdfebcde293f85ec8b34a9941c530255d3fed00ad255ec78a30.png" />
+</div>
+</div>
+<p>The two vertical lines in the plot show how far out from the mean we have to go to accumulate 95% of the probability. Now, we can solve this as</p>
+<div class="math notranslate nohighlight">
+\[ 50 + 50 \epsilon = 60 \]</div>
+<p>which makes <span class="math notranslate nohighlight">\(\epsilon=1/5\)</span> or 20%. So, flipping 100 times means I can only get within 20% of the real <span class="math notranslate nohighlight">\(p\)</span> 95% of the time in the worst case scenario (i.e. <span class="math notranslate nohighlight">\(p=1/2\)</span>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>b=scipy.stats.bernoulli(.5) # coin distribution
+xs = b.rvs(100) # flip it 100 times
+phat = mean(xs) # estimated p
+
+print abs(phat-0.5) &lt; 0.5*0.20 # did I make it w/in interval 95% of the time?
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s keep doing this and see if we can get within this interval 95% of the time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>out=[]
+b=scipy.stats.bernoulli(.5) # coin distribution
+for i in range(500): # number of tries
+    xs = b.rvs(100) # flip it 100 times
+    phat = mean(xs) # estimated p
+    out.append(abs(phat-0.5) &lt; 0.5*0.20 ) # within 20% 
+
+print &#39;Percentage of tries within 20 interval = %3.2f&#39;%(100*sum(out)/float(len(out) ))
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Percentage of tries within 20 interval = 96.20
+</pre></div>
+</div>
+</div>
+</div>
+<p>Well, that seems to work. Now we have a way to get at the quality of the estimator, <span class="math notranslate nohighlight">\(\hat{p}\)</span>.</p>
+</section>
+</section>
+</section>
+<section id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<p>In this section, we explored the concept of maximum likelihood estimation using a coin flipping experiment both analytically and numerically with the  scientific Python tool chain. There are two key points to remember. First, maximum likelihood estimation produces a function of the data that is itself a random variable, with its own statistics and distribution. Second, it’s worth considering how to analytically derive the density function of the estimator rather than relying on canned packages to compute confidence intervals wherever possible. This is especially true when data is hard to come by and the approximations made in the central limit theorem are therefore harder to justify.</p>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p>This <a class="reference internal" href="#www.ipython.org"><span class="xref myst">IPython notebook</span></a> is available for <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Maximum_likelihood.ipynb">download</a>. I urge you to experiment with the calculations for different parameters. As always, corrections and comments are welcome!</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Gauss_Markov.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Expectation_Maximization.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Expectation Maximization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Maximum Likelihood Estimation</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-coin-flipping-experiment">Setting up the Coin Flipping Experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simulating-the-experiment">Simulating the Experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-density-for-the-estimator">Probability Density for the Estimator</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confidence-intervals">Confidence Intervals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

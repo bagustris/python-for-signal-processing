@@ -1,0 +1,981 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Filtering: Part 1 &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Filtering_Part1';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Filtering: Part 2" href="Filtering_Part2.html" />
+    <link rel="prev" title="Introduction" href="Windowing_Part3.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Frequency Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Filtering: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Filtering: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Filtering: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_2_Sampling_Theorem.html">Chapter 2: Sampling Theorem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_3_Discrete_Fourier_transform.html">Chapter 3: Discrete Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_4_Spectral_analysis.html">Chapter 4: Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_5_Finite_impulse_response_filters.html">Chapter 5: Finite Impulse Response Filters</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Filtering_Part1.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Filtering_Part1.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Filtering: Part 1</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finite-impulse-response-filters-as-moving-averages">Finite Impulse Response Filters as Moving Averages</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fourier-transform-of-the-discrete-sequence">Fourier Transform of the Discrete Sequence</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filter-output-as-discrete-convolution">Filter output as discrete convolution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convolution-using-the-dft">Convolution using the DFT</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filter-transfer-functions">Filter Transfer Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#z-transform">Z-Transform</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetry">Symmetry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causality">Causality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetry-and-anti-symmetry">Symmetry and Anti-symmetry</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-real-part-of-the-filter-transfer-function">Extracting the Real Part of the Filter Transfer Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="filtering-part-1">
+<h1>Filtering: Part 1<a class="headerlink" href="#filtering-part-1" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>Filtering means preserving certain favored signal frequencies while simultaneously suppressing others. At first, this may seem as easy as simply removing  all the offending frequencies of interest in the Fourier transform and keeping the rest, but, as we will see, practical considerations prohibit this. There are many, many approaches to filtering and here we focus on the popular finite impulse response (FIR) filters. As the name suggests, these filters have no feedback loops, which means that they stop producing output when the input runs out. These are very popular in practice, with blazing-fast on-chip implementations and easy-to-understand, flexible design specifications. This section introduces the main concepts of FIR filter design.</p>
+<section id="finite-impulse-response-filters-as-moving-averages">
+<h3>Finite Impulse Response Filters as Moving Averages<a class="headerlink" href="#finite-impulse-response-filters-as-moving-averages" title="Link to this heading">#</a></h3>
+<p>Finite Impulse Response (FIR) filters have the following form:</p>
+<div class="math notranslate nohighlight">
+\[ y_n = \sum_{k=0}^{M-1} h_k x_{n-k} \]</div>
+<p>with real input <span class="math notranslate nohighlight">\( x_n \)</span> and real output <span class="math notranslate nohighlight">\( y_n \)</span>. These are called <em>finite</em> impulse response because they stop after running out of input (i.e. there is no feedback to keep this going indefinitely on its own). These are also sometimes called <em>moving average</em> filters or <em>all-zero</em> filters. The word <em>taps</em> is used for <span class="math notranslate nohighlight">\( M \)</span>  so a <em>10-tap</em> filter has <span class="math notranslate nohighlight">\( M=10 \)</span> coefficients. For example, given the two-tap filter, <span class="math notranslate nohighlight">\( h_0 = h_1 = 1/2 \)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[ y_n = x_{n}/2 + x_{n-1}/2 \]</div>
+<p>For example, for input <span class="math notranslate nohighlight">\( x_n=1 \hspace{.5em} \forall n \ge 0 \)</span>,  <span class="math notranslate nohighlight">\( y_n = 1 \hspace{.5em} \forall n \ge 1  \)</span>. Note that we lose one sample in filling the filter for <span class="math notranslate nohighlight">\( n=0 \)</span> which means we have to wait one sample for a valid filter output. This is the filter’s  <em>transient</em> state.  As another example, for input
+<span class="math notranslate nohighlight">\( x_n= \exp \left( j\pi n \right)  \hspace{.5em} \forall n\ge 0 \)</span>, then <span class="math notranslate nohighlight">\( y_n=0 \forall n \ge 1  \)</span>. These two cases show that this moving average has eliminated   the highest frequency signal (<span class="math notranslate nohighlight">\( \omega=\pi \)</span>) and preserved the lowest frequency signal (<span class="math notranslate nohighlight">\( \omega=0 \)</span>).</p>
+<p>Let’s analyze this filter using the tools in the <code class="docutils literal notranslate"><span class="pre">scipy.signal</span></code> module.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span> 
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span> <span class="o">=</span> <span class="mf">.2</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">w</span><span class="p">,</span><span class="n">h</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">freqz</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">],</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Compute impulse response</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">h</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$20 \log_</span><span class="si">{10}</span><span class="s2"> |H(\omega)| $&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\omega$ (radians/s)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\phi $ (deg)&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/64b6c14bfccc8bfbaab9780b025625aca966c669414e6c27468f77aee83ea928.png" src="../_images/64b6c14bfccc8bfbaab9780b025625aca966c669414e6c27468f77aee83ea928.png" />
+</div>
+</div>
+<p>In the figure above, the top plot shows the amplitude response of the filter (in dB) and the bottom plot shows  the phase response in degrees. At <span class="math notranslate nohighlight">\(\omega=0 \)</span>, we have <span class="math notranslate nohighlight">\(|H(\omega=0)|=1 \)</span> (i.e unity-gain) which says that our moving average filter does not change the amplitude of signals at <span class="math notranslate nohighlight">\( \omega=0 \)</span>. We observed this earlier with <span class="math notranslate nohighlight">\(x_n=1 \)</span> that produced <span class="math notranslate nohighlight">\(y_n=1 \)</span>. When we consider the other extreme with <span class="math notranslate nohighlight">\(\omega= \pi \)</span>, we have <span class="math notranslate nohighlight">\(|H(\omega=\pi)|=0\)</span> which we observed earlier for <span class="math notranslate nohighlight">\( x_n= \exp \left( j\pi n \right)  \hspace{.5em} \forall \hspace{.5em} n \ge 0 \)</span>. Thus, signals at <span class="math notranslate nohighlight">\( \omega=\pi \)</span> are completely zero-ed out by the filter.</p>
+<p>Now, let’s consider a signal halfway between this two extremes:</p>
+<div class="math notranslate nohighlight">
+\[ x_n= \exp \left( j\pi n/2 \right)  \hspace{.5em} \forall \hspace{.5em} n \ge 0 \]</div>
+<p>The following figure shows the filter’s corresponding output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Ns</span> <span class="o">=</span> <span class="mi">30</span> <span class="c1"># length of input sequence</span>
+<span class="n">n</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span> <span class="c1"># sample index</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+<span class="n">y</span><span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">([</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mf">2.</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">markerfmt</span><span class="o">=</span><span class="s1">&#39;ro&#39;</span><span class="p">,</span> <span class="n">linefmt</span><span class="o">=</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span><span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;r:&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="o">=-</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mf">1.1</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;amplitude&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">);</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1c8eddfa8f672505f3f7beb0deb333a3c2bcaadb80b5766ae09cb43e159b5973.png" src="../_images/1c8eddfa8f672505f3f7beb0deb333a3c2bcaadb80b5766ae09cb43e159b5973.png" />
+</div>
+</div>
+<p>The figure above shows the input/output time-domain response of the filter when  <span class="math notranslate nohighlight">\(\omega=\pi/2 \)</span>. At this point, <span class="math notranslate nohighlight">\( |H(\omega)|^2 = 1/2 \)</span> meaning the signal energy has been cut in half which is shown by the corresponding lower amplitude of the output signal. The signal phase has been shifted by 45 degrees. To see this, note that the input signal repeats every four samples (360 degrees). The graph above shows that the signal phase has shifted -45 degrees which is equivalent to a shift of one-half sample. Note that <code class="docutils literal notranslate"><span class="pre">signal.lfilter</span></code> automatically inserts a zero initial condition so we had to drop that one incomplete output point to line up the plots.  By interpreting the magnitude/phase plots above, we can reconcile the filter’s input/output behavior in the time domain.</p>
+<p>What happens when we lengthen our moving average filter to consider averaging over eight samples instead of two?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">gridspec</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="n">gs</span> <span class="o">=</span> <span class="n">gridspec</span><span class="o">.</span><span class="n">GridSpec</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">gs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="n">ma_length</span> <span class="o">=</span> <span class="mi">8</span> <span class="c1"># moving average filter length</span>
+<span class="n">w</span><span class="p">,</span><span class="n">h</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">ma_length</span><span class="p">)</span><span class="o">/</span><span class="n">ma_length</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">h</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$ 20 \log_</span><span class="si">{10}</span><span class="s2">|H(\omega)| $&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\omega$&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">25</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\omega$ (radians/s)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\phi $ (deg)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">180</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mi">180</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="n">linestyles</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]))</span>
+<span class="n">Ns</span> <span class="o">=</span><span class="mi">30</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">Ns</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">3.</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">ma_length</span><span class="p">)</span><span class="o">/</span><span class="n">ma_length</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">,</span><span class="n">basefmt</span><span class="o">=</span><span class="s1">&#39;b-&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">stem</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">ma_length</span><span class="o">-</span><span class="mi">1</span><span class="p">:],</span><span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="n">ma_length</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="n">markerfmt</span><span class="o">=</span><span class="s1">&#39;ro&#39;</span><span class="p">,</span><span class="n">linefmt</span><span class="o">=</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="n">ma_length</span><span class="o">-</span><span class="mi">1</span><span class="p">:],</span><span class="n">y</span><span class="p">[:</span><span class="o">-</span><span class="n">ma_length</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="s1">&#39;r:&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="o">=-</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mf">1.1</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;n&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;amplitude&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">);</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;ipython-input-3-39df855535ab&gt;:13: RuntimeWarning: divide by zero encountered in log10
+  ax.plot(w,20*np.log10(abs(h)))
+</pre></div>
+</div>
+<img alt="../_images/b6999c459b662edba6d5cbdf23d806fb6ddc39228c6fa94d3c5b97b6d7185221.png" src="../_images/b6999c459b662edba6d5cbdf23d806fb6ddc39228c6fa94d3c5b97b6d7185221.png" />
+</div>
+</div>
+<p>The figure above shows the magnitude and phase responses of the longer moving average filter. The zig-zag lines of the phase plot are due to the wrap-around of the phase as it wraps around   180 degree mark. The bottom plot shows the input/output sequences. Note that the output is delayed by the length of the input filter. Because the frequency of the input signal is <span class="math notranslate nohighlight">\( 2\pi/6 \)</span>, its period is <span class="math notranslate nohighlight">\(T=6\)</span> samples the input signal repeats every six samples. According to the phase plot above, the phase at this discrete frequency is approximately 30 degrees plus the 180 degree jump, the output sequence is shifted over by half a sample (<span class="math notranslate nohighlight">\( 30/360 = 0.5/6 \)</span>) plus the 3 samples (half the six sample period, <span class="math notranslate nohighlight">\( 180/360=1/2 \)</span>). Note that the magnitude plot shows multiple lobes and dips at discrete frequencies where the output is zero-ed out by the filter. Thus, even though we just lengthened our moving average filter by a few samples, we have encountered much more complicated amplitude and phase behavior. We need to assemble the right tools to understand this problem in general.</p>
+</section>
+</section>
+<section id="fourier-transform-of-the-discrete-sequence">
+<h2>Fourier Transform of the Discrete Sequence<a class="headerlink" href="#fourier-transform-of-the-discrete-sequence" title="Link to this heading">#</a></h2>
+<p>So far in these pages, we have considered samples of the Fourier transform      at discrete frequences (<span class="math notranslate nohighlight">\( \omega = \frac{2\pi}{N} k \)</span>). Now we want to consider the Fourier Transform of the discrete input at <em>continuous</em> frequency defined as the following:</p>
+<div class="math notranslate nohighlight">
+\[ H(\omega) = \sum_{n\in \mathbb{Z}} h_n \exp \left( -j\omega n \right) \]</div>
+<p>Note that this is periodic, <span class="math notranslate nohighlight">\(H(\omega)=H(\omega+2\pi)\)</span>.</p>
+<section id="filter-output-as-discrete-convolution">
+<h3>Filter output as discrete convolution<a class="headerlink" href="#filter-output-as-discrete-convolution" title="Link to this heading">#</a></h3>
+<p>The discrete convolution of infinite sequences <span class="math notranslate nohighlight">\( x_n \)</span> and <span class="math notranslate nohighlight">\( h_n \)</span> is defined as</p>
+<div class="math notranslate nohighlight">
+\[ y_n = \sum_{k\in \mathbb{Z}} x_k^* h_{n-k} \]</div>
+<p>where the asterisk superscript denotes  complex conjugation.  If we have a finite filter length of <span class="math notranslate nohighlight">\( M \)</span> (<span class="math notranslate nohighlight">\( h_n =0, \forall n \notin \{0,1,...,M-1\} \)</span>), then the filter output reduces to</p>
+<div class="math notranslate nohighlight">
+\[ y_n = \sum_{k=0}^{M-1} h_k x_{n-k} \]</div>
+<p>Note this is closely related to but not the  same as the circular convolution we have already discussed because there is no wrap-around. However, because it is very efficient to compute this using a DFT, we need to relate these two versions of convolution.</p>
+</section>
+<section id="convolution-using-the-dft">
+<h3>Convolution using the DFT<a class="headerlink" href="#convolution-using-the-dft" title="Link to this heading">#</a></h3>
+<p>If <span class="math notranslate nohighlight">\(x_n\)</span> is nonzero for <span class="math notranslate nohighlight">\( P \)</span> samples, then the output <span class="math notranslate nohighlight">\( y_n \)</span> is non-zero only for <span class="math notranslate nohighlight">\( P+M-1 \)</span> samples. Thus, if we zero-pad each sequence out to this length, take the DFT, multiply the DFTs, and then invert the DFTs, we obtain the results of this non-circular convolution. Let’s code this up below using our last example.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">ma_length</span><span class="p">)</span><span class="o">/</span><span class="n">ma_length</span> <span class="c1"># filter sequence</span>
+<span class="n">yc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)))</span><span class="o">.</span><span class="n">real</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">yc</span><span class="p">[</span><span class="n">ma_length</span><span class="o">-</span><span class="mi">1</span><span class="p">:],</span><span class="s1">&#39;o-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;DFT method&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;lfilter&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;DFT method vs. signal.lfilter&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;amplitude&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/874f54ce2fe36aef8932978d90fbc512c97df1552e73e1b1073a744e9bd1e9e3.png" src="../_images/874f54ce2fe36aef8932978d90fbc512c97df1552e73e1b1073a744e9bd1e9e3.png" />
+</div>
+</div>
+<p>The figure above compares the filter output sequence computed using the DFT and <code class="docutils literal notranslate"><span class="pre">signal.lfilter</span></code>. The only difference is the transient startup section <span class="math notranslate nohighlight">\( M-1 \)</span> where the taps of the filter have not filled out. This technique is fine for processing blocks of convenient size and there are many other methods (e.g. overlap-add) to compute this using different blocks that patch together the output while dealing with these transient effects.</p>
+</section>
+</section>
+<section id="filter-transfer-functions">
+<h2>Filter Transfer Functions<a class="headerlink" href="#filter-transfer-functions" title="Link to this heading">#</a></h2>
+<p>By keeping track of summation indicies, but it is not hard to show that</p>
+<div class="math notranslate nohighlight">
+\[ Y(\omega) = H(\omega) X(\omega) \]</div>
+<p>where <span class="math notranslate nohighlight">\(H(\omega)\)</span> is called the <em>transfer function</em> or the <em>frequency response</em> of the filter <span class="math notranslate nohighlight">\( h_n \)</span>. This product of transforms is much easier to work with than convolution and allows us to understand filter performance through the properties of <span class="math notranslate nohighlight">\( H(\omega) \)</span>.</p>
+<p>In our last example, by simply increasing the length of the moving average filter, we obtained many more zeros in <span class="math notranslate nohighlight">\( H(\omega) \)</span>. Because our filters produce real outputs <span class="math notranslate nohighlight">\( y_n \)</span> given real inputs, <span class="math notranslate nohighlight">\( x_n \)</span>, the zeros of the <span class="math notranslate nohighlight">\( H(\omega) \)</span> must be in complex conjugate pairs. To analyze this, we need to generalize the   Fourier Transfrom to the <em>z-transform</em>.</p>
+<section id="z-transform">
+<h3>Z-Transform<a class="headerlink" href="#z-transform" title="Link to this heading">#</a></h3>
+<p>The filter’s z-transform is defined as the following:</p>
+<div class="math notranslate nohighlight">
+\[ H(z) = \sum_n h_n z^{-n} \]</div>
+<p>The Fourier transform is a special case of the z-transform evaluated on the unit circle (<span class="math notranslate nohighlight">\( z=\exp(j\omega) \)</span>), but <span class="math notranslate nohighlight">\(z\)</span> more generally spans the entire complex plane. Thus, to understand how our moving average filter removes frequencies, we need to compute the complex roots of the z-transform of <span class="math notranslate nohighlight">\( h_n \)</span> as</p>
+<div class="math notranslate nohighlight">
+\[ H(z) = \sum_n h_n z^{-n} \]</div>
+<p>This notation emphasizes the transfer function as a polynomial of the complex variable <span class="math notranslate nohighlight">\(z\)</span>. Thus, for our eight-tap moving average filter, we have</p>
+<div class="math notranslate nohighlight">
+\[ H(z) = \sum_{n=0}^{M-1} h_n z^{-n} = \frac{1}{8} \sum_{n=0}^7 z^{-n} =\frac{1}{8}  (1+z)(1+z^2)(1+z^4)/z^7 \]</div>
+<p>Thus, the first zero occurs when <span class="math notranslate nohighlight">\(z=-1\)</span> or when <span class="math notranslate nohighlight">\( \exp(j\omega) = -1 \Rightarrow \omega=\pi\)</span>. The next pair of zeros occurs when <span class="math notranslate nohighlight">\(z= \pm j\)</span> which corresponds to <span class="math notranslate nohighlight">\( \omega = \pm \pi/2 \)</span>. Finally, the last four zeros are for <span class="math notranslate nohighlight">\(\omega=\pm \pi/4\)</span> and <span class="math notranslate nohighlight">\(\omega=\pm 3\pi/4 \)</span>.  Notice that any filter with this  <span class="math notranslate nohighlight">\( z+1 \)</span> term will  eliminate the <span class="math notranslate nohighlight">\( \omega=\pi \)</span> (highest) frequency. Likewise, the term <span class="math notranslate nohighlight">\( z-1 \)</span> means that the filter zeros out <span class="math notranslate nohighlight">\( \omega=0 \)</span>. In general, the roots of the z-transform <em>do not</em> lie on the unit circle. One way to understand FIR filter design is as the judicious placement of these zeros in the complex plane so the shape of the resulting transfer function <span class="math notranslate nohighlight">\( H(z) \)</span> evaluated on the unit circle satisfies our design specifications.</p>
+<p>We need a special case of the Fourier transform as a tool for our analysis.</p>
+</section>
+</section>
+<section id="symmetry">
+<h2>Symmetry<a class="headerlink" href="#symmetry" title="Link to this heading">#</a></h2>
+<p>There is a special case when the input sequence is symmetric,</p>
+<div class="math notranslate nohighlight">
+\[ x_n = x_{-n} \]</div>
+<p>which leads to a real-valued (i.e. zero-phase) Fourier transform property,</p>
+<div class="math notranslate nohighlight">
+\[ H(\omega)= x_0+\sum_{n \gt 0} 2 x_n \cos\left(\omega n \right) \]</div>
+<p>When the input is anti-symmetric,</p>
+<div class="math notranslate nohighlight">
+\[ x_n = -x_{-n} \]</div>
+<div class="math notranslate nohighlight">
+\[ H(\omega)= j\sum_{n \gt 0} 2 x_n \sin\left(\omega n \right) \]</div>
+<p>The Fourier transform is purely imaginary (phase = <span class="math notranslate nohighlight">\( \pi/2 \)</span>). Note that <span class="math notranslate nohighlight">\( x_n = -x_{-n} \)</span> for <span class="math notranslate nohighlight">\( n=0 \)</span> means that <span class="math notranslate nohighlight">\( x_0=0 \)</span> for this case.</p>
+</section>
+<section id="causality">
+<h2>Causality<a class="headerlink" href="#causality" title="Link to this heading">#</a></h2>
+<p>By changing the indexing in our first moving average filter example from  <span class="math notranslate nohighlight">\( h_0 = h_1 = 1/2\)</span> to <span class="math notranslate nohighlight">\( h_{-1} = h_1 =1/2\)</span>, then we have symmetry around zero with the  resulting Fourier  transform,</p>
+<div class="math notranslate nohighlight">
+\[ H(\omega) = \frac{1}{2} \exp \left( j\omega \right) +  \frac{1}{2} \exp\left( -j\omega \right) = \cos(\omega) \]</div>
+<p>which is a <em>real</em> function of frequency (with zero-phase). While this is  nice theoretically, it is not possible practically because it requires future-knowledge of input sequence as shown below</p>
+<div class="math notranslate nohighlight">
+\[ y_n = \sum_{k=0}^{M-1} h_n x_{n-k} = y_n = h_{-1} x_{n+1}+h_{1} x_{n-1} = \left( x_{n+1}+x_{n-1} \right)/2  \]</div>
+<p>which shows that <span class="math notranslate nohighlight">\( y_n \)</span> depends on th future value of <span class="math notranslate nohighlight">\( x_{n+1} \)</span>. This is what non-causal means and we must omit this kind of symmetry about zero from our class of admissible filter coefficents. However, we can scoot the  symmetric point to the center of the sequence at the cost of introducing a linear phase factor, <span class="math notranslate nohighlight">\( \exp\left(-j\omega (M-1)/2 \right) \)</span>. Filters with linear phase do not distort the input phase across frequency. This means that all frequency components of the signal emerge at the other end of the filter in the same order they entered it. This is the concept of <em>group delay</em>. Otherwise, it would be very hard to retrieve any information embedded in the signal’s phase in later  processing. Thus, we can build  linear phase causal filters with symmetric coefficients,</p>
+<div class="math notranslate nohighlight">
+\[ h_n = h_{M-1-n} \]</div>
+<p>or anti-symmetric coefficients,</p>
+<div class="math notranslate nohighlight">
+\[ h_n = -h_{M-1-n} \]</div>
+<p>by putting the point of symmetry at <span class="math notranslate nohighlight">\( (M-1)/2 \)</span>. Note that this symmetry means that efficient hardware implementations can re-use stored filter coefficients.</p>
+</section>
+<section id="symmetry-and-anti-symmetry">
+<h2>Symmetry and Anti-symmetry<a class="headerlink" href="#symmetry-and-anti-symmetry" title="Link to this heading">#</a></h2>
+<p>Now we know how to build linear phase filters with symmetric or anti-symmetric coefficients and enforce causality by centering the point of symmetry, we can collect these facts and examine the resulting consequences. Given</p>
+<div class="math notranslate nohighlight">
+\[ h_n = \pm h_{M-1-n} \]</div>
+<p>with <span class="math notranslate nohighlight">\( h_n =0 \hspace{0.5em} \forall n \ge M \wedge \forall n \lt 0 \)</span></p>
+<p>For even <span class="math notranslate nohighlight">\( M \)</span>, the z-transform then becomes,</p>
+<div class="math notranslate nohighlight">
+\[ H(z) = \sum_{n=0}^{M-1} z^{-n} h_n = h_0 + h_1 z^{-1} +\ldots + h_{M-1}z^{-M+1}= z^{-(M-1)/2} \sum_{n=0}^{M/2-1} h_n \left( z^{(M-1-2 n)/2} \pm z^{-(M-1-2 n)/2}\right) \]</div>
+<p>Likewise, for odd <span class="math notranslate nohighlight">\( M \)</span>,</p>
+<div class="math notranslate nohighlight">
+\[ H(z) =  z^{-(M-1)/2} \left\lbrace h_{(M-1)/2}+ \sum_{n=0}^{(M-3)/2} h_n \left( z^{(M-1-2 n)/2} \pm z^{-(M-1-2 n)/2}\right) \right\rbrace\]</div>
+<p>By substituting <span class="math notranslate nohighlight">\( 1/z \)</span> and multiplying both sides by <span class="math notranslate nohighlight">\( z^{-(M-1)} \)</span>, we obtain</p>
+<div class="math notranslate nohighlight">
+\[ z^{-(M-1)}H(z^{-1}) = \pm H(z) \]</div>
+<p>This equation shows that if <span class="math notranslate nohighlight">\(z\)</span> is a root, then so is <span class="math notranslate nohighlight">\(1/z\)</span>, and since we want a real-valued impulse response, complex roots must appear in conjugate pairs. Thus if <span class="math notranslate nohighlight">\(z_1\)</span> is complex valued, then <span class="math notranslate nohighlight">\( z_1^* \)</span> is also a root and so is <span class="math notranslate nohighlight">\(1/z_1\)</span> and <span class="math notranslate nohighlight">\( 1/z_1^* \)</span>. Thus, one complex root  generates <em>four</em> roots.  This means that having <span class="math notranslate nohighlight">\( M \)</span> taps on the filter does not imply <span class="math notranslate nohighlight">\(M\)</span> independent choices of the filter’s roots or of the filter’s coefficents. The symmetry conditions reduce the number of degrees of freedom available in the design.</p>
+<section id="extracting-the-real-part-of-the-filter-transfer-function">
+<h3>Extracting the Real Part of the Filter Transfer Function<a class="headerlink" href="#extracting-the-real-part-of-the-filter-transfer-function" title="Link to this heading">#</a></h3>
+<p>We can evaluate these results  on the unit circle when <span class="math notranslate nohighlight">\( h_n = +h_{M-n-1}\)</span>to obtain the following,</p>
+<div class="math notranslate nohighlight">
+\[ H(\omega) = H_{re}(\omega)\exp \left( -j\omega(M-1)/2 \right) \]</div>
+<p>where <span class="math notranslate nohighlight">\( H_{re}(\omega)\)</span> is a real-valued function that can be written as</p>
+<div class="math notranslate nohighlight">
+\[ H_{re}(\omega) = 2 \sum_{n=0}^{(M/2)-1} h_n \cos \left( \omega \frac{M-1-2 n}{2}  \right) \]</div>
+<p>for even <span class="math notranslate nohighlight">\( M \)</span> and as</p>
+<div class="math notranslate nohighlight">
+\[ H_{re}(\omega) = h_{(M-1)/2}+ 2\sum_{n=0}^{(M-3)/2} h_n  \cos \left( \omega \frac{M-1-2 n}{2}  \right) \]</div>
+<p>for odd <span class="math notranslate nohighlight">\( M \)</span>. Similar results follow when <span class="math notranslate nohighlight">\( h_n = -h_{M-1-n} \)</span>. For <span class="math notranslate nohighlight">\( M \)</span> even, we have</p>
+<div class="math notranslate nohighlight">
+\[ H_{re}(\omega) = 2 \sum_{n=0}^{M/2-1} h_n \sin \left( \omega \frac{M-1-2 n}{2} \right) \]</div>
+<p>and for odd <span class="math notranslate nohighlight">\(M\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[ H_{re}(\omega) = 2 \sum_{n=0}^{(M-3)/2} h_n \sin \left( \omega \frac{M-1-2 n}{2} \right) \]</div>
+<p>By narrowing our focus to <span class="math notranslate nohighlight">\( H_{re}(\omega)\)</span> and separating out the linear-phase part, we can formulate design techniques that focus solely on this real-valued function, as we will see later with Parks-McClellen FIR design.</p>
+<p>The table below shows the number of <em>independent</em> filter coefficients that must be specified for a FIR filter in each case.</p>
+<table border="1">
+    <tr>
+    <th>  </th>
+    <th> even M</th>
+    <th> odd M </th>
+    </tr>
+    <tr>
+        <td>symmetric</td><td>M/2</td><td style="text-align:center">(M+1)/2</td>
+    </tr>
+    <tr>
+        <td>anti-symmetric</td><td>M/2</td><td style="text-align:center"> (M-1)/2</td>
+    </tr>
+</table> 
+<p>The design problem is finding the coefficents that satisfy a  filter’s specifications. Picking any of the cases shown in the table depends on the application. For example, for odd <span class="math notranslate nohighlight">\( M \)</span> and the anti-symmetric case, <span class="math notranslate nohighlight">\( H_{re}(\omega=0)= H_{re}(\omega=\pi)= 0 \)</span> so this would be a bad choice for high or low pass filters.</p>
+<p>Because many books refer to the items in this table as type-I through type-IV filters, I’m including this terminology in the table below.</p>
+<table border="1">
+    <tr>
+    <th>  </th>
+    <th> even M</th>
+    <th> odd M </th>
+    </tr>
+    <tr>
+        <td>symmetric</td><td>type-I</td><td style="text-align:center">type-II</td>
+    </tr>
+    <tr>
+        <td>anti-symmetric</td><td>type-III</td><td style="text-align:center"> type-VI</td>
+    </tr>
+</table> </section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<p>We can use these results to reconsider our earlier result for the two-tap moving average filter for which <span class="math notranslate nohighlight">\( M=2 \)</span> and <span class="math notranslate nohighlight">\( h_0 = 1/2 \)</span>. Then,</p>
+<div class="math notranslate nohighlight">
+\[ H_{re}(\omega) =  \cos \left( \omega/2 \right) \]</div>
+<p>with phase,</p>
+<div class="math notranslate nohighlight">
+\[ \exp \left( -j\omega(M-1)/2 \right) = \exp \left( -j\omega/2 \right)\]</div>
+<p>which equals <span class="math notranslate nohighlight">\( \exp (-j\pi/4) \)</span> when <span class="math notranslate nohighlight">\( \omega = \pi/2 \)</span> as we observed numerically earlier.</p>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>In this section, we began our work with FIR filters by considering the concepts of linear phase, symmetry, and causality. By defining FIR filter coefficients symmetrically, we were able to enforce both causality and linear phase. We introduced the continuous-frequency version of the Fourier Transform and its relationship to the Discrete Fourier Transfrom (DFT). We demonstrated how the circular convolution of the DFT can be used to compute the continuous-frequency Fourier Transform version of the convolution. Then, we  introduced the z-transform as a more general tool than the Fourier transform for understanding the role of zeros in filter design. All this led us to conditions on the filter coeffients that satisfy our practical requirements of linear phase (no phase-distortions across frequency) and causality (no future knowledge of inputs). Finally, we considered the mathematical properties of FIR filters that apply to <em>any</em> design.</p>
+<p>Sadly, all this work is exactly backwards because all our examples so far started with a set of filter coefficients (<span class="math notranslate nohighlight">\( h_n \)</span>) and then drew conclusions, numerically and analytically, about their consequences. In a real, situation, we start with a desired filter specification, and <em>then</em> (by various means) come up with the corresponding filter coefficients. Our next section explores this topic.</p>
+<p>As usual, the corresponding IPython notebook for this post  is available for download <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Filtering.ipynb">here</a>.</p>
+<p>Comments and corrections welcome!</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Proakis, John G. ,<em>Digital signal processing: principles algorithms and applications</em>. Pearson Education India, 2001.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Windowing_Part3.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Filtering_Part2.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Filtering: Part 2</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#finite-impulse-response-filters-as-moving-averages">Finite Impulse Response Filters as Moving Averages</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fourier-transform-of-the-discrete-sequence">Fourier Transform of the Discrete Sequence</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filter-output-as-discrete-convolution">Filter output as discrete convolution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convolution-using-the-dft">Convolution using the DFT</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filter-transfer-functions">Filter Transfer Functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#z-transform">Z-Transform</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetry">Symmetry</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causality">Causality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#symmetry-and-anti-symmetry">Symmetry and Anti-symmetry</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extracting-the-real-part-of-the-filter-transfer-function">Extracting the Real Part of the Filter Transfer Function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

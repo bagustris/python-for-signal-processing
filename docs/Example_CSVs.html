@@ -1,0 +1,902 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Examples using CSV files &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Example_CSVs';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Compressive sampling Overview" href="Compressive_Sampling.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="Sampling_Theorem_Part_1.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="Sampling_Theorem_Part_1.html">
+                    Sampling Theorem - Part 1:
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Introduction</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Introduction</a></li>
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Examples using CSV files</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2FExample_CSVs.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Example_CSVs.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Examples using CSV files</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Examples using CSV files</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-fields-as-columns">Adding new fields as columns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-updated-csv-file">Writing updated CSV file</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-numpy-to-parse-csv-files">Using Numpy to parse CSV files</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-pandas-to-parse-csv-files">Using pandas to parse CSV files</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inject-into-a-sqlite-database">Inject into a sqlite database</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="examples-using-csv-files">
+<h1>Examples using CSV files<a class="headerlink" href="#examples-using-csv-files" title="Link to this heading">#</a></h1>
+<p>Parsing comma-separtated-values (CSV) files is a common task. There are many tools available in Python to deal with this. Let’s start by using the built-in <code class="docutils literal notranslate"><span class="pre">csv</span></code> module.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import csv # using Python module
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we want to open an example file, and read the contents:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f = open(&#39;example_1.csv&#39;,&#39;rb&#39;) # use binary mode if on MS windows
+d = [i for i in csv.reader(f) ] # use list comprehension to read from file
+f.close() # close file
+print d
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[&#39;Name&#39;, &#39;DOB&#39;, &#39;Years&#39;, &#39;Degree&#39;], [&#39;Alice Jones&#39;, &#39;12/1/1980&#39;, &#39;3&#39;, &#39;MS&#39;], [&#39;Bob Smith&#39;, &#39;1/1/1969&#39;, &#39;4&#39;, &#39;BS&#39;], [&#39;John Book&#39;, &#39;5/3/1980&#39;, &#39;11&#39;, &#39;BA&#39;], [&#39;Billy Blanks&#39;, &#39;6/9/2000&#39;, &#39;8&#39;, &#39;AA&#39;]]
+</pre></div>
+</div>
+</div>
+</div>
+<section id="adding-new-fields-as-columns">
+<h2>Adding new fields as columns<a class="headerlink" href="#adding-new-fields-as-columns" title="Link to this heading">#</a></h2>
+<p>This reads the rows of the CSV file into a list-of-lists.</p>
+<p>Now, let’s suppose we want to create columns for <code class="docutils literal notranslate"><span class="pre">last</span> <span class="pre">name</span></code>  and <code class="docutils literal notranslate"><span class="pre">first</span> <span class="pre">name</span></code> instead of having just one <code class="docutils literal notranslate"><span class="pre">name</span></code> field. The first element in the list <code class="docutils literal notranslate"><span class="pre">d</span></code> is the header, so we had the additional fields there:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>d[0].append(&#39;Last Name&#39;)
+d[0].append(&#39;First Name&#39;)
+print d[0]
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Name&#39;, &#39;DOB&#39;, &#39;Years&#39;, &#39;Degree&#39;, &#39;Last Name&#39;, &#39;First Name&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we want to split the original <code class="docutils literal notranslate"><span class="pre">Name</span></code> field into first and last names and put these at the ends of their respective rows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>for row in d[1:]: # start at 1st, not 0th column. Each row is a list
+    first,last= row[0].split() # split on white-space
+    row.append(last) # append to each row
+    row.append(first)
+    
+print d
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[&#39;Name&#39;, &#39;DOB&#39;, &#39;Years&#39;, &#39;Degree&#39;, &#39;Last Name&#39;, &#39;First Name&#39;], [&#39;Alice Jones&#39;, &#39;12/1/1980&#39;, &#39;3&#39;, &#39;MS&#39;, &#39;Jones&#39;, &#39;Alice&#39;], [&#39;Bob Smith&#39;, &#39;1/1/1969&#39;, &#39;4&#39;, &#39;BS&#39;, &#39;Smith&#39;, &#39;Bob&#39;], [&#39;John Book&#39;, &#39;5/3/1980&#39;, &#39;11&#39;, &#39;BA&#39;, &#39;Book&#39;, &#39;John&#39;], [&#39;Billy Blanks&#39;, &#39;6/9/2000&#39;, &#39;8&#39;, &#39;AA&#39;, &#39;Blanks&#39;, &#39;Billy&#39;]]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#%qtconsole
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="writing-updated-csv-file">
+<h2>Writing updated CSV file<a class="headerlink" href="#writing-updated-csv-file" title="Link to this heading">#</a></h2>
+<p>Now, we want to write out our new data in CSV format</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>f = open(&#39;example_1_out.csv&#39;,&#39;wb&#39;) # write mode binary
+fw = csv.writer(f) # create csv writer
+fw.writerows(d) 
+f.close() # close file 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, opening the file <code class="docutils literal notranslate"><span class="pre">example_1_out.csv</span></code> using excel (or another reader) should show the new column. That covers the most direct and pure-Python way to dealing with CSV files. However, there are many other tools available. For example, <code class="docutils literal notranslate"><span class="pre">numpy</span></code> provides power methods to access these files.</p>
+</section>
+</section>
+<section id="using-numpy-to-parse-csv-files">
+<h1>Using Numpy to parse CSV files<a class="headerlink" href="#using-numpy-to-parse-csv-files" title="Link to this heading">#</a></h1>
+<p>Let’s see how to accomplish the same work as above by using Numpy.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import numpy as np 
+
+d = np.loadtxt(&#39;example_1.csv&#39;,delimiter=&#39;,&#39;,dtype=str)
+
+print d
+print d.dtype
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[&#39;Name&#39; &#39;DOB&#39; &#39;Years&#39; &#39;Degree&#39;]
+ [&#39;Alice Jones&#39; &#39;12/1/1980&#39; &#39;3&#39; &#39;MS&#39;]
+ [&#39;Bob Smith&#39; &#39;1/1/1969&#39; &#39;4&#39; &#39;BS&#39;]
+ [&#39;John Book&#39; &#39;5/3/1980&#39; &#39;11&#39; &#39;BA&#39;]
+ [&#39;Billy Blanks&#39; &#39;6/9/2000&#39; &#39;8&#39; &#39;AA&#39;]]
+|S12
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that we did not have to use <code class="docutils literal notranslate"><span class="pre">open</span></code> to get at the contents of the file. By default, the <code class="docutils literal notranslate"><span class="pre">delimiter</span></code> is any whitespace, so we had to change this to the comma character. The <code class="docutils literal notranslate"><span class="pre">dtype</span></code> specifies we want everything to be read in as a string. Numpy can figure out how long that string needs to be as it goes through the file so we don’t have to specify that ahead of time (we probably don’t know it anyway). In this case, the <code class="docutils literal notranslate"><span class="pre">dtype</span></code> turns out to be a twelve character string <code class="docutils literal notranslate"><span class="pre">S12</span></code>. Note that this is the maximum length is used for <em>all</em> strings so there is obviously a lot of extra space if most of the strings are short and just a few are long.</p>
+<p>Numpy provides many more ways of reading data via the <code class="docutils literal notranslate"><span class="pre">dtype</span></code>. For example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>dt = [(&#39;name&#39;,   &#39;S64&#39;),   # The first element of the tuple is our name for each respective column
+      (&#39;dob&#39;,    &#39;S64&#39;),   # and the second element is the numpy dtype we want for that column.
+      (&#39;years&#39;,  &#39;int&#39;),   # Here we want years as an integer, not a string
+      (&#39;degree&#39;, &#39;S64&#39;), ]
+
+d = np.loadtxt(&#39;example_1.csv&#39;,delimiter=&#39;,&#39;,dtype=dt,skiprows=1) # skip the header row
+print d
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;Alice Jones&#39;, &#39;12/1/1980&#39;, 3, &#39;MS&#39;) (&#39;Bob Smith&#39;, &#39;1/1/1969&#39;, 4, &#39;BS&#39;)
+ (&#39;John Book&#39;, &#39;5/3/1980&#39;, 11, &#39;BA&#39;) (&#39;Billy Blanks&#39;, &#39;6/9/2000&#39;, 8, &#39;AA&#39;)]
+</pre></div>
+</div>
+</div>
+</div>
+<p>The advantage of doing it this way is that now we can compute the <code class="docutils literal notranslate"><span class="pre">years</span></code> column using <code class="docutils literal notranslate"><span class="pre">numpy</span></code> tools. For example, here is the mean of the years.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>print d[&#39;years&#39;].mean() # using numpy arrays
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.5
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now to get back to the main task at hand: splitting the name field into first and last name.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import string
+
+n=map(string.split,d[&#39;name&#39;])
+w=array([tuple(i)+tuple(j) for i,j in zip(d,n)],    # list comprehension glues tuple-ized rows together
+         dtype=dt+[(&#39;first&#39;,&#39;S64&#39;),(&#39;last&#39;,&#39;S64&#39;)]) # append new dtypes to existing list of dtypes
+</pre></div>
+</div>
+</div>
+</div>
+<p>That was kind of non-simple, but now we can write this to a CSV using <code class="docutils literal notranslate"><span class="pre">savetxt</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># the comments are set to &#39;&#39; to avoid hash marks on the first line.
+np.savetxt(&#39;np_output.csv&#39;,w,delimiter=&#39;,&#39;,fmt=&#39;%s&#39;,header=&#39;name,dob,years,degree,first,last&#39;,comments=&#39;&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, you can inspect the so-generated file and verify it is a CSV.</p>
+</section>
+<section id="using-pandas-to-parse-csv-files">
+<h1>Using pandas to parse CSV files<a class="headerlink" href="#using-pandas-to-parse-csv-files" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">pandas</span></code> is the real power tool for this job.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import pandas as pd
+
+d = pd.read_csv(&#39;example_1.csv&#39;)
+print d
+print type(d)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           Name        DOB  Years Degree
+0   Alice Jones  12/1/1980      3     MS
+1     Bob Smith   1/1/1969      4     BS
+2     John Book   5/3/1980     11     BA
+3  Billy Blanks   6/9/2000      8     AA
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we have read the CSV file as a <code class="docutils literal notranslate"><span class="pre">pandas</span></code> DataFrame which is a super-structure that sits on top of <code class="docutils literal notranslate"><span class="pre">numpy</span></code>. Let’s examine the columns of this DataFrame.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>print d.columns
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([Name, DOB, Years, Degree], dtype=object)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that there is an extra space after the <code class="docutils literal notranslate"><span class="pre">Name</span> </code>. This potentially makes it hard to access the columns using pandas slicing. For example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>print d.DOB # this works great when the column header name has no spaces in it.
+print d[&#39;Name&#39;] # you can also refer to columns using this syntax
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0    12/1/1980
+1     1/1/1969
+2     5/3/1980
+3     6/9/2000
+Name: DOB, dtype: object
+0     Alice Jones
+1       Bob Smith
+2       John Book
+3    Billy Blanks
+Name: Name, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<p>Luckily, this is not hard to fix. We just need to create another column that is free of these trailing spaces:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>d[&#39;name&#39;]=d[&#39;Name &#39;] # easily create extra column
+print d.name         # now you can access this column using this syntax
+</pre></div>
+</div>
+</div>
+</div>
+<p>Pandas is a lot more powerful than this! We can parse the columns by types individually by providing a <code class="docutils literal notranslate"><span class="pre">dtype</span></code> for each column as a dictionary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>d = pd.read_csv(&#39;example_1.csv&#39;,dtype={&#39;Name &#39;:&#39;S64&#39;,&#39;DOB&#39;:&#39;S64&#39;,&#39;Years&#39;:int,&#39;Degree&#39;:&#39;S64&#39;})
+print d
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can compute along the columns as we did before with <code class="docutils literal notranslate"><span class="pre">numpy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>print d.Years.mean()
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can also parse the <code class="docutils literal notranslate"><span class="pre">DOB</span></code> field to get a true timestamp instead of a string using the <code class="docutils literal notranslate"><span class="pre">parse_dates</span></code> keyword.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>d = pd.read_csv(&#39;example_1.csv&#39;,dtype={&#39;Name&#39;:&#39;S64&#39;,
+                                       &#39;DOB&#39;:&#39;S64&#39;,
+                                       &#39;Years&#39;:int,
+                                       &#39;Degree&#39;:&#39;S64&#39;},parse_dates=[1])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we can compute with these <code class="docutils literal notranslate"><span class="pre">datetime</span></code> objects as in the following.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># difference in birthdays between Alice Jones and John Book
+print d.DOB[0] -  d.DOB[2]
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>212 days, 0:00:00
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we now how many days are between the respective birthdays of Alice Jones and John Book.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>%qtconsole
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>d[&#39;first&#39;]=map(lambda x:string.split(x)[0],d[&#39;Name&#39;])
+d[&#39;last&#39;]=map(lambda x:string.split(x)[1],d[&#39;Name&#39;])
+print d
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           Name                 DOB  Years Degree  first    last
+0   Alice Jones 1980-12-01 00:00:00      3     MS  Alice   Jones
+1     Bob Smith 1969-01-01 00:00:00      4     BS    Bob   Smith
+2     John Book 1980-05-03 00:00:00     11     BA   John    Book
+3  Billy Blanks 2000-06-09 00:00:00      8     AA  Billy  Blanks
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>print d
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>           Name                 DOB  Years Degree  first    last
+0   Alice Jones 1980-12-01 00:00:00      3     MS  Alice   Jones
+1     Bob Smith 1969-01-01 00:00:00      4     BS    Bob   Smith
+2     John Book 1980-05-03 00:00:00     11     BA   John    Book
+3  Billy Blanks 2000-06-09 00:00:00      8     AA  Billy  Blanks
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inject-into-a-sqlite-database">
+<h1>Inject into a sqlite database<a class="headerlink" href="#inject-into-a-sqlite-database" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import pandas.io.sql as pd_sql
+import sqlite3 as sql # sqlite3 is built into Python
+
+con = sql.connect(&quot;example_1.db&quot;)
+pd_sql.write_frame(d,&#39;data&#39;,con) # write to DB as table named &quot;data&quot;
+con.close()
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Compressive_Sampling.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Compressive sampling Overview</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Examples using CSV files</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-fields-as-columns">Adding new fields as columns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#writing-updated-csv-file">Writing updated CSV file</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-numpy-to-parse-csv-files">Using Numpy to parse CSV files</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-pandas-to-parse-csv-files">Using pandas to parse CSV files</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#inject-into-a-sqlite-database">Inject into a sqlite database</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

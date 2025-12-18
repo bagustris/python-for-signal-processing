@@ -1,0 +1,838 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Filtering: Part 3 &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Filtering_Part3';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Compressive sampling Overview" href="Compressive_Sampling.html" />
+    <link rel="prev" title="Filtering: Part 2" href="Filtering_Part2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Frequency Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Filtering: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Filtering: Part 2</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Filtering: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_2_Sampling_Theorem.html">Chapter 2: Sampling Theorem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_3_Discrete_Fourier_transform.html">Chapter 3: Discrete Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_4_Spectral_analysis.html">Chapter 4: Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_5_Finite_impulse_response_filters.html">Chapter 5: Finite Impulse Response Filters</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Filtering_Part3.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Filtering_Part3.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Filtering: Part 3</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filter-specification">Filter Specification</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="filtering-part-3">
+<h1>Filtering: Part 3<a class="headerlink" href="#filtering-part-3" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>In this section, we consider another approach to the filter design problem as solving for an optimal Chebyshev polynomial. In broad strokes, the idea is to approximate the desired  filter response by a <em>minimax</em> polynomial, one with a minimal maximum deviation from the ideal desired response, <span class="math notranslate nohighlight">\(H_{d}(\omega) \)</span>. It turns out that solving for such polynomials employs the <em>Remez exchange algorithm</em> so the implemented function in the <code class="docutils literal notranslate"><span class="pre">signal.fir_filter_design</span></code> is called <code class="docutils literal notranslate"><span class="pre">remez</span></code>, even though the application of this algorithm to FIR filter design is just part of the  Parks-McClellan algorithm. Unfortunately, the algorithm itself is based on certain advanced theorems beyond our scope so we will just use it to get acceptable filter coefficients.</p>
+</section>
+<section id="filter-specification">
+<h2>Filter Specification<a class="headerlink" href="#filter-specification" title="Link to this heading">#</a></h2>
+<p>The Parks-McClellan algorithm generates filter coefficients by solving the <em>optimum equiripple Chebyshev approximation</em> to the ideal filter provided in the specification.  The Parks-McClellan algorithm internally uses the Remez exchange technique so the corresponding function in the <code class="docutils literal notranslate"><span class="pre">signal</span></code> module is called <code class="docutils literal notranslate"><span class="pre">signal.remez</span></code>. The function takes the <code class="docutils literal notranslate"><span class="pre">numtaps</span></code> argument which is <span class="math notranslate nohighlight">\(M\)</span> in our notation, the <code class="docutils literal notranslate"><span class="pre">bands</span></code> argument is a sequence of passband/stopband edges in normalized frequency (i.e. scaled  by <span class="math notranslate nohighlight">\(f_s/2\)</span>), the <code class="docutils literal notranslate"><span class="pre">desired</span></code> argument is a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array (or other array-like iterable ) that is half the length of the <code class="docutils literal notranslate"><span class="pre">bands</span></code> argument and contains the desired gain in each of the specified bands. The next argument is the optional <code class="docutils literal notranslate"><span class="pre">weight</span></code> which is array-like, half the length of the <code class="docutils literal notranslate"><span class="pre">bands</span></code> argument, and provides the relative weighting for the passband/stopband. The unfortunately named optional <code class="docutils literal notranslate"><span class="pre">Hz</span></code> argument (default=1) is the sampling frequency in the same units as the <code class="docutils literal notranslate"><span class="pre">bands</span></code>. The next optional argument is the type of filter response in each of the bands (i.e. bandpass, hilbert). The default is <code class="docutils literal notranslate"><span class="pre">bandpass</span></code> filter. The remaining arguments of the function call have to do with the internal operation of the iterative algorithm.</p>
+<p>Now, let’s see this approach in action.</p>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<p>Suppose we operate at a 1 kHz sample rate and we want a 20-tap lowpass filter with a passband up to 100 Hz and a stopband starting at 150 Hz.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rectangle</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span>
+
+<span class="n">fs</span> <span class="o">=</span> <span class="mf">1e3</span> <span class="c1"># sample rate in Hz</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">fpass</span> <span class="o">=</span> <span class="mi">100</span> <span class="c1"># in Hz</span>
+<span class="n">fstop</span> <span class="o">=</span> <span class="mi">150</span> <span class="c1"># in Hz</span>
+
+<span class="n">hn</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">remez</span><span class="p">(</span><span class="n">M</span><span class="p">,</span>
+                 <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">fpass</span><span class="p">,</span> <span class="n">fstop</span><span class="p">,</span> <span class="n">fs</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="c1"># scaled passband, and stop band </span>
+                 <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>  <span class="c1"># low pass filter</span>
+                 <span class="n">Hz</span> <span class="o">=</span> <span class="n">fs</span><span class="p">,</span> <span class="c1"># sampling frequency</span>
+                 <span class="p">)</span>
+
+<span class="n">w</span><span class="p">,</span><span class="n">H</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="n">hn</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># frequency response</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">apply_plot_overlay</span><span class="p">():</span>
+    <span class="s1">&#39;convenience function to illustrate stop/passband in frequency response plot&#39;</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">H</span><span class="p">)),</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;filter response&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymax</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="o">*</span><span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span><span class="o">*</span><span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">(),</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">40</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;frequency (Hz)&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$20\log_</span><span class="si">{10}</span><span class="s2">|H(f)|$&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">),</span><span class="n">width</span><span class="o">=</span><span class="n">fpass</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">fpass</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">),</span><span class="n">width</span><span class="o">=</span><span class="n">fstop</span><span class="o">-</span><span class="n">fpass</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">fstop</span><span class="p">,</span><span class="o">-</span><span class="mi">40</span><span class="p">),</span><span class="n">width</span><span class="o">=</span><span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="n">fstop</span><span class="p">,</span><span class="n">height</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;passband&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span><span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="s1">&#39;stopband&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span><span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">apply_plot_overlay</span><span class="p">()</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d3610fbe2904f63a02c125e4cb95458bcb0e9e5b6d7a1a2bfd598cd21b4b7a9c.png" src="../_images/d3610fbe2904f63a02c125e4cb95458bcb0e9e5b6d7a1a2bfd598cd21b4b7a9c.png" />
+</div>
+</div>
+<p>The figure above shows the frequency response for the specified FIR filter. The pink region is the transitional region between the pass and stop bands. As shown, the attenuation in the stopband only provides approximately 15 dB of attenuation. This means that a signal greater than 15 dB in the stopband will leak into the signals in the passband.  One way to increase the attenuation in the stopband, is to increase the filter order,  <span class="math notranslate nohighlight">\(M\)</span>, as shown in the figure below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="mi">40</span> <span class="c1"># double filter length</span>
+<span class="n">hn</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">remez</span><span class="p">(</span><span class="n">M</span><span class="p">,</span>
+                 <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">fpass</span><span class="p">,</span> <span class="n">fstop</span><span class="p">,</span> <span class="n">fs</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="c1"># scaled passband, and stop band </span>
+                 <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>  <span class="c1"># low pass filter</span>
+                 <span class="n">Hz</span> <span class="o">=</span> <span class="n">fs</span><span class="p">,</span> <span class="c1"># sampling frequency</span>
+                 <span class="p">)</span>
+
+<span class="n">w</span><span class="p">,</span><span class="n">H</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="n">hn</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># frequency response</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">apply_plot_overlay</span><span class="p">()</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/6d5f043b631f5c7619addfb301de3f8515f1c3674e63f92b2c9317300dda6035.png" src="../_images/6d5f043b631f5c7619addfb301de3f8515f1c3674e63f92b2c9317300dda6035.png" />
+</div>
+</div>
+<p>The figure above shows the frequency response when the filter order is doubled. Note that the attenuation in the stopband has improved but there is now a significant distortion due to the ripple in the passband. Given the same filter order, <span class="math notranslate nohighlight">\( M \)</span>, we can mitigate this with the <code class="docutils literal notranslate"><span class="pre">weight</span></code> argument as shown below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hn</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">remez</span><span class="p">(</span><span class="n">M</span><span class="p">,</span>
+                 <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">fpass</span><span class="p">,</span> <span class="n">fstop</span><span class="p">,</span> <span class="n">fs</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="c1"># scaled passband, and stop band </span>
+                 <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>  <span class="c1"># low pass filter</span>
+                 <span class="n">weight</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="c1"># passband 100 times more important than stopband</span>
+                 <span class="n">Hz</span> <span class="o">=</span> <span class="n">fs</span><span class="p">,</span> <span class="c1"># sampling frequency</span>
+                 <span class="p">)</span>
+
+<span class="n">w</span><span class="p">,</span><span class="n">H</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">freqz</span><span class="p">(</span><span class="n">hn</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># frequency response</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">7</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">apply_plot_overlay</span><span class="p">()</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c768d659794f353c7662dfcc92492a4cca3e878e8be63f4173411d11538f7e07.png" src="../_images/c768d659794f353c7662dfcc92492a4cca3e878e8be63f4173411d11538f7e07.png" />
+</div>
+</div>
+<p>As the figure above shows, using the <code class="docutils literal notranslate"><span class="pre">weight</span></code> argument allows flattening of the passband at the expense of raising the stopband attenuation.  This argument influences the iterative algorithm to value errors in the passband much more than in the stopband. I invite you to download the IPython Notebook corresponding to this article to try different filter orders and weights.</p>
+<p>Let’s now consider the performance of this filter in practice.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Ns</span> <span class="o">=</span><span class="mi">300</span> <span class="c1"># number of samples </span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">1024</span> <span class="c1"># DFT size</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">Ns</span><span class="p">)</span><span class="o">/</span><span class="n">fs</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">30</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">200</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+<span class="c1">#x = x*signal.hamming(Ns) # try windowing also!</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+
+<span class="n">y</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">hn</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">apply_plot_overlay</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">30</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;filter input&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Y</span><span class="p">)),</span><span class="s1">&#39;g-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;filter output&#39;</span><span class="p">)</span>
+<span class="c1">#ax2.plot(np.arange(N)/N*fs,20*np.log10(abs(X)*abs(H)),&#39;g:&#39;,lw=2.,label=&#39;YY&#39;)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$20\log|Y(f)|$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">X</span><span class="p">)),</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;input&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">/</span><span class="n">N</span><span class="o">*</span><span class="n">fs</span><span class="p">,</span><span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Y</span><span class="p">)),</span><span class="s1">&#39;g-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">fs</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;dB&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;frequency (Hz)&quot;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s1">&#39;passband</span><span class="se">\n</span><span class="s1">attenuation&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">32</span><span class="p">),</span>
+             <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="n">textcoords</span><span class="o">=</span><span class="s1">&#39;offset points&#39;</span><span class="p">,</span>
+             <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s1">&#39;-&gt;&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+            <span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/d0c648800f17b186520a751f4671ae3eba5f83a9192186f8ee74a71eedfb4cc3.png" src="../_images/d0c648800f17b186520a751f4671ae3eba5f83a9192186f8ee74a71eedfb4cc3.png" />
+<img alt="../_images/e4b6a0e3f41dae305ff31609390d337843d32070eff59af19392a565cdd196bc.png" src="../_images/e4b6a0e3f41dae305ff31609390d337843d32070eff59af19392a565cdd196bc.png" />
+</div>
+</div>
+<p>The figure above shows an overlay of the filter response (in blue, left-side y-axis) on the input and output of the filter (right-side y-axis) where the input consists of two equal-amplitude tones, one in the passband and one in the stopband. Because the filter’s stopband provides approximately 10 dB of attenuation, the tone in the stopband is reduced by this amount. Note that the tone in the passband remains unchanged because the passband attenuation is negligible (as it was designed!). The bottom plot in the figure above is the same thing except without the overlay.</p>
+<p>Let’s consider the input and output signals in the time domain in the following figure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_pass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">30</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="c1"># passband signal</span>
+<span class="n">x_stop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mi">200</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="c1"># stopband signal</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x_pass</span> <span class="o">+</span> <span class="n">x_stop</span>
+<span class="n">y</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">lfilter</span><span class="p">(</span><span class="n">hn</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x_pass</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;passband signal&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x_stop</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;stopband signal&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;filter input=passband + stopband signals&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">x_pass</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;passband signal&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;filter output&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;time (sec)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="c1"># fig.savefig(&#39;figure_00@.png&#39;, bbox_inches=&#39;tight&#39;, dpi=300)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/da176bfcb060ab292eba848d9604a148f3c937f4803f85c3994d2a4f00d4151f.png" src="../_images/da176bfcb060ab292eba848d9604a148f3c937f4803f85c3994d2a4f00d4151f.png" />
+</div>
+</div>
+<p>The figure above beaks down the time-domain response of the filter. The top plot shows the two signals separately. The middle figure shows the sum of these two signals that is the filter’s input. The bottom plot shows the filter’s output compared to the input signal that was in the filter’s passband.</p>
+<p>In the bottom plot, observe that the output signal is shifted compared to the input. This is due the phase response of the filter. Because this is a FIR filter, this phase is linear. Also notice that the stopband signal that causes the ripple on the filter’s output is still obvious in the filter’s output. This is a result of the relatively poor 10 dB attenuation in the stopband that we noted earlier. If we want to eliminate this rippling effect entirely, we have to design a filter with much greater  attenuation in the stopband.</p>
+<p>I invite you to download the IPython Notebook corresponding to this section and change the amplitude of the signal in the stopband and see how it affects the filter’s output.</p>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>In this section, we covered the the Parks-McClellan algorithm that generates FIR filter coefficients by solving the optimum equiripple Chebyshev approximation to the ideal filter provided in the specification. This design technique as implemented in the <code class="docutils literal notranslate"><span class="pre">signal.remez</span></code> function allows the designer to specify the passband and stopband frequencies, the idealized response in the passband, and optional relative weighting of the desired response in the passband as opposed to the stopband. All of these filter design techniques are subject to the <em>stuffed mattress effect</em> which means that pushing the filter’s response down in one area (i.e. increasing attenuation in the stopband) just pushes it up elsewhere in the frequency domain, potentially causing passband distortion as we illustrated. It is the designer’s responsibility to reconcile these competing demands for filter performance in terms of the overarching np.cost of complexity (i.e. filter length, numerical precision of coefficients) that may dominate the filters implementation in hardware.</p>
+<p>One thing we did not discuss is how to pick the filter order given a desired passband/stopband specification.  Unfortunately, this is left to trial and error and the intuition of the filter designer. Note that there are many other ways to design FIR filters, each in interpreting the FIR design problem differently.  For example, the <em>meteor</em> program implements a constraint-based filter design program by Steiglitz, Parks, and Kaiser.</p>
+<p>As usual, the original corresponding IPython notebook for this post  is available for download <a class="reference external" href="https://github.com/unpingco/Python-for-Signal-Processing/blob/master/Filtering_Part3.ipynb">here</a>.</p>
+<p>Comments and corrections welcome!</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>J. H. McClellan and T. W. Parks, “A unified approach to the design of optimum FIR linear phase digital filters”, IEEE Trans. Circuit Theory, vol. CT-20, pp. 697-701, 1973.</p></li>
+<li><p>J. H. McClellan, T. W. Parks and L. R. Rabiner, “A Computer Program for Designing Optimum FIR Linear Phase Digital Filters”, IEEE Trans. Audio Electroacoust., vol. AU-21, pp. 506-525, 1973.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python361064bit3b840f9918f246278fc4b65bf6247be2",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python361064bit3b840f9918f246278fc4b65bf6247be2'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Filtering_Part2.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Filtering: Part 2</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Compressive_Sampling.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Compressive sampling Overview</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#filter-specification">Filter Specification</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1099 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chapter 5: Finite Impulse Response Filters &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'book-version/Chapter_5_Finite_impulse_response_filters';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Chapter 4: Spectral Analysis" href="Chapter_4_Spectral_analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Sampling_Theorem_Part_2.html">Approximately Time-Limited Functions</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Fourier_Transform.html">Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Frequency_Resolution.html">Frequency Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/More_Fourier_Transform.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Windowing_Part1.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Windowing_Part2.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Windowing_Part3.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Filtering_Part1.html">Filtering: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Filtering_Part2.html">Filtering: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Filtering_Part3.html">Filtering: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Sampling_Monte_Carlo.html">Introduction</a></li>
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../notebook/Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Chapter_2_Sampling_Theorem.html">Chapter 2: Sampling Theorem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_3_Discrete_Fourier_transform.html">Chapter 3: Discrete Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Chapter_4_Spectral_analysis.html">Chapter 4: Spectral Analysis</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Chapter 5: Finite Impulse Response Filters</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fbook-version/Chapter_5_Finite_impulse_response_filters.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/book-version/Chapter_5_Finite_impulse_response_filters.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Chapter 5: Finite Impulse Response Filters</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="chapter-5-finite-impulse-response-filters">
+<h1>Chapter 5: Finite Impulse Response Filters<a class="headerlink" href="#chapter-5-finite-impulse-response-filters" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from __future__ import  division
+from scipy import signal
+   
+Ns=30 # length of input sequence
+n= arange(Ns) # sample index
+x = cos(arange(Ns)*pi/2.)
+y= signal.lfilter([1/2.,1/2.],1,x)
+
+fig,ax = subplots(1,1)
+fig.set_size_inches(8,3)
+
+ax.stem(n,x,label=&#39;input&#39;,basefmt=&#39;b-&#39;)
+ax.plot(n,x,&#39;:&#39;)
+ax.stem(n[1:],y[:-1],markerfmt=&#39;ro&#39;,linefmt=&#39;r-&#39;,label=&#39;output&#39;)
+ax.plot(n[1:],y[:-1],&#39;r:&#39;)
+ax.set_ylim(ymin=-1.1,ymax=1.1)
+ax.set_xlabel(&quot;n&quot;,fontsize=22)
+ax.legend(loc=0,fontsize=18)
+ax.set_xticks(n)
+ax.set_xlim(xmin=-1.1,xmax=20)
+ax.set_ylabel(&quot;Amplitude&quot;,fontsize=22);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ad9af3032ed5ee24b40941be6cb9ea6ed1de30a4421c13a63700d51b9fd7b1cf.png" src="../_images/ad9af3032ed5ee24b40941be6cb9ea6ed1de30a4421c13a63700d51b9fd7b1cf.png" />
+</div>
+</div>
+<p>This shows the input/output time-domain response of the two-tap moving
+average filter. Note that the output is delayed by one sample because
+of the filter’s transient. The frequency domain response for this
+filter is shown below. The input frequency is <span class="math notranslate nohighlight">\(\omega=\pi/2\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from matplotlib import gridspec
+
+fig=figure()
+#fig.set_size_inches((8,5))
+
+gs = gridspec.GridSpec(2,2)
+# add vertical and horizontal space
+gs.update(wspace=0.5, hspace=0.5)
+
+ax = fig.add_subplot(subplot(gs[0,0]))
+
+ma_length = 8 # moving average filter length
+w,h=signal.freqz(ones(ma_length)/ma_length,1)
+ax.plot(w,20*log10(abs(h)))
+ax.set_ylabel(r&quot;$ 20 \log_{10}|H(\omega)| $&quot;,fontsize=18)
+ax.set_xlabel(r&quot;$\omega$&quot;,fontsize=18)
+ax.vlines(pi/3,-25,0,linestyles=&#39;:&#39;,color=&#39;r&#39;,lw=3.)
+ax.set_ylim(ymin=-25)
+
+ax = fig.add_subplot(subplot(gs[0,1]))
+ax.plot(w,angle(h,deg=True))
+ax.set_xlabel(r&#39;$\omega$&#39;,fontsize=18)
+ax.set_ylabel(r&quot;$\phi $ (deg)&quot;,fontsize=16)
+ax.set_xlim(xmax = pi)
+ax.set_ylim(ymin=-180,ymax=180)
+ax.vlines(pi/3,-180,180,linestyles=&#39;:&#39;,color=&#39;r&#39;,lw=3.)
+
+ax = fig.add_subplot(subplot(gs[1,:]))
+Ns=30
+n= arange(Ns)
+x = cos(arange(Ns)*pi/3.)
+y= signal.lfilter(ones(ma_length)/ma_length,1,x)
+
+ax.stem(n,x,label=&#39;input&#39;,basefmt=&#39;b-&#39;)
+ax.plot(n,x,&#39;:&#39;)
+ax.stem(n[ma_length-1:],y[:-ma_length+1],
+        markerfmt=&#39;ro&#39;,
+        linefmt=&#39;r-&#39;,
+        label=&#39;output&#39;)
+ax.plot(n[ma_length-1:],y[:-ma_length+1],&#39;r:&#39;)
+ax.set_xlim(xmin=-1.1)
+ax.set_ylim(ymin=-1.1,ymax=1.1)
+ax.set_xlabel(&quot;n&quot;,fontsize=18)
+ax.set_xticks(n)
+ax.legend(loc=0)
+ax.set_ylabel(&quot;Amplitude&quot;,fontsize=18);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/eba2daacb18ebf74f0aa6eda25752f3ea2674d1c9adb64089b21c5c0a14951ba.png" src="../_images/eba2daacb18ebf74f0aa6eda25752f3ea2674d1c9adb64089b21c5c0a14951ba.png" />
+</div>
+</div>
+<p>The top left shows the magnitude response of the 8-tap
+filter. The top left shows the corresponding phase response. The
+bottom plot shows the input/output time-domain response
+for the input at frequency <span class="math notranslate nohighlight">\(\omega=\pi/3\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from scipy import signal 
+
+fig, axs = subplots(2,1,sharex=True)
+subplots_adjust(hspace = .2)
+fig.set_size_inches((5,5))
+
+ax=axs[0]
+w,h=signal.freqz([1/2., 1/2.],1) # Compute impulse response
+ax.plot(w,20*log10(abs(h)))
+ax.set_ylabel(r&quot;$20 \log_{10} |H(\omega)| $&quot;,fontsize=18)
+ax.grid()
+
+ax=axs[1]
+ax.plot(w,angle(h,deg=True))
+ax.set_xlabel(r&#39;$\omega$&#39;,fontsize=18)
+ax.set_ylabel(r&quot;$\phi $ (deg)&quot;,fontsize=18)
+ax.set_xlim(xmax = pi)
+ax.grid()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/edc1ed76b3c4983535b892bd7bd6544d0bae84633913be1d6688caeb472c2e55.png" src="../_images/edc1ed76b3c4983535b892bd7bd6544d0bae84633913be1d6688caeb472c2e55.png" />
+</div>
+</div>
+<p>The top plot in figure shows the magnitude response of the filter (in dB) and the bottom plot shows  the phase response in degrees. At <span class="math notranslate nohighlight">\(\omega=0\)</span>, we have <span class="math notranslate nohighlight">\(|H(\omega=0)|=1 \)</span> (i.e unity-gain) which says that our moving average filter does not change the amplitude of signals at <span class="math notranslate nohighlight">\(\omega=0\)</span>. We observed this already with the input <span class="math notranslate nohighlight">\(x_n=1 \)</span> that produced <span class="math notranslate nohighlight">\(y_n=1\)</span> as output. On the graph at the other extreme (<span class="math notranslate nohighlight">\(\omega=\pi\)</span>),  we have <span class="math notranslate nohighlight">\(|H(\omega=\pi)|=0\)</span> which we observed earlier for input <span class="math notranslate nohighlight">\(x_n= \exp\left( j\pi n \right)  \forall n \ge 0 \)</span> that produced all-zero output.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from scipy import signal
+from numpy import fft
+
+wc = pi/4
+M=20
+N = 512 # DFT size
+n = arange(-M,M)
+h = wc/pi * sinc(wc*(n)/pi)  # see definition of np.sinc()
+
+w,Hh = signal.freqz(h,1,whole=True, worN=N) # get entire frequency domain
+wx = fft.fftfreq(len(w)) # shift to center for plotting
+
+fig,axs = subplots(3,1)
+fig.set_size_inches((8,8))
+subplots_adjust(hspace=0.3)
+
+ax=axs[0]
+ax.stem(n+M,h,basefmt=&#39;b-&#39;)
+ax.set_xlabel(&quot;$n$&quot;,fontsize=22)
+ax.set_ylabel(&quot;$h_n$&quot;,fontsize=22)
+
+ax=axs[1]
+ax.plot(w-pi,abs(fft.fftshift(Hh)))
+ax.axis(xmax=pi/2,xmin=-pi/2)
+ax.vlines([-wc,wc],0,1.2,color=&#39;g&#39;,lw=2.,linestyle=&#39;--&#39;,)
+ax.hlines(1,-pi,pi,color=&#39;g&#39;,lw=2.,linestyle=&#39;--&#39;,)
+ax.set_xlabel(r&quot;$\omega$&quot;,fontsize=22)
+ax.set_ylabel(r&quot;$|H(\omega)| $&quot;,fontsize=22)
+
+ax=axs[2]
+ax.plot(w-pi,20*log10(abs(fft.fftshift(Hh))))
+ax.axis(ymin=-40,xmax=pi/2,xmin=-pi/2)
+ax.vlines([-wc,wc],10,-40,color=&#39;g&#39;,lw=2.,linestyle=&#39;--&#39;,)
+ax.hlines(0,-pi,pi,color=&#39;g&#39;,lw=2.,linestyle=&#39;--&#39;,)
+ax.set_xlabel(r&quot;$\omega$&quot;,fontsize=22)
+ax.set_ylabel(r&quot;$20\log_{10}|H(\omega)| $&quot;,fontsize=18)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0xb64d630&gt;
+</pre></div>
+</div>
+<img alt="../_images/05a695e8c6a54a2b1b1b74ea193afc31f99474d42697af6f6807238bd4e32f4b.png" src="../_images/05a695e8c6a54a2b1b1b74ea193afc31f99474d42697af6f6807238bd4e32f4b.png" />
+</div>
+</div>
+<p>Figure that shows the filter coefficients in the top plot, the magnitude of the frequency response in the middle plot (linear units), and the magnitude of the frequency response in decibel units in the bottom plot. In this case, we use a Hamming window to control the Gibbs phenomenon at the edges of the passband. Note that the entire passband is much flatter than the previous case without the Hamming window.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>fig,ax = subplots()
+fig.set_size_inches(6,3)
+
+k=arange(M)
+omega = linspace(0,pi,100)
+
+ax.plot(omega,(sin(k*omega[:,None]+k*wc)
+                 -sin(k*omega[:,None]-k*wc)).sum(axis=1))
+ax.set_ylabel(r&quot;$Y_{re}(\omega)$&quot;,fontsize=18)
+ax.grid()
+t=ax.set_title(r&quot;$\omega_c = \pi/4$&quot;,fontsize=22)
+t.set_y(1.03) # scoot title up a bit
+ax.set_xlabel(r&quot;$\omega$&quot;,fontsize=22)
+# setup xticks and labels for LaTeX
+ax.set_xticks([0, pi/4,pi/2.,3*pi/4, pi,])
+ax.set_xticklabels([&#39;$0$&#39;,r&#39;$\frac{\pi}{4}$&#39;,r&#39;$\frac{\pi}{2}$&#39;,
+                    r&#39;$\frac{3\pi}{4}$&#39;, r&#39;$\pi$&#39;],fontsize=18)
+ax.set_xlim(xmax=pi)
+ax.annotate(&quot;Gibbs phenomenon&quot;,xy=(pi/4,10),fontsize=14,
+            xytext=(20,0),
+            textcoords=&#39;offset points&#39;,
+            arrowprops={&#39;facecolor&#39;:&#39;b&#39;,&#39;arrowstyle&#39;:&#39;-&gt;&#39;})
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Annotation at 0x6344850&gt;
+</pre></div>
+</div>
+<img alt="../_images/3d81556cdab940b654e39b98cc1a1d2a929ffd0f126096f5bee32fcf8a19dd28.png" src="../_images/3d81556cdab940b654e39b98cc1a1d2a929ffd0f126096f5bee32fcf8a19dd28.png" />
+</div>
+</div>
+<p>Figure that shows the Gibbs phenomenon at the edge of the filter’s passband. The cutoff frequency is <span class="math notranslate nohighlight">\(\omega_c\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>wc = pi/4
+
+M=20
+
+N = 512 # DFT size
+n = arange(-M,M)
+win = signal.hamming(len(n))
+h = wc/pi * sinc(wc*(n)/pi)*win  # see definition of np.sinc()
+
+w,Hh = signal.freqz(h,1,whole=True, worN=N) # get entire frequency domain
+wx = fft.fftfreq(len(w)) # shift to center for plotting
+
+fig,axs = subplots(3,1)
+fig.set_size_inches((8,8))
+subplots_adjust(hspace=0.3)
+
+ax=axs[0]
+ax.stem(n+M,h,basefmt=&#39;b-&#39;)
+ax.set_xlabel(&quot;$n$&quot;,fontsize=24)
+ax.set_ylabel(&quot;$h_n$&quot;,fontsize=24)
+
+ax=axs[1]
+ax.plot(w-pi,abs(fft.fftshift(Hh)))
+ax.axis(xmax=pi/2,xmin=-pi/2)
+ax.vlines([-wc,wc],0,1.2,color=&#39;g&#39;,lw=2.,linestyle=&#39;--&#39;,)
+ax.hlines(1,-pi,pi,color=&#39;g&#39;,lw=2.,linestyle=&#39;--&#39;,)
+ax.set_xlabel(r&quot;$\omega$&quot;,fontsize=22)
+ax.set_ylabel(r&quot;$|H(\omega)| $&quot;,fontsize=22)
+
+ax=axs[2]
+ax.plot(w-pi,20*log10(abs(fft.fftshift(Hh))))
+ax.axis(ymin=-80,xmax=pi/2,xmin=-pi/2)
+ax.vlines([-wc,wc],10,-80,color=&#39;g&#39;,lw=2.,linestyle=&#39;--&#39;,)
+ax.hlines(0,-pi,pi,color=&#39;g&#39;,lw=2.,linestyle=&#39;--&#39;,)
+ax.set_xlabel(r&quot;$\omega$&quot;,fontsize=22)
+ax.set_ylabel(r&quot;$20\log_{10}|H(\omega)| $&quot;,fontsize=18)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0xb8fe350&gt;
+</pre></div>
+</div>
+<img alt="../_images/ec8ae8b9403624c2ff88dccacdbb7f5b615e107f59f08db62b883e30305c3141.png" src="../_images/ec8ae8b9403624c2ff88dccacdbb7f5b615e107f59f08db62b883e30305c3141.png" />
+</div>
+</div>
+<p>Figure  that shows the filter coefficients in the top plot, the magnitude of the frequency response in the middle plot (linear units), and the magnitude of the frequency response in decibel units in the bottom plot. In this case, we use a Hamming window to control the Gibbs phenomenon at the edges of the passband. Note that the entire passband is much flatter than the previous case without the Hamming window.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Ns =300 # number of samples 
+N = 1024 # DFT size
+
+fs = 1e3 # sample rate in Hz
+fpass = 100 # in Hz
+fstop = 150 # in Hz
+delta = 60 # in dB, desired attenuation in stopband
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from matplotlib.patches import Rectangle
+
+M,beta= signal.fir_filter_design.kaiserord(delta, (fstop-fpass)/(fs/2.))
+
+hn = signal.firwin(M,(fstop+fpass)/2.,window=(&#39;kaiser&#39;,beta),nyq=fs/2.)
+w,H = signal.freqz(hn) # frequency response
+
+fig,ax = subplots()
+fig.set_size_inches((8,3))
+
+ax.plot(w/pi*fs/2.,20*log10(abs(H)))
+ax.set_xlabel(&quot;Frequency (Hz)&quot;,fontsize=16)
+ax.set_ylabel(r&quot;$20\log_{10} |H(f)| $&quot;,fontsize=22)
+ymin,ymax = -80,5
+ax.axis(ymin = ymin,ymax=ymax)
+ax.add_patch(Rectangle((0,ymin),width=fpass,
+             height=ymax-ymin,
+             color=&#39;g&#39;,alpha=0.3))
+ax.add_patch(Rectangle((fpass,ymin),width=fstop-fpass,
+             height=ymax-ymin,
+             color=&#39;r&#39;,alpha=0.3))
+ax.add_patch(Rectangle((fstop,ymin),width=fs/2-fstop,
+             height=ymax-ymin,
+             color=&#39;y&#39;,alpha=0.3))
+ax.set_title(&quot;Number of taps=%d&quot;%M)
+ax.text(10,-15,&#39;passband&#39;,fontsize=14,bbox=dict(color=&#39;white&#39;))
+ax.text(200,-15,&#39;stopband&#39;,fontsize=16,bbox=dict(color=&#39;white&#39;))
+ax.grid()
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ae5003296f5485c27c650958ef38f86ad3e19422ea9409f58d84f7417f018b5f.png" src="../_images/ae5003296f5485c27c650958ef38f86ad3e19422ea9409f58d84f7417f018b5f.png" />
+</div>
+</div>
+<p>Figure
+showing the passband region, the transition region, and
+the stopband region from the filter specification. The
+specification called for 60 dB of attenuation in the stopband
+and that is clearly shown at the stopband cutoff frequency (150 Hz).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from numpy import fft
+
+t = arange(0,Ns)/fs
+x = cos(2*pi*30*t)+cos(2*pi*200*t)
+X = fft.fft(x,N)
+
+y=signal.lfilter(hn,1,x)
+Y = fft.fft(y,N)
+
+fig,ax = subplots()
+fig.set_size_inches((10,4))
+ax.plot(arange(N)/N*fs,20*log10(abs(X)),&#39;r-&#39;,label=&#39;input&#39;)
+ax.plot(arange(N)/N*fs,20*log10(abs(Y)),&#39;g-&#39;,label=&#39;output&#39;)
+ax.set_xlim(xmax = fs/2)
+ax.set_ylim(ymin=-20)
+ax.set_ylabel(r&#39;dB&#39;,fontsize=22)
+ax.set_xlabel(&quot;Frequency (Hz)&quot;,fontsize=18)
+ax.grid()
+ax.annotate(&#39;attenuated in\nstopband&#39;,fontsize=16,xy=(200,32),
+             xytext=(50,3),textcoords=&#39;offset points&#39;,
+             arrowprops=dict(arrowstyle=&#39;-&gt;&#39;,lw=3),
+            )
+ax.legend(loc=0,fontsize=16);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b49cd0463eed8695c633e5c7bb53ff579d604b74d6896bbda429fa52516349fc.png" src="../_images/b49cd0463eed8695c633e5c7bb53ff579d604b74d6896bbda429fa52516349fc.png" />
+</div>
+</div>
+<p>Figure  showing the application of the filter on two equal-amplitude input tones where one tone is in the passband and the other in the stopband. The tone in the passband passes through to the output but the tone in the stopband is completely eliminated by the filter because the attenuation in the stopband is 60 dB and the tone is only 40 dB.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from matplotlib.patches import Rectangle
+from scipy import signal
+
+fs = 1e3 # sample rate in Hz
+M = 20
+fpass = 100 # in Hz
+fstop = 150 # in Hz
+
+hn = signal.remez(M,
+                 array([0, fpass, fstop, fs])/2., # scaled passband, and stop band 
+                 [1,0],  # low pass filter
+                 Hz = fs, # sampling frequency
+                 )
+
+w,H=signal.freqz(hn,1) # frequency response
+
+def apply_plot_overlay():
+    &#39;convenience function to illustrate stop/passband in frequency response plot&#39;
+    ax.plot(w/pi*(fs/2),20*log10(abs(H)),label=&#39;Filter response&#39;)
+    ax.set_ylim(ymax=5)
+    ax.vlines(100,*ax.get_ylim(),color=&#39;r&#39;)
+    ax.vlines(150,*ax.get_ylim(),color=&#39;r&#39;)
+    ax.set_ylim(ymin=-40)
+    ax.set_xlabel(&quot;Frequency (Hz)&quot;,fontsize=18)
+    ax.set_ylabel(r&quot;$20\log_{10}|H(f)|$&quot;,fontsize=22)
+    ax.add_patch(Rectangle((0,-40),width=fpass,height=45,color=&#39;g&#39;,alpha=0.3))
+    ax.add_patch(Rectangle((fpass,-40),width=fstop-fpass,height=45,color=&#39;r&#39;,alpha=0.3))
+    ax.add_patch(Rectangle((fstop,-40),width=fs/2-fstop,height=45,color=&#39;y&#39;,alpha=0.3))
+    ax.text(10,-5,&#39;passband&#39;,fontsize=14,bbox=dict(color=&#39;white&#39;))
+    ax.text(200,-5,&#39;stopband&#39;,fontsize=16,bbox=dict(color=&#39;white&#39;))
+    ax.grid()
+    
+fig,ax = subplots()
+fig.set_size_inches((7,3))
+apply_plot_overlay()
+ax.set_title(&#39;%d-tap Parks-McClellan Filter&#39;%M)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0xba79a30&gt;
+</pre></div>
+</div>
+<img alt="../_images/688ef74e6bbe2bc97aa014ca550b4cd6b8cc8c00fdaaa55dc4101163f5944354.png" src="../_images/688ef74e6bbe2bc97aa014ca550b4cd6b8cc8c00fdaaa55dc4101163f5944354.png" />
+</div>
+</div>
+<p>Figure showing the magnitude response of the filter we designed using the Parks-McClellan methods.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>M = 40 # double filter length
+hn = signal.remez(M,
+                 array([0, fpass, fstop, fs])/2., # scaled passband, and stop band 
+                 [1,0],  # low pass filter
+                 Hz = fs, # sampling frequency
+                 )
+
+w,H=signal.freqz(hn,1) # frequency response
+fig,ax = subplots()
+fig.set_size_inches((7,3))
+apply_plot_overlay()
+ax.set_title(&#39;%d-tap Parks-McClellan Filter&#39;%M)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x65b0d50&gt;
+</pre></div>
+</div>
+<img alt="../_images/d8b35971730e5932469515d8025f1371996baca073933977f5a6ba803316cb73.png" src="../_images/d8b35971730e5932469515d8025f1371996baca073933977f5a6ba803316cb73.png" />
+</div>
+</div>
+<p>Figure showing the frequency response when the filter order is doubled. As compared to the previous case, the attenuation in the stopband has improved, but now there is significant distortion in the passband.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>hn = signal.remez(M,
+                 array([0, fpass, fstop, fs])/2., # scaled passband, and stop band 
+                 [1,0],  # low pass filter
+                 weight=[100,1], # passband 100 times more important than stopband
+                 Hz = fs, # sampling frequency
+                 )
+
+w,H=signal.freqz(hn,1) # frequency response
+fig,ax = subplots()
+fig.set_size_inches((7,3))
+apply_plot_overlay()
+ax.set_title(&#39;Weighted %d-tap Parks-McClellan Filter&#39;%M)
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0xb581750&gt;
+</pre></div>
+</div>
+<img alt="../_images/5af8712fd771dc0eefddde4c1cd95bed73bfc14a8306a5bc538f97465eb741ab.png" src="../_images/5af8712fd771dc0eefddde4c1cd95bed73bfc14a8306a5bc538f97465eb741ab.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Ns =300 # number of samples 
+N = 1024 # DFT size
+t = arange(0,Ns)/fs
+
+x = cos(2*pi*30*t)+cos(2*pi*200*t)
+#x = x*signal.hamming(Ns) # try windowing also!
+X = fft.fft(x,N)
+
+y=signal.lfilter(hn,1,x)
+Y = fft.fft(y,N)
+
+fig,ax = subplots()
+fig.set_size_inches((10,4))
+apply_plot_overlay()
+ax.set_ylim(ymin=-30,ymax=7)
+ax.legend(loc=&#39;upper left&#39;,fontsize=16)
+
+ax2 = ax.twinx()
+ax2.plot(arange(N)/N*fs,20*log10(abs(X)),&#39;r-&#39;,label=&#39;filter input&#39;)
+ax2.plot(arange(N)/N*fs,20*log10(abs(Y)),&#39;g-&#39;,label=&#39;filter output&#39;)
+#ax2.plot(arange(N)/N*fs,20*log10(abs(X)*abs(H)),&#39;g:&#39;,lw=2.,label=&#39;YY&#39;)
+ax2.set_xlim(xmax = fs/2)
+ax2.set_ylim(ymin=-20)
+ax2.set_ylabel(r&#39;$20\log|Y(f)|$&#39;,fontsize=22)
+ax2.legend(loc=0,fontsize=16);
+
+fig,ax = subplots()
+fig.set_size_inches((10,4))
+ax.plot(arange(N)/N*fs,20*log10(abs(X)),&#39;r-&#39;,label=&#39;input&#39;)
+ax.plot(arange(N)/N*fs,20*log10(abs(Y)),&#39;g-&#39;,label=&#39;output&#39;)
+ax.set_xlim(xmax = fs/2)
+ax.set_ylim(ymin=-20)
+ax.set_ylabel(&#39;dB&#39;,fontsize=22)
+ax.set_xlabel(&quot;Frequency (Hz)&quot;,fontsize=18)
+ax.grid()
+ax.annotate(&#39;stopband\nattenuation&#39;,fontsize=16,xy=(200,32),
+             xytext=(50,3),textcoords=&#39;offset points&#39;,
+             arrowprops=dict(arrowstyle=&#39;-&gt;&#39;,lw=3),
+            )
+ax.legend(loc=0,fontsize=16);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/cf09da800cb863e53f7f19615bee1add6b80e2ea8b1612cb5b7083517a0a7a14.png" src="../_images/cf09da800cb863e53f7f19615bee1add6b80e2ea8b1612cb5b7083517a0a7a14.png" />
+<img alt="../_images/e3c1843dfeb69341ebf1961f9b5eae4b93b5f0c1d3abc0b3283aea12a9d2a375.png" src="../_images/e3c1843dfeb69341ebf1961f9b5eae4b93b5f0c1d3abc0b3283aea12a9d2a375.png" />
+</div>
+</div>
+<p>Figure showing the filter applied to two inputs tones, one in the passband and the other in the stopband. Because we preferentially weighted the passband over the stopband, the tone in the stopband still comes through because the attenuation there is only 10 dB and the signal peaks at approximately 40 dB. This leaves roughly 30 dB of signal left as shown.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>x_pass = cos(2*pi*30*t) # passband signal
+x_stop = cos(2*pi*200*t) # stopband signal
+x = x_pass + x_stop
+y=signal.lfilter(hn,1,x)
+
+fig,axs = subplots(3,1,sharey=True,sharex=True)
+fig.set_size_inches((10,5))
+
+ax=axs[0]
+ax.plot(t,x_pass,label=&#39;passband signal&#39;,color=&#39;k&#39;)
+ax.plot(t,x_stop,label=&#39;stopband signal&#39;)
+ax.legend(loc=0,fontsize=16)
+
+ax=axs[1]
+ax.plot(t,x,label=&#39;filter input=passband + stopband signals&#39;,color=&#39;r&#39;)
+ax.legend(loc=0,fontsize=16)
+
+ax=axs[2]
+ax.plot(t,x_pass,label=&#39;passband signal&#39;,color=&#39;k&#39;)
+ax.plot(t,y,label=&#39;filter output&#39;,color=&#39;g&#39;)
+ax.set_xlabel(&quot;Time (sec)&quot;,fontsize=18)
+ax.legend(loc=0,fontsize=16);
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7589961194f0b6df42d724282a6d40f657a4f23a9a1f498d33eb7df5d69d3bab.png" src="../_images/7589961194f0b6df42d724282a6d40f657a4f23a9a1f498d33eb7df5d69d3bab.png" />
+</div>
+</div>
+<p>Figure breaks down the time-domain response of the filter.  The top plot shows the two signals separately. The middle plot shows the sum of these two signals that is the filter’s input. The bottom plot shows the filter’s output compared to the input signal that was in the filter’s passband. The hope for this filter was that the tone in the passband would be the only signal to survive at the output.  In the bottom plot in figure, observe that the output signal is shifted compared to the input. This is due the phase response of the filter. Because this is a FIR filter, this phase is linear. Also notice that the stopband signal that caused the ripple at the filter’s input is still obvious in the filter’s output. This is a result of the relatively poor 10 dB attenuation in the stopband that we noted earlier. If we want to eliminate this rippling effect entirely, we have to design a filter with much greater  attenuation in the stopband.</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./book-version"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Chapter_4_Spectral_analysis.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chapter 4: Spectral Analysis</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

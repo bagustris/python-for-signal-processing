@@ -1,0 +1,932 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Sampling Monte Carlo &#8212; Python for Signal Processing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebook/Sampling_Monte_Carlo';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Rectangle Wedge Tail Decomposition" href="Rectangle_Wedge_Tail_Decomposition.html" />
+    <link rel="prev" title="Buffon’s Needle" href="Buffons_Needle_Sim.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Python for Signal Processing</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Python for Signal Processing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Signal Processing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_1.html">Sampling Theorem - Part 1:</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Sampling_Theorem_Part_2.html">Sampling Theorem: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Fourier_Transform.html">Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Frequency_Resolution.html">Frequency Resolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="More_Fourier_Transform.html">More Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part1.html">Windowing: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part2.html">Windowing: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Windowing_Part3.html">Windowing: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part1.html">Filtering: Part 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part2.html">Filtering: Part 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Filtering_Part3.html">Filtering: Part 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Compressive_Sampling.html">Compressive sampling Overview</a></li>
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Stochastic Processes</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Gaussian.html">Introduction</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE.html">Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Conditional_expectation_MSE_Ex.html">Introduction</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Conditional_Expectation_Projection.html">Introduction</a></li>
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Projection.html">Weighted distances</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Projection_Ex.html">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Projection_mdim.html">Projection in Multiple Dimensions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Inverse_Projection_Constrained_Optimization.html">Inverse Projection</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Gauss_Markov.html">Introduction</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Maximum_likelihood.html">Maximum Likelihood Estimation</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="Expectation_Maximization.html">Expectation Maximization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="Markov_chains.html">Basic Definitions</a></li>
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="Buffons_Needle_Sim.html">Buffon’s Needle</a></li>
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Sampling Monte Carlo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Rectangle_Wedge_Tail_Decomposition.html">Rectangle Wedge Tail Decomposition</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Misc</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Example_CSVs.html">Examples using CSV files</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Book Version</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_1_Intro.html">Tutorial Numpy</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_2_Sampling_Theorem.html">Chapter 2: Sampling Theorem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_3_Discrete_Fourier_transform.html">Chapter 3: Discrete Fourier Transform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_4_Spectral_analysis.html">Chapter 4: Spectral Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../book-version/Chapter_5_Finite_impulse_response_filters.html">Chapter 5: Finite Impulse Response Filters</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/unpingco/Python-for-Signal-Processing/issues/new?title=Issue%20on%20page%20%2Fnotebook/Sampling_Monte_Carlo.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebook/Sampling_Monte_Carlo.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Sampling Monte Carlo</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inverse-cdf-method-for-discrete-variables">Inverse CDF Method for Discrete Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inverse-cdf-method-for-continuous-variables">Inverse CDF Method for Continuous Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rejection-method">Rejection Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="sampling-monte-carlo">
+<h1>Sampling Monte Carlo<a class="headerlink" href="#sampling-monte-carlo" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>We want to generate samples of a given density, <span class="math notranslate nohighlight">\(f(x)\)</span>. In this case, we can assume we already have a reliable way to generate samples from a uniform distribution, <span class="math notranslate nohighlight">\(\mathcal{U}[0,1]\)</span>. How do we know a random sample (<span class="math notranslate nohighlight">\(v\)</span>) comes from the <span class="math notranslate nohighlight">\(f(x)\)</span> distribution? One way to think about it is that a histogram of samples must approximate <span class="math notranslate nohighlight">\(f(x)\)</span>. This means that</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}( v \in N_{\Delta}(x) )  = f(x) \Delta x\]</div>
+<p>which says that the probability that a sample is in some <span class="math notranslate nohighlight">\(\Delta\)</span> neighborhood of x is approximately <span class="math notranslate nohighlight">\(f(x)\Delta x\)</span>.</p>
+<p>Let’s consider how to create these samples for both discrete and continuous random variables.</p>
+</section>
+<section id="inverse-cdf-method-for-discrete-variables">
+<h2>Inverse CDF Method for Discrete Variables<a class="headerlink" href="#inverse-cdf-method-for-discrete-variables" title="Link to this heading">#</a></h2>
+<p>Suppose we have a probability mass function,</p>
+<div class="math notranslate nohighlight">
+\[ f(x) = \sum p_i \delta(x-x_i) \]</div>
+<p>where <span class="math notranslate nohighlight">\(p_i\)</span> is the probability <em>mass</em> at the point <span class="math notranslate nohighlight">\(x_i\)</span>. For example, for a fair six-sided die, we have</p>
+<div class="math notranslate nohighlight">
+\[ f(x) = \frac{1}{6} \sum_{i=1}^6 \delta(x-i) \]</div>
+<p>This generates the corresponding cumulative mass function,</p>
+<div class="math notranslate nohighlight">
+\[ F(x) = \frac{1}{6} \sum_{i=1}^6 U(x-i) \]</div>
+<p>where <span class="math notranslate nohighlight">\(U\)</span> is the unit-step function. The next block of code develops this using <code class="docutils literal notranslate"><span class="pre">sympy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sympy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">S</span>
+<span class="n">x</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">F</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">Heaviside</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">)])</span><span class="o">/</span><span class="mi">6</span> <span class="c1"># offset to satisfy sympy definition</span>
+<span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">F</span><span class="p">,(</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;CDF(x)&#39;</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a60d514f44a15e56b1ede59d0eb72a97abe95b8c16127615fce0e79902b65d6e.png" src="../_images/a60d514f44a15e56b1ede59d0eb72a97abe95b8c16127615fce0e79902b65d6e.png" />
+</div>
+</div>
+<p>Now, we want a random number generator that outputs an element of <span class="math notranslate nohighlight">\(\left \{  1,2,3,..,6\right \} \)</span> with equal probability. We can generate a uniform random variable and think of it as picking a point on the y-axis of the plot above. Then, all we do is pick the corresponding x-axis value as the output. Let’s do this in the next code block</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">invF</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">Piecewise</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&lt;=</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="p">),</span>    <span class="c1"># if uniform sample between 0 and 1/6, choose die-side labeled 1</span>
+                 <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">6</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&lt;=</span><span class="mi">2</span><span class="o">/</span><span class="mi">6</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="o">/</span><span class="mi">6</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&lt;=</span><span class="mi">3</span><span class="o">/</span><span class="mi">6</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="o">/</span><span class="mi">6</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&lt;=</span><span class="mi">4</span><span class="o">/</span><span class="mi">6</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="o">/</span><span class="mi">6</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&lt;=</span><span class="mi">5</span><span class="o">/</span><span class="mi">6</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="o">/</span><span class="mi">6</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="n">samples</span><span class="o">=</span><span class="n">array</span><span class="p">([</span><span class="n">invF</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>  <span class="n">rand</span><span class="p">(</span><span class="mi">500</span><span class="p">)])</span>
+<span class="n">hist</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span><span class="n">normed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">align</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">);</span>
+<span class="n">axis</span><span class="p">(</span><span class="n">ymax</span><span class="o">=</span><span class="mi">2</span><span class="o">/</span><span class="mf">6.</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Estimated PMF of Fair Six-Sided Die&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7b9245ddb353a57478c0bae5611ee30c4cd1f7b14eb5cad86a5a29e236d0fc69.png" src="../_images/7b9245ddb353a57478c0bae5611ee30c4cd1f7b14eb5cad86a5a29e236d0fc69.png" />
+</div>
+</div>
+<p>For comparison, here is the estimated CDF compared with <span class="math notranslate nohighlight">\(F\)</span>. You can trying using more or fewer samples in <code class="docutils literal notranslate"><span class="pre">rand()</span></code> to see how this changes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bar</span><span class="p">(</span><span class="o">-</span><span class="mf">.5</span><span class="o">+</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span><span class="n">cumsum</span><span class="p">([</span><span class="n">mean</span><span class="p">(</span><span class="n">samples</span><span class="o">==</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">)]),</span><span class="n">alpha</span><span class="o">=</span><span class="mf">.3</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;ECDF&#39;</span><span class="p">)</span>   <span class="c1"># estimated CDF</span>
+<span class="n">bar</span><span class="p">(</span><span class="o">-</span><span class="mf">.25</span><span class="o">+</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">),[</span><span class="n">F</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">)],</span><span class="n">fc</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">.3</span><span class="p">,</span><span class="n">width</span><span class="o">=</span><span class="mf">.5</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;CDF&#39;</span><span class="p">)</span> <span class="c1"># target CDF</span>
+<span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Estimated CDF for fair six-sided die&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Die face index&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">axis</span><span class="p">(</span><span class="n">ymax</span><span class="o">=</span><span class="mf">1.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.0, 7.0, 0.0, 1.1)
+</pre></div>
+</div>
+<img alt="../_images/d188456612d6ecbece62725fd9ec5cdb20ff8268e0730b361f1e891c335162f3.png" src="../_images/d188456612d6ecbece62725fd9ec5cdb20ff8268e0730b361f1e891c335162f3.png" />
+</div>
+</div>
+<p>By repeating the same argument, we can construct an <em>unfair</em> six-sided die as</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># the faces 2,4 and more probable than 1,5,6 and 3 is the most probable</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">/</span><span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="c1"># normalize to 1</span>
+<span class="n">Fu</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="n">S</span><span class="o">.</span><span class="n">Heaviside</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">)])</span>
+<span class="n">S</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">Fu</span><span class="p">,(</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;CDF(x)&#39;</span><span class="p">,</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Unfair 6-sided Die&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/13f0380bde1bd8bc80dfa2b2517e28f926880dac17ec1864081b947fafcb433e.png" src="../_images/13f0380bde1bd8bc80dfa2b2517e28f926880dac17ec1864081b947fafcb433e.png" />
+</div>
+</div>
+<p>In the next block, we automate computing the inverse.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cp</span><span class="o">=</span><span class="n">cumsum</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">p</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="c1"># need to find edges on vertical axis, add [0] to get left edge</span>
+<span class="n">invFu</span><span class="o">=</span><span class="n">S</span><span class="o">.</span><span class="n">Piecewise</span><span class="p">(</span><span class="o">*</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">&lt;</span><span class="n">x</span><span class="o">&lt;=</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">7</span><span class="p">),</span><span class="n">cp</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">cp</span><span class="p">[</span><span class="mi">1</span><span class="p">:])])</span>
+<span class="n">hist</span><span class="p">([</span><span class="n">invFu</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>  <span class="n">rand</span><span class="p">(</span><span class="mi">1000</span><span class="p">)],</span><span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">],</span><span class="n">normed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">align</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">);</span>
+<span class="n">axis</span><span class="p">(</span><span class="n">ymax</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="n">title</span><span class="p">(</span><span class="s1">&#39;Estimated PMF of Unfair Six-Sided Die&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/08765e7a83f43d9d73a488829e82dbdec50a67ef620f11a5ae91f918139b5ce8.png" src="../_images/08765e7a83f43d9d73a488829e82dbdec50a67ef620f11a5ae91f918139b5ce8.png" />
+</div>
+</div>
+</section>
+<section id="inverse-cdf-method-for-continuous-variables">
+<h2>Inverse CDF Method for Continuous Variables<a class="headerlink" href="#inverse-cdf-method-for-continuous-variables" title="Link to this heading">#</a></h2>
+<p>The same idea applies to continuous random variables, but now we have to use squeeze the  intervals down to individual points. In the example above, our inverse function was a piecewise function that operated on uniform random samples. In this case, the piecewise function collapses to a continuous inverse function.</p>
+<p>We want to generate random samples for a CDF <span class="math notranslate nohighlight">\(F\)</span> that is invertible. The criterion for generating an appropriate sample is the following,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}(F(x) &lt; v &lt; F(x+\Delta x)) =  F(x+\Delta x) - F(x) = \int_x^{x+\Delta x} f(u) du \approx  f(x) \Delta x\]</div>
+<p>which is saying that the probability that the sample <span class="math notranslate nohighlight">\(v\)</span> is contained in a <span class="math notranslate nohighlight">\(\Delta x\)</span> interval is approximately equal to the density function, <span class="math notranslate nohighlight">\(f(x) \Delta x\)</span> at that point. The trick is to use a uniform random sample (<span class="math notranslate nohighlight">\(u\)</span>) and an invertible CDF <span class="math notranslate nohighlight">\(F(x)\)</span> to construct these samples.</p>
+<p>Note that for a uniform random variable <span class="math notranslate nohighlight">\(u \sim \mathcal{U}[0,1]\)</span>, we have,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}(x &lt; F^{-1}(u) &lt; x+\Delta x) =\mathbb{P}(F(x) &lt; u &lt; F(x+\Delta x)) =  F(x+\Delta x) - F(x) = \int_x^{x+\Delta x} f(p) dp \approx  f(x) \Delta x\]</div>
+<p>This means that <span class="math notranslate nohighlight">\( v=F^{-1}(u) \sim f \)</span>, which is what we were after. Let’s try this with the exponential distribution,</p>
+<div class="math notranslate nohighlight">
+\[ f_{\alpha}(x) = \alpha\exp(-\alpha x) \]</div>
+<p>with the following CDF,</p>
+<div class="math notranslate nohighlight">
+\[ F(x) = 1-\exp(-\alpha x )\]</div>
+<p>and corresponding inverse,</p>
+<div class="math notranslate nohighlight">
+\[ F^{-1}(u)  = \frac{1}{\alpha}\ln \frac{1}{(1-u)}\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">scipy.stats</span>
+
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.</span>
+<span class="n">nsamp</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="n">u</span><span class="o">=</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">x</span><span class="o">=</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">expon</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+
+<span class="n">Finv</span><span class="o">=</span><span class="k">lambda</span> <span class="n">u</span><span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="n">alpha</span><span class="o">*</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">u</span><span class="p">))</span>
+<span class="c1">#Finv=lambda u: 1+1/alpha*log(1/(1-u)) # shift over to correct</span>
+    
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">subplots</span><span class="p">()</span>
+
+<span class="n">xhat</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">Finv</span><span class="p">,</span><span class="n">u</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">nsamp</span><span class="p">)))</span>
+<span class="c1"># exponential distrib samples by inverse method</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">xhat</span><span class="p">,</span><span class="n">normed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;inverse method&#39;</span><span class="p">)</span> 
+<span class="c1"># exponential distrib samples by scipy.stats</span>
+<span class="n">xrvs</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="n">nsamp</span><span class="p">)</span>
+<span class="n">xe</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">xrvs</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">xrvs</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span><span class="n">normed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;scipy.stats&#39;</span><span class="p">)</span>
+<span class="c1"># exponential theoretical density function</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xe</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">xe</span><span class="p">),</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;theoretical&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">xrvs</span><span class="o">.</span><span class="n">max</span><span class="p">())))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">ymax</span><span class="o">=</span><span class="mf">1.05</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Inverse CDF for Exponential Distribution&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;pdf(x)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/7fbad8cab5706bb62243eae88b0592e90b76c3c1e2deb9fc7e241b081dd3e6da.png" src="../_images/7fbad8cab5706bb62243eae88b0592e90b76c3c1e2deb9fc7e241b081dd3e6da.png" />
+</div>
+</div>
+<p>The reason the histogram is shifted over is because we lose knowledge of a constant shift in <span class="math notranslate nohighlight">\(v\)</span> because <span class="math notranslate nohighlight">\(1-v\)</span> is also uniformly distributed between <span class="math notranslate nohighlight">\(\mathcal{U}[0,1]\)</span>. This means we have to change the inverse function to the following:</p>
+<div class="math notranslate nohighlight">
+\[ F^{-1}(u)  = 1+\frac{1}{\alpha}\ln \frac{1}{(1-u)}\]</div>
+</section>
+<section id="rejection-method">
+<h2>Rejection Method<a class="headerlink" href="#rejection-method" title="Link to this heading">#</a></h2>
+<p>In some cases, you may not be able to invert for the CDF. The <code class="docutils literal notranslate"><span class="pre">rejection</span></code> method can handle this situation. The idea is to pick a uniform (<span class="math notranslate nohighlight">\(\mathcal{U}[a,b]\)</span>) random variable <span class="math notranslate nohighlight">\(u_1\)</span> and <span class="math notranslate nohighlight">\(u_2\)</span> so that</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}\left( u_1 \in N_{\Delta}(x) \bigwedge u_2 &lt; \frac{f(u_1)}{M} \right) \hspace{0.5em} \approx \frac{\Delta x}{b-a} \frac{f(u_1)}{M} \]</div>
+<p>where we take <span class="math notranslate nohighlight">\(u_1=x\)</span> and <span class="math notranslate nohighlight">\(f(x) &lt; M \)</span>. The only job of the <span class="math notranslate nohighlight">\(M\)</span> variable is to scale down the <span class="math notranslate nohighlight">\(f(x)\)</span> so that the <span class="math notranslate nohighlight">\(u_2\)</span> variable can span the range.  The <em>efficiency</em> of this method is the probability of not rejecting <span class="math notranslate nohighlight">\(u_1\)</span> which comes from integrating out the above approximation.</p>
+<div class="math notranslate nohighlight">
+\[ \int dx \frac{f(x)}{M} \hspace{0.5em} = \frac{1}{M(b-a)}\]</div>
+<p>This means that we don’t want an unecessarily large <span class="math notranslate nohighlight">\(M\)</span> because that makes it more likely that samples will be discarded. Let’s use a density that does not have a continuous inverse.</p>
+<div class="math notranslate nohighlight">
+\[ f(x) = \exp\left(-\frac{(x-1)^2}{2x} \right) \hspace{1em}  (x+1)/12 \]</div>
+<p>where <span class="math notranslate nohighlight">\(x&gt;0\)</span>. Note that this does not <em>exactly</em> integrate out to one like a good probability density function should, but I probably need to think of a better function because the normalization constant for this is pretty convoluted.</p>
+<p>Nevertheless, here it is with its corresponding CDF.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span><span class="mi">15</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">f</span><span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">2.</span><span class="o">/</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mf">12.</span>
+<span class="n">fx</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fx</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$f(x)$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">cumsum</span><span class="p">(</span><span class="n">fx</span><span class="p">)</span><span class="o">*</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$F(x)$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/9d0b2896bfa39de425cbbc8a07ffae1efefcb5e8f9b862d7dd8a86b560a573c5.png" src="../_images/9d0b2896bfa39de425cbbc8a07ffae1efefcb5e8f9b862d7dd8a86b560a573c5.png" />
+</div>
+</div>
+<p>And, following our rejection plan, the following are the simulated random samples of <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">M</span><span class="o">=</span><span class="mf">.3</span> <span class="c1"># scale factor</span>
+<span class="n">u1</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span><span class="o">*</span><span class="mi">15</span> <span class="c1"># uniform random samples scaled out</span>
+<span class="n">u2</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>    <span class="c1"># uniform random samples</span>
+<span class="n">idx</span><span class="o">=</span><span class="n">where</span><span class="p">(</span><span class="n">u2</span><span class="o">&lt;=</span><span class="n">f</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span><span class="o">/</span><span class="n">M</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># rejection criterion</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">u1</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">normed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fx</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$f(x)$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Estimated Efficency=</span><span class="si">%3.1f%%</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">u1</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x9015690&gt;
+</pre></div>
+</div>
+<img alt="../_images/3a11ba65611f61fc74dfad28de935bf35f17d701cff95faf533b61941a518f7d.png" src="../_images/3a11ba65611f61fc74dfad28de935bf35f17d701cff95faf533b61941a518f7d.png" />
+</div>
+</div>
+<p>The plot above shows a pretty good match between our target density function, <span class="math notranslate nohighlight">\(f\)</span>, and our histogram of the samples we just generated using the rejection method.</p>
+<p>Conceptually, there’s nothing wrong with this result. The problem is the efficiency is low – we are throwing away too many samples, as shown in the figure below. We need to somehow do better.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span><span class="n">u2</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;rejected&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u1</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="n">u2</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="s1">&#39;g.&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;accepted&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7f357d0&gt;
+</pre></div>
+</div>
+<img alt="../_images/67641ced0db11cddc2c46e841e54ee6ae46976ef3da0af1c74daf5561458e1f5.png" src="../_images/67641ced0db11cddc2c46e841e54ee6ae46976ef3da0af1c74daf5561458e1f5.png" />
+</div>
+</div>
+<p>The above shows the samples that were accepted and rejected by this method. The fact that we threw out so many is very inefficient, and we want to do better.</p>
+<p>The above argument uses <span class="math notranslate nohighlight">\(u_1\)</span> to select along the domain of <span class="math notranslate nohighlight">\(f(x)\)</span> and the other <span class="math notranslate nohighlight">\(u_2\)</span> uniform random variable  decides whether to accept or not. One idea would be to choose <span class="math notranslate nohighlight">\(u_1\)</span> so that <span class="math notranslate nohighlight">\(x\)</span> values are coincidentally those that are near the peak of <span class="math notranslate nohighlight">\(f(x)\)</span>, instead of uniformly anywhere in the domain, especially near the tails, which are low probability anyway. Now, the trick is to find a new density function <span class="math notranslate nohighlight">\(g(x)\)</span> to sample from that has a similiar concentration of probability density. One way it to familiarize oneself with the popular density functions that have adjustable parameters and fast random sample generators already. There are lots of places to look and, chances are, there is likely already such a generator for your problem. Otherwise, the <a class="reference external" href="http://en.wikipedia.org/wiki/Beta_distribution">family of <span class="math notranslate nohighlight">\(\beta\)</span> densities</a> is a good place to start looking.</p>
+<p>To be explicit, what we want is <span class="math notranslate nohighlight">\(u_1 \sim g(x) \)</span> so that, returning to our earlier argument,</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}\left( u_1 \in N_{\Delta}(x) \bigwedge u_2 &lt; \frac{f(u_1)}{M} \right) \approx g(x) \Delta x \frac{f(u_1)}{M} \]</div>
+<p>but this is <em>not</em> what we need here. The problem is with the second part of the <span class="math notranslate nohighlight">\(\bigwedge\)</span> clause. We need to put something there that will give us something proportional to <span class="math notranslate nohighlight">\(f(x)\)</span>. Define the following:</p>
+<div class="math notranslate nohighlight">
+\[ h(x) = \frac{f(x)}{g(x)}\]</div>
+<p>with corresponding maximum on the domain as <span class="math notranslate nohighlight">\(h_{\max}\)</span> and then go back and construct the second part of the clause as</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{P}\left( u_1 \in N_{\Delta}(x) \bigwedge u_2 &lt; \frac{h(u_1)}{h_{\max}} \right) \approx g(x) \Delta x \frac{h(u_1)}{h_{\max}} = f(x)/h_{\max} \]</div>
+<p>Recall that satisfying this criterion means that <span class="math notranslate nohighlight">\(u_1=x\)</span>. As before, we can estimate the probability of acceptance of the <span class="math notranslate nohighlight">\(u_1\)</span> as <span class="math notranslate nohighlight">\( 1/h_{\max}\)</span>.</p>
+<p>Now, to construct such a <span class="math notranslate nohighlight">\(g(x)\)</span> function. Here,we choose the chi-squared distribution. The following plots the <span class="math notranslate nohighlight">\(g(x)\)</span> and <span class="math notranslate nohighlight">\(f(x)\)</span> (left plot) and the corresponding <span class="math notranslate nohighlight">\(h(x)=f(x)/g(x)\)</span> (right plot). Note that <span class="math notranslate nohighlight">\(g(x)\)</span> and <span class="math notranslate nohighlight">\(f(x)\)</span> have peaks that almost coincide, which is what we are looking for.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ch</span><span class="o">=</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">chi2</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="c1"># chi-squared</span>
+<span class="n">h</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">ch</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># h-function</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">axs</span><span class="o">=</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fx</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$f(x)$&#39;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">ch</span><span class="o">.</span><span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$g(x)$&#39;</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">h</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;$h(x)=f(x)/g(x)$&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.text.Text at 0x8e3ea90&gt;
+</pre></div>
+</div>
+<img alt="../_images/eb800792c3021b6e130e89580bfb63b2ed0ff5e370a8664855a4e9b5d5911dfd.png" src="../_images/eb800792c3021b6e130e89580bfb63b2ed0ff5e370a8664855a4e9b5d5911dfd.png" />
+</div>
+</div>
+<p>Now, let’s generate  some samples from this <span class="math notranslate nohighlight">\(\chi^2\)</span> distribution with the rejection method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hmax</span><span class="o">=</span><span class="n">h</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">u1</span> <span class="o">=</span> <span class="n">ch</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span> <span class="c1"># samples from chi-square distribution</span>
+<span class="n">u2</span> <span class="o">=</span> <span class="n">rand</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>   <span class="c1"># uniform random samples</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">u2</span> <span class="o">&lt;=</span> <span class="n">h</span><span class="p">(</span><span class="n">u1</span><span class="p">)</span><span class="o">/</span><span class="n">hmax</span><span class="p">)</span>  <span class="c1"># Rejection criterion</span>
+
+<span class="n">v</span> <span class="o">=</span> <span class="n">u1</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>  <span class="c1"># keep these only</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">normed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">bins</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">fx</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$f(x)$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Estimated Efficency=</span><span class="si">%3.1f%%</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">u1</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x9344c30&gt;
+</pre></div>
+</div>
+<img alt="../_images/e47dac77b922911207cee62bfbac76eb76c47cc09cece5358160171eaf483e2c.png" src="../_images/e47dac77b922911207cee62bfbac76eb76c47cc09cece5358160171eaf483e2c.png" />
+</div>
+</div>
+<p>Using the <span class="math notranslate nohighlight">\(\chi^2\)</span> distribution with the rejection method results in throwing away less than 10% of the generated samples compared with our prior example where we threw out at least 80% of the generated samples. Obviously, this way is much more computationally efficient and this is the kind of thing we are always looking for.</p>
+<p>For completeness, here is the corresponding plot that shows the samples with the corresponding threshold <span class="math notranslate nohighlight">\(h(x)/h_{\max}\)</span> that was used to select them.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u1</span><span class="p">,</span><span class="n">u2</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;rejected&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">u1</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="n">u2</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span><span class="s1">&#39;g.&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;accepted&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">.3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">h</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="n">hmax</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mf">3.</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;$h(x)$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x938fd30&gt;
+</pre></div>
+</div>
+<img alt="../_images/0c07c54a3b079268036db872e5559b54183e7a062a679a6471cb8cdc74111004.png" src="../_images/0c07c54a3b079268036db872e5559b54183e7a062a679a6471cb8cdc74111004.png" />
+</div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>In this section, we investigated how to generate random samples from a given distribution, beit discrete or continuous. For the continuouse case, the key issue was whether or not the cumulative density function had a continuous inverse. If not, we had to turn to the rejection method, and find an appropriate related density that we could easily sample from to use as part of a rejection threshold. Finding such a function is an art, but many families of probability densities have been studied over the years that already have fast sample-generators.</p>
+<p>It is possible to go much deeper with the rejection method, but these involve careful partitioning of the domains and lots of special methods for separate domains and corner cases.  Nonetheless, all of these advanced techniques are still variations on the same fundamental theme we illustrated here.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="http://books.google.com/books?id=ACTrrQk1UgoC&amp;amp;dq=Exploring+Monte+Carlo+Methods&amp;amp;source=gbs_navlinks_s">Exploring Monte Carlo Methods by Dunn, 2011</a></p>
+<p><a class="reference external" href="http://books.google.com/books?id=0QzvAAAAMAAJ&amp;amp;dq=continuous+balakrishnan&amp;amp;hl=en&amp;amp;sa=X&amp;amp;ei=vzcuUtqvOYOKjAKr14BI&amp;amp;ved=0CC8Q6AEwAA">Continuous univariate distributions by Balakrishnan, 1995</a></p>
+<p><a class="reference external" href="https://github.com/unpingco/Pig-in-the-Python/blob/master/Sampling_Monte_Carlo.ipynb">IPython Source Notebook</a></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebook"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Buffons_Needle_Sim.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Buffon’s Needle</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Rectangle_Wedge_Tail_Decomposition.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Rectangle Wedge Tail Decomposition</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inverse-cdf-method-for-discrete-variables">Inverse CDF Method for Discrete Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inverse-cdf-method-for-continuous-variables">Inverse CDF Method for Continuous Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rejection-method">Rejection Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
